@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "@/lib/supabaseClient";
+import BackToWorklyLink from "@/components/BackToWorklyLink";
 
 export default function Login() {
   const router = useRouter();
@@ -63,9 +64,7 @@ export default function Login() {
 
   return (
     <div className="auth-shell">
-      <a href="/" className="auth-back">
-        ← Back to Workly
-      </a>
+      <BackToWorklyLink />
       <div className="auth-card login-card">
         <h1>Log in</h1>
         <p className="auth-intro">

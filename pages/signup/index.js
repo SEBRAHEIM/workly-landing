@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
+import BackToWorklyLink from "@/components/BackToWorklyLink";
 import { supabase } from "../../lib/supabaseClient";
 
 export default function SignupPage() {
@@ -58,10 +59,7 @@ export default function SignupPage() {
 
   return (
     <div className="signup-shell">
-      <a href="/" className="signup-back-link">
-        <span className="signup-back-icon">←</span>
-        <span>Back to Workly</span>
-      </a>
+      <BackToWorklyLink />
 
       <div className="signup-frame">
         <header className="signup-header">
