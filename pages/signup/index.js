@@ -1,111 +1,144 @@
-import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { supabase } from "../../lib/supabaseClient";
 
-export default function ChooseRole() {
+export default function SignupPage() {
   const router = useRouter();
 
-  function goEmail(role) {
-    if (role === "student") {
-      router.push("/signup/student");
-    } else {
-      router.push("/signup/creator");
-    }
-  }
+  const [studentGoogleLoading, setStudentGoogleLoading] = useState(false);
+  const [creatorGoogleLoading, setCreatorGoogleLoading] = useState(false);
 
-  async function goGoogle(role) {
+  const handleStudentEmail = () => {
+    router.push("/signup/student");
+  };
+
+  const handleCreatorEmail = () => {
+    router.push("/signup/creator");
+  };
+
+  const handleStudentGoogle = async () => {
+    if (typeof window === "undefined") return;
     try {
-      const origin =
-        typeof window !== "undefined" ? window.location.origin : "";
-      await supabase.auth.signInWithOAuth({
+      setStudentGoogleLoading(true);
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${origin}/auth/callback?role=${role}&mode=signup`
-        }
+          redirectTo: `${window.location.origin}/auth/callback?role=student`,
+        },
       });
-    } catch (e) {
-      console.error("Google signup failed", e);
-      alert("Google sign up failed. Please try again or use email.");
+      if (error) {
+        console.error("Google signup (student) error:", error.message);
+        setStudentGoogleLoading(false);
+      }
+    } catch (err) {
+      console.error("Google signup (student) error:", err);
+      setStudentGoogleLoading(false);
     }
-  }
+  };
+
+  const handleCreatorGoogle = async () => {
+    if (typeof window === "undefined") return;
+    try {
+      setCreatorGoogleLoading(true);
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback?role=creator`,
+        },
+      });
+      if (error) {
+        console.error("Google signup (creator) error:", error.message);
+        setCreatorGoogleLoading(false);
+      }
+    } catch (err) {
+      console.error("Google signup (creator) error:", err);
+      setCreatorGoogleLoading(false);
+    }
+  };
 
   return (
-    <div className="auth-shell">
-      <a href="/" className="auth-back">
-        ← Back to Workly
+    <div className="signup-shell">
+      <a href="/" className="signup-back-link">
+        <span className="signup-back-icon">←</span>
+        <span>Back to Workly</span>
       </a>
-      <div className="auth-card">
-        <h1>Get started</h1>
-        <p>Are you joining Workly as a student or as a creator?</p>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(0, 1fr))",
-            gap: 14,
-            marginTop: 12
-          }}
-        >
-          {/* Student card */}
-          <div className="dash-card" style={{ marginTop: 0 }}>
-            <div className="dash-title">Student</div>
-            <div className="dash-subtitle">
-              Upload rubrics and assessments. Creators will do the full project
-              for you.
-            </div>
-            <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
-              <button
-                type="button"
-                className="auth-button"
-                onClick={() => goGoogle("student")}
-              >
-                Sign up with Google
-              </button>
-              <button
-                type="button"
-                className="auth-button"
-                style={{
-                  background: "#f9fafb",
-                  color: "#0f172a",
-                  boxShadow: "none",
-                  border: "1px solid rgba(148,163,184,0.7)"
-                }}
-                onClick={() => goEmail("student")}
-              >
-                Sign up with email
-              </button>
-            </div>
-          </div>
+      <div className="signup-frame">
+        <header className="signup-header">
+          <h1 className="signup-title">Get started</h1>
+          <p className="signup-subtitle">
+            Are you joining Workly as a student or as a creator?
+          </p>
+        </header>
 
-          {/* Creator card */}
-          <div className="dash-card" style={{ marginTop: 0 }}>
-            <div className="dash-title">Creator</div>
-            <div className="dash-subtitle">
-              Apply to complete projects for students. You&apos;ll go through
-              tests and manual approval before seeing real tasks.
+        <div className="signup-grid">
+          <section className="signup-card">
+            <div className="signup-card-inner">
+              <h2 className="signup-card-title">Student</h2>
+              <p className="signup-card-body">
+                Upload rubrics and assessments. Creators will do the full
+                project for you.
+              </p>
+
+              <div className="signup-actions">
+                <button
+                  type="button"
+                  className="signup-primary"
+                  onClick={handleStudentEmail}
+                >
+                  Sign up with email
+                </button>
+
+                <button
+                  type="button"
+                  className="signup-secondary auth-google-button"
+                  onClick={handleStudentGoogle}
+                  disabled={studentGoogleLoading}
+                >
+                  <span className="google-icon">
+                    <span className="google-icon-inner" />
+                  </span>
+                  {studentGoogleLoading
+                    ? "Connecting to Google…"
+                    : "Sign up with Google"}
+                </button>
+              </div>
             </div>
-            <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
-              <button
-                type="button"
-                className="auth-button"
-                onClick={() => goGoogle("creator")}
-              >
-                Sign up with Google
-              </button>
-              <button
-                type="button"
-                className="auth-button"
-                style={{
-                  background: "#f9fafb",
-                  color: "#0f172a",
-                  boxShadow: "none",
-                  border: "1px solid rgba(148,163,184,0.7)"
-                }}
-                onClick={() => goEmail("creator")}
-              >
-                Sign up with email
-              </button>
+          </section>
+
+          <section className="signup-card">
+            <div className="signup-card-inner">
+              <h2 className="signup-card-title">Creator</h2>
+              <p className="signup-card-body">
+                Apply to complete projects for students. You&apos;ll go through
+                tests and manual approval before seeing real tasks.
+              </p>
+
+              <div className="signup-actions">
+                <button
+                  type="button"
+                  className="signup-primary"
+                  onClick={handleCreatorEmail}
+                >
+                  Sign up with email
+                </button>
+
+                <button
+                  type="button"
+                  className="signup-secondary auth-google-button"
+                  onClick={handleCreatorGoogle}
+                  disabled={creatorGoogleLoading}
+                >
+                  <span className="google-icon">
+                    <span className="google-icon-inner" />
+                  </span>
+                  {creatorGoogleLoading
+                    ? "Connecting to Google…"
+                    : "Sign up with Google"}
+                </button>
+              </div>
             </div>
-          </div>
+          </section>
         </div>
       </div>
     </div>
