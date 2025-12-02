@@ -852,3 +852,25 @@ footer {
     margin-top: 20px;
   }
 }
+
+.auth-back-link,
+.signup-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0f172a;
+  text-decoration: none;
+  padding: 4px 0;
+}
+
+.auth-back-link:hover,
+.signup-back-link:hover {
+  color: #020617;
+}
+
+.auth-back-link .signup-back-icon,
+.signup-back-link .signup-back-icon {
+  font-size: 18px;
+}
