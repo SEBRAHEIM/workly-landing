@@ -874,3 +874,26 @@ footer {
 .signup-back-link .signup-back-icon {
   font-size: 18px;
 }
+
+/* === Back to Workly (shared for login + signup) === */
+.back-link {
+  position: absolute;
+  top: 32px;
+  left: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;              /* same size everywhere */
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.92);  /* WHITE text */
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  z-index: 10;
+  transition: opacity 0.15s ease;
+}
+
+.back-link:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
