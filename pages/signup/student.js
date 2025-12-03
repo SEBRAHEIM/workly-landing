@@ -8,20 +8,23 @@ export default function StudentEmailSignup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [done, setDone] = useState(false);
-  const [checking, setChecking] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [done, setDone] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
     setLoading(true);
 
+    const origin =
+      typeof window !== "undefined" ? window.location.origin : "";
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: { role: "student" },
+        emailRedirectTo: origin ? `${origin}/auth/callback` : undefined,
       },
     });
 
@@ -32,30 +35,12 @@ export default function StudentEmailSignup() {
       return;
     }
 
-    // No session is created until email is confirmed.
-    // Show the "check your email" screen.
-    setDone(true);
-  };
-
-  const handleContinueAfterVerify = async () => {
-    setErrorMsg("");
-    setChecking(true);
-
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    setChecking(false);
-
-    if (error || !data.session) {
-      setErrorMsg(
-        "We couldn't log you in yet. Make sure you clicked the confirmation link in your email, then try again."
-      );
+    if (data.session) {
+      router.replace("/dashboard/student");
       return;
     }
 
-    router.replace("/dashboard/student");
+    setDone(true);
   };
 
   if (done) {
@@ -63,42 +48,21 @@ export default function StudentEmailSignup() {
       <div className="auth-shell">
         <BackToWorklyLink />
         <div className="auth-card">
-          <h1>Check your email</h1>
+          <h1>Create your student account</h1>
           <p className="auth-sub">
-            We sent a confirmation link to <strong>{email}</strong>.
+            Check your email to confirm your account before you can log in.
           </p>
           <p
             style={{
-              marginTop: 10,
+              marginTop: 16,
               fontSize: 14,
               color: "rgba(15,23,42,0.8)",
             }}
           >
-            You can open the email on any device. After you confirm, come back
-            here and continue.
+            We sent a confirmation link to <strong>{email}</strong>. Open it on
+            this device, tap the button, and you will be taken straight into
+            your dashboard.
           </p>
-
-          <button
-            type="button"
-            className="auth-primary-btn"
-            style={{ marginTop: 18 }}
-            onClick={handleContinueAfterVerify}
-            disabled={checking}
-          >
-            {checking ? "Checking…" : "I confirmed my email – continue"}
-          </button>
-
-          {errorMsg && (
-            <p
-              style={{
-                marginTop: 12,
-                fontSize: 14,
-                color: "#ef4444",
-              }}
-            >
-              {errorMsg}
-            </p>
-          )}
         </div>
       </div>
     );
