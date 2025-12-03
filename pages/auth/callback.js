@@ -1,56 +1,50 @@
-import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function AuthCallback() {
   const router = useRouter();
 
   useEffect(() => {
-    async function finish() {
-      const { data } = await supabase.auth.getUser();
-      const user = data.user;
+    if (!router.isReady) return;
 
-      if (!user) {
+    const run = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      const user = data?.user;
+
+      if (error || !user) {
         router.replace("/login");
         return;
       }
 
-      const search =
-        typeof window !== "undefined"
-          ? new URLSearchParams(window.location.search)
-          : new URLSearchParams("");
-      const roleFromQuery = search.get("role");
+      const role = router.query.role;
 
-      let metadata = user.user_metadata || {};
+      if (role === "student" || role === "creator") {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("id")
+          .eq("id", user.id)
+          .maybeSingle();
 
-      if (roleFromQuery && !metadata.role) {
-        metadata = { ...metadata, role: roleFromQuery };
-        if (roleFromQuery === "creator" && !metadata.status) {
-          metadata.status = "pending";
+        if (!profile) {
+          router.replace(`/signup/${role}-details`);
+          return;
         }
-        await supabase.auth.updateUser({ data: metadata });
+
+        router.replace(`/dashboard/${role}`);
+        return;
       }
 
-      const role = metadata.role || roleFromQuery || "student";
+      router.replace("/dashboard/student");
+    };
 
-      if (role === "creator") {
-        router.replace("/dashboard/creator");
-      } else {
-        router.replace("/dashboard/student");
-      }
-    }
-
-    finish();
+    run();
   }, [router]);
 
   return (
     <div className="auth-shell">
-      <a href="/" className="auth-back">
-        ← Back to Workly
-      </a>
-      <div className="auth-card login-card">
-        <h1>Finishing sign in…</h1>
-        <p>You will be redirected to your dashboard in a moment.</p>
+      <div className="auth-card">
+        <p>Finishing sign in…</p>
       </div>
     </div>
   );
