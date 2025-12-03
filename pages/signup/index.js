@@ -6,9 +6,7 @@ import BackToWorklyLink from "@/components/BackToWorklyLink";
 export default function SignupPage() {
   const router = useRouter();
 
-  const [loadingStudentEmail, setLoadingStudentEmail] = useState(false);
   const [loadingStudentGoogle, setLoadingStudentGoogle] = useState(false);
-  const [loadingCreatorEmail, setLoadingCreatorEmail] = useState(false);
   const [loadingCreatorGoogle, setLoadingCreatorGoogle] = useState(false);
 
   const siteUrl =
@@ -38,22 +36,12 @@ export default function SignupPage() {
   const handleCreatorGoogleSignup = () =>
     startGoogleSignup("creator", setLoadingCreatorGoogle);
 
-  const handleStudentEmailSignup = async () => {
-    try {
-      setLoadingStudentEmail(true);
-      router.push("/login?role=student");
-    } finally {
-      setLoadingStudentEmail(false);
-    }
+  const handleStudentEmailSignup = () => {
+    router.push("/signup/student-email");
   };
 
-  const handleCreatorEmailSignup = async () => {
-    try {
-      setLoadingCreatorEmail(true);
-      router.push("/login?role=creator");
-    } finally {
-      setLoadingCreatorEmail(false);
-    }
+  const handleCreatorEmailSignup = () => {
+    router.push("/signup/creator-email");
   };
 
   return (
@@ -80,11 +68,8 @@ export default function SignupPage() {
                   type="button"
                   className="signup-primary"
                   onClick={handleStudentEmailSignup}
-                  disabled={loadingStudentEmail}
                 >
-                  {loadingStudentEmail
-                    ? "Opening email signup…"
-                    : "Sign up with email"}
+                  Sign up with email
                 </button>
 
                 <button
@@ -115,11 +100,8 @@ export default function SignupPage() {
                   type="button"
                   className="signup-primary"
                   onClick={handleCreatorEmailSignup}
-                  disabled={loadingCreatorEmail}
                 >
-                  {loadingCreatorEmail
-                    ? "Opening email signup…"
-                    : "Sign up with email"}
+                  Sign up with email
                 </button>
 
                 <button
