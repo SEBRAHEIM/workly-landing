@@ -516,7 +516,7 @@ footer {
 
 .signup-shell {
   max-width: 1160px;
-  margin: 40px auto 72px;
+  margin: 24px auto 72px;
   padding: 0 18px;
 }
 
@@ -649,8 +649,23 @@ footer {
 
 .signup-shell {
   max-width: 1040px;
-  margin: 36px auto 64px;
+  margin: 24px auto 64px;
   padding: 0 20px;
+}
+
+.signup-title {
+  margin-top: 48px;
+  margin-left: 40px;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+}
+
+.signup-subtitle {
+  margin-left: 40px;
+  margin-top: 4px;
+  font-size: 16px;
+  color: rgba(255,255,255,0.7);
 }
 
 .signup-frame {
