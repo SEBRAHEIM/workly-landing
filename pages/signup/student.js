@@ -1,128 +1,131 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { supabase } from "../../lib/supabaseClient";
+import BackToWorklyLink from "@/components/BackToWorklyLink";
+import { supabase } from "@/lib/supabaseClient";
 
-export default function StudentSignup() {
+export default function StudentEmailSignup() {
   const router = useRouter();
-  const [username, setUsername] = useState("");
-  const [nationality, setNationality] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          role: "student",
-          username,
-          nationality
-        }
-      }
-    });
-    setLoading(false);
-    if (error) {
-      setError(error.message);
+
+    if (!email || !password || !confirmPassword) {
+      setError("Please fill in all fields.");
       return;
     }
-    if (data.user) {
-      router.push("/dashboard/student");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
     }
-  }
+
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const siteUrl =
+        process.env.NEXT_PUBLIC_SITE_URL ||
+        (typeof window !== "undefined" ? window.location.origin : "");
+
+      const { error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { role: "student" },
+          emailRedirectTo: siteUrl
+            ? `${siteUrl}/auth/verify-email?role=student`
+            : undefined,
+        },
+      });
+
+      if (signUpError) {
+        setError(signUpError.message);
+        setLoading(false);
+        return;
+      }
+
+      router.push(
+        `/auth/verify-email?role=student&email=${encodeURIComponent(email)}`
+      );
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="auth-shell">
-      <a href="/" className="auth-back">
-        ← Back to Workday
-      </a>
-      <div className="auth-card">
-        <h1>Student sign up</h1>
-        <p>
-          Create your student account. Only your username can appear to
-          creators; all other details stay private for the owner.
+      <BackToWorklyLink />
+      <div className="auth-card signup-card">
+        <h1 className="auth-title">Create your student account</h1>
+        <p className="auth-subtitle">
+          Enter your details below or choose a different signup option.
         </p>
-        <form onSubmit={handleSubmit}>
+
+        <form className="auth-form" onSubmit={handleSubmit}>
           <div className="auth-field">
-            <label className="auth-label" htmlFor="username">
-              Username (public)
-            </label>
+            <label>Email</label>
             <input
-              id="username"
-              className="auth-input"
-              type="text"
-              placeholder="lazystudent01"
-              required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-          <div className="auth-field">
-            <label className="auth-label" htmlFor="nationality">
-              Nationality (private)
-            </label>
-            <input
-              id="nationality"
-              className="auth-input"
-              type="text"
-              placeholder="UAE, Oman, India..."
-              required
-              value={nationality}
-              onChange={(e) => setNationality(e.target.value)}
-            />
-          </div>
-          <div className="auth-field">
-            <label className="auth-label" htmlFor="email">
-              Email (private)
-            </label>
-            <input
-              id="email"
-              className="auth-input"
               type="email"
-              placeholder="you@university.ac.ae"
-              required
+              className="auth-input"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
+
           <div className="auth-field">
-            <label className="auth-label" htmlFor="password">
-              Password
-            </label>
+            <label>Password</label>
             <input
-              id="password"
-              className="auth-input"
               type="password"
-              placeholder="••••••••"
-              required
+              className="auth-input"
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
-          <div className="auth-hint">
-            This will create a real account in Supabase with your data saved
-            securely.
+
+          <div className="auth-field">
+            <label>Confirm password</label>
+            <input
+              type="password"
+              className="auth-input"
+              autoComplete="new-password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
           </div>
-          {error && (
-            <div className="auth-hint" style={{ color: "#b91c1c" }}>
-              {error}
-            </div>
-          )}
-          <button className="auth-button" type="submit" disabled={loading}>
-            {loading ? "Creating account..." : "Create student account"}
+
+          {error && <p className="auth-error">{error}</p>}
+
+          <button
+            type="submit"
+            className="auth-primary-btn"
+            disabled={loading}
+          >
+            {loading ? "Sending code…" : "Create account"}
           </button>
+
+          <p className="auth-secondary-text">
+            Already have an account?{" "}
+            <a href="/login" className="auth-link">
+              Log in
+            </a>
+          </p>
         </form>
-        <div className="auth-switch">
-          <span>Already have an account?</span>
-          <button type="button" onClick={() => router.push("/login")}>
-            Log in
-          </button>
-        </div>
       </div>
     </div>
   );

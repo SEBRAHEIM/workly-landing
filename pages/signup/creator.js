@@ -1,161 +1,131 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { supabase } from "../../lib/supabaseClient";
+import BackToWorklyLink from "@/components/BackToWorklyLink";
+import { supabase } from "@/lib/supabaseClient";
 
-export default function CreatorSignup() {
+export default function CreatorEmailSignup() {
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [nationality, setNationality] = useState("");
-  const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          role: "creator",
-          status: "pending",
-          name,
-          username,
-          nationality,
-          phone
-        }
-      }
-    });
-    setLoading(false);
-    if (error) {
-      setError(error.message);
+
+    if (!email || !password || !confirmPassword) {
+      setError("Please fill in all fields.");
       return;
     }
-    if (data.user) {
-      router.push("/dashboard/creator");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
     }
-  }
+
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const siteUrl =
+        process.env.NEXT_PUBLIC_SITE_URL ||
+        (typeof window !== "undefined" ? window.location.origin : "");
+
+      const { error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { role: "creator" },
+          emailRedirectTo: siteUrl
+            ? `${siteUrl}/auth/verify-email?role=creator`
+            : undefined,
+        },
+      });
+
+      if (signUpError) {
+        setError(signUpError.message);
+        setLoading(false);
+        return;
+      }
+
+      router.push(
+        `/auth/verify-email?role=creator&email=${encodeURIComponent(email)}`
+      );
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="auth-shell">
-      <a href="/" className="auth-back">
-        ← Back to Workday
-      </a>
-      <div className="auth-card">
-        <h1>Creator application</h1>
-        <p>
-          Apply to work on student projects. Only your username can appear to
-          students; all other details are visible only to the owner.
+      <BackToWorklyLink />
+      <div className="auth-card signup-card">
+        <h1 className="auth-title">Create your creator account</h1>
+        <p className="auth-subtitle">
+          Enter your details below or choose a different signup option.
         </p>
-        <form onSubmit={handleSubmit}>
+
+        <form className="auth-form" onSubmit={handleSubmit}>
           <div className="auth-field">
-            <label className="auth-label" htmlFor="name">
-              Full name (private)
-            </label>
+            <label>Email</label>
             <input
-              id="name"
-              className="auth-input"
-              type="text"
-              placeholder="Your full legal name"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-          <div className="auth-field">
-            <label className="auth-label" htmlFor="username">
-              Username (public)
-            </label>
-            <input
-              id="username"
-              className="auth-input"
-              type="text"
-              placeholder="workday_creator"
-              required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-          <div className="auth-field">
-            <label className="auth-label" htmlFor="nationality">
-              Nationality (private)
-            </label>
-            <input
-              id="nationality"
-              className="auth-input"
-              type="text"
-              placeholder="UAE, Jordan, Egypt..."
-              required
-              value={nationality}
-              onChange={(e) => setNationality(e.target.value)}
-            />
-          </div>
-          <div className="auth-field">
-            <label className="auth-label" htmlFor="phone">
-              Mobile / WhatsApp (private)
-            </label>
-            <input
-              id="phone"
-              className="auth-input"
-              type="tel"
-              placeholder="+971 5x xxx xxxx"
-              required
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-          </div>
-          <div className="auth-field">
-            <label className="auth-label" htmlFor="email">
-              Email (private)
-            </label>
-            <input
-              id="email"
-              className="auth-input"
               type="email"
-              placeholder="creator@email.com"
-              required
+              className="auth-input"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
+
           <div className="auth-field">
-            <label className="auth-label" htmlFor="password">
-              Password
-            </label>
+            <label>Password</label>
             <input
-              id="password"
-              className="auth-input"
               type="password"
-              placeholder="••••••••"
-              required
+              className="auth-input"
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
-          <div className="auth-hint">
-            After this, creators will go through tests and manual approval by
-            you before seeing any real projects.
+
+          <div className="auth-field">
+            <label>Confirm password</label>
+            <input
+              type="password"
+              className="auth-input"
+              autoComplete="new-password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
           </div>
-          {error && (
-            <div className="auth-hint" style={{ color: "#b91c1c" }}>
-              {error}
-            </div>
-          )}
-          <button className="auth-button" type="submit" disabled={loading}>
-            {loading ? "Submitting..." : "Submit creator application"}
+
+          {error && <p className="auth-error">{error}</p>}
+
+          <button
+            type="submit"
+            className="auth-primary-btn"
+            disabled={loading}
+          >
+            {loading ? "Sending code…" : "Create account"}
           </button>
+
+          <p className="auth-secondary-text">
+            Already have an account?{" "}
+            <a href="/login" className="auth-link">
+              Log in
+            </a>
+          </p>
         </form>
-        <div className="auth-switch">
-          <span>Already approved?</span>
-          <button type="button" onClick={() => router.push("/login")}>
-            Log in
-          </button>
-        </div>
       </div>
     </div>
   );
