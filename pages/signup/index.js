@@ -57,10 +57,10 @@ export default function SignupPage() {
   };
 
   return (
-    <>
+    <div className="signup-shell">
       <BackToWorklyLink />
 
-      <div className="signup-shell">
+      <div className="signup-frame">
         <div className="signup-inner">
           <div className="signup-header">
             <h1>Get started</h1>
@@ -71,8 +71,8 @@ export default function SignupPage() {
             <div className="signup-card signup-student">
               <h2>Student</h2>
               <p>
-                Upload rubrics and assessments. Creators will do the full
-                project for you.
+                Upload rubrics and assessments. Creators will do the full project
+                for you.
               </p>
 
               <div className="signup-actions">
@@ -106,8 +106,8 @@ export default function SignupPage() {
             <div className="signup-card signup-creator">
               <h2>Creator</h2>
               <p>
-                Apply to complete projects for students. You&apos;ll go
-                through tests and manual approval before seeing real tasks.
+                Apply to complete projects for students. You&apos;ll go through
+                tests and manual approval before seeing real tasks.
               </p>
 
               <div className="signup-actions">
@@ -140,6 +140,6 @@ export default function SignupPage() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
