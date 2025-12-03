@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "@/lib/supabaseClient";
 import BackToWorklyLink from "@/components/BackToWorklyLink";
 
 export default function CreatorEmailSignup() {
@@ -10,7 +10,7 @@ export default function CreatorEmailSignup() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
     setErrorMsg("");
     setLoading(true);
@@ -19,57 +19,69 @@ export default function CreatorEmailSignup() {
       email,
       password,
       options: {
-        data: { role: "creator" },
+        data: {
+          role: "creator",
+        },
       },
     });
 
     setLoading(false);
 
     if (error) {
-      setErrorMsg(error.message || "Something went wrong while creating your account.");
+      setErrorMsg(error.message);
       return;
     }
 
-    // Redirect to verification page where they will paste the code
+    // Go to verification screen with role + email
     router.push(`/verify?role=creator&email=${encodeURIComponent(email)}`);
-  };
+  }
 
   return (
     <div className="auth-shell">
       <BackToWorklyLink />
-      <div className="auth-card signup-card">
-        <h1>Create your creator account</h1>
-        <p className="auth-subtitle">
-          Enter your details below to create a Workly creator account. We&apos;ll send a
-          verification code to your email.
+      <div className="auth-card">
+        <h1>Creator sign up</h1>
+        <p>
+          Apply as a creator with email. We&apos;ll send a 6-digit code to
+          confirm your account before showing your dashboard.
         </p>
 
-        <form onSubmit={handleSubmit} className="auth-form">
+        <form onSubmit={handleSubmit}>
           <div className="auth-field">
-            <label>Email</label>
+            <label className="auth-label" htmlFor="email">
+              Email
+            </label>
             <input
+              id="email"
               className="auth-input"
               type="email"
+              placeholder="you@email.com"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@email.com"
             />
           </div>
 
           <div className="auth-field">
-            <label>Password</label>
+            <label className="auth-label" htmlFor="password">
+              Password
+            </label>
             <input
+              id="password"
               className="auth-input"
               type="password"
+              placeholder="••••••••"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Create a password"
             />
           </div>
 
-          <button type="submit" className="auth-primary-btn" disabled={loading}>
+          <button
+            type="submit"
+            className="auth-primary-btn"
+            disabled={loading}
+          >
             {loading ? "Sending code…" : "Create account"}
           </button>
 

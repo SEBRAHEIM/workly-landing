@@ -1,45 +1,47 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function StudentDashboard() {
   const router = useRouter();
-  const [user, setUser] = useState(null);
+  const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
     async function load() {
       const { data } = await supabase.auth.getUser();
       if (!data.user) {
-        router.push("/login");
+        router.replace("/login");
         return;
       }
-      if (data.user.user_metadata?.role === "creator") {
-        router.push("/dashboard/creator");
-        return;
-      }
-      setUser(data.user);
+      setUserEmail(data.user.email || "");
     }
     load();
   }, [router]);
 
-  const username = user?.user_metadata?.username || "student";
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    router.replace("/login");
+  }
 
   return (
-    <div className="dash-shell">
-      <a href="/" className="auth-back">
-        ← Back to Workday
-      </a>
-      <div className="dash-card">
-        <div className="dash-title">Student dashboard</div>
-        <div className="dash-subtitle">
-          Welcome, {username}. This is your private space to upload rubrics and
-          track your projects.
+    <div className="dash-full">
+      <header className="dash-topbar">
+        <div className="dash-brand">Workly · Student</div>
+        <div className="dash-user">
+          <span>{userEmail}</span>
+          <button onClick={handleLogout}>Log out</button>
         </div>
-        <div className="dash-meta">
-          Next steps: we will add real project upload, Turnitin checks, and
-          payment tracking here.
+      </header>
+
+      <main className="dash-main">
+        <div className="dash-blank">
+          <h1>Student dashboard</h1>
+          <p>
+            This space is reserved for your future project uploads, deadlines,
+            and order tracking.
+          </p>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

@@ -1,46 +1,47 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { supabase } from "../../lib/supabaseClient";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function CreatorDashboard() {
   const router = useRouter();
-  const [user, setUser] = useState(null);
+  const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
     async function load() {
       const { data } = await supabase.auth.getUser();
       if (!data.user) {
-        router.push("/login");
+        router.replace("/login");
         return;
       }
-      if (data.user.user_metadata?.role === "student") {
-        router.push("/dashboard/student");
-        return;
-      }
-      setUser(data.user);
+      setUserEmail(data.user.email || "");
     }
     load();
   }, [router]);
 
-  const username = user?.user_metadata?.username || "creator";
-  const status = user?.user_metadata?.status || "pending";
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    router.replace("/login");
+  }
 
   return (
-    <div className="dash-shell">
-      <a href="/" className="auth-back">
-        ← Back to Workday
-      </a>
-      <div className="dash-card">
-        <div className="dash-title">Creator dashboard</div>
-        <div className="dash-subtitle">
-          Welcome, {username}. Your current status is: {status}.
+    <div className="dash-full">
+      <header className="dash-topbar">
+        <div className="dash-brand">Workly · Creator</div>
+        <div className="dash-user">
+          <span>{userEmail}</span>
+          <button onClick={handleLogout}>Log out</button>
         </div>
-        <div className="dash-meta">
-          When status is pending, you will not see real projects yet. After the
-          owner approves you in the admin panel, this page will show real paid
-          tasks, uploads, and payouts.
+      </header>
+
+      <main className="dash-main">
+        <div className="dash-blank">
+          <h1>Creator dashboard</h1>
+          <p>
+            This space is reserved for your future tasks, payouts, and project
+            status board.
+          </p>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
