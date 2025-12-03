@@ -1,13 +1,16 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 import BackToWorklyLink from "@/components/BackToWorklyLink";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function CreatorEmailSignup() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
   const [done, setDone] = useState(false);
+  const [checking, setChecking] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,8 +32,28 @@ export default function CreatorEmailSignup() {
       return;
     }
 
-    // Same behaviour: user must confirm email before they can log in.
     setDone(true);
+  };
+
+  const handleContinueAfterVerify = async () => {
+    setErrorMsg("");
+    setChecking(true);
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    setChecking(false);
+
+    if (error || !data.session) {
+      setErrorMsg(
+        "We couldn't log you in yet. Make sure you clicked the confirmation link in your email, then try again."
+      );
+      return;
+    }
+
+    router.replace("/dashboard/creator");
   };
 
   if (done) {
@@ -38,21 +61,42 @@ export default function CreatorEmailSignup() {
       <div className="auth-shell">
         <BackToWorklyLink />
         <div className="auth-card">
-          <h1>Create your creator account</h1>
+          <h1>Check your email</h1>
           <p className="auth-sub">
-            Check your email to confirm your account before you can log in.
+            We sent a confirmation link to <strong>{email}</strong>.
           </p>
           <p
             style={{
-              marginTop: 16,
+              marginTop: 10,
               fontSize: 14,
               color: "rgba(15,23,42,0.8)",
             }}
           >
-            We sent a confirmation link to <strong>{email}</strong>. Open it on
-            this device, confirm, then come back and log in from the login page
-            to access your creator dashboard.
+            You can open the email on any device. After you confirm, come back
+            here and continue.
           </p>
+
+          <button
+            type="button"
+            className="auth-primary-btn"
+            style={{ marginTop: 18 }}
+            onClick={handleContinueAfterVerify}
+            disabled={checking}
+          >
+            {checking ? "Checking…" : "I confirmed my email – continue"}
+          </button>
+
+          {errorMsg && (
+            <p
+              style={{
+                marginTop: 12,
+                fontSize: 14,
+                color: "#ef4444",
+              }}
+            >
+              {errorMsg}
+            </p>
+          )}
         </div>
       </div>
     );
