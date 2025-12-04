@@ -1,7 +1,10 @@
+import { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 
 export default function Home() {
+  const [showAuthModal, setShowAuthModal] = useState(true);
+
   return (
     <div className="home-shell">
       <Head>
@@ -87,6 +90,56 @@ export default function Home() {
           </div>
         </footer>
       </div>
+
+      {/* AUTH MODAL OVERLAY (Fiverr-style) */}
+      {showAuthModal && (
+        <div
+          className="authm-overlay"
+          onClick={() => setShowAuthModal(false)}
+        >
+          <div
+            className="authm-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="authm-close"
+              onClick={() => setShowAuthModal(false)}
+              aria-label="Close"
+            >
+              ×
+            </button>
+
+            <div className="authm-header">
+              <p className="authm-kicker">Welcome to Workly</p>
+              <h2 className="authm-title">
+                Success <span>starts</span> here.
+              </h2>
+              <p className="authm-sub">
+                Create a free account to upload projects as a student or complete
+                tasks as a creator.
+              </p>
+            </div>
+
+            <div className="authm-actions">
+              <Link href="/login" className="authm-btn authm-btn-google">
+                Continue with Google
+              </Link>
+
+              <Link href="/get-started" className="authm-btn authm-btn-email">
+                Continue with email
+              </Link>
+            </div>
+
+            <div className="authm-footer-text">
+              <p>
+                Already have an account?{" "}
+                <Link href="/login">Sign in</Link>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
