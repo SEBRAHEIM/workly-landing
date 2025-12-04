@@ -2,8 +2,18 @@ import { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 
+const categories = [
+  { key: "reports", label: "Reports & Essays", hint: "Word docs, research, reflections" },
+  { key: "presentations", label: "Presentations & PPT", hint: "Slides, speaker notes, templates" },
+  { key: "group", label: "Group projects", hint: "Case studies, group assignments" },
+  { key: "excel", label: "Excel & Data", hint: "Sheets, dashboards, simple stats" },
+  { key: "coding", label: "Programming & Tech", hint: "Basic apps, code snippets" },
+  { key: "other", label: "Other uni tasks", hint: "Anything that doesn’t fit above" },
+];
+
 export default function Home() {
-  const [showAuthModal, setShowAuthModal] = useState(true);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
 
   return (
     <div className="home-root">
@@ -11,89 +21,95 @@ export default function Home() {
         <title>Workly – University projects, done for you.</title>
         <meta
           name="description"
-          content="Upload your university assessment as a student, or apply as a trusted creator. Workly connects both sides privately with clear payments and approvals."
+          content="Upload your university assessment as a student, or apply as a trusted creator. Workly connects both sides privately with clear approvals and payments."
         />
       </Head>
 
-      {/* DESKTOP LAYOUT */}
+      {/* ===== DESKTOP LAYOUT ===== */}
       <div className="desktop-layout">
         <div className="home-desktop-shell">
+          {/* Top nav */}
           <header className="home-desktop-nav">
-            <div className="home-logo">WORKLY</div>
-            <nav className="home-nav-links">
-              <Link href="/get-started">Get started</Link>
-              <Link href="/login">Log in</Link>
+            <div className="home-nav-left">
+              <button
+                type="button"
+                className="home-burger-btn"
+                onClick={() => setNavOpen(true)}
+                aria-label="Open menu"
+              >
+                <span />
+                <span />
+              </button>
+              <div className="home-logo">WORKLY</div>
+            </div>
+            <nav className="home-nav-right">
+              <Link href="/creator/apply" className="home-link-plain">
+                Become a creator
+              </Link>
+              <Link href="/login" className="home-link-plain">
+                Sign in
+              </Link>
+              <Link href="/get-started" className="home-nav-join">
+                Join
+              </Link>
             </nav>
           </header>
 
+          {/* Main content */}
           <main className="home-desktop-main">
+            {/* Hero */}
             <section className="home-desktop-hero">
               <div className="home-desktop-copy">
                 <p className="home-kicker">University projects, done for you.</p>
                 <h1 className="home-title">
-                  What will you <span>submit</span> today?
+                  Our creators will <span>take it from here.</span>
                 </h1>
                 <p className="home-sub">
-                  Upload rubrics and assessments as a student, or apply as a trusted
-                  creator. Workly keeps both sides private and manages clear approvals
-                  and payments.
+                  Upload your rubric, choose a creator, and keep everything inside
+                  Workly. No sharing numbers, no searching in WhatsApp.
                 </p>
-
                 <div className="home-actions">
                   <Link href="/get-started" className="home-primary-btn">
-                    Get started
+                    Find a creator
                   </Link>
                   <Link href="/login" className="home-secondary-btn">
-                    Log in
+                    Upload a rubric
                   </Link>
                 </div>
               </div>
 
-              <div className="home-desktop-panel">
-                <div className="home-desktop-card">
-                  <h3>Built for real students</h3>
-                  <p>
-                    Drop the rubric, set your deadline, and let a creator handle the
-                    project from start to finish.
-                  </p>
+              <div className="home-desktop-search-card">
+                <p className="home-search-label">What do you need help with?</p>
+                <div className="home-search-row">
+                  <input
+                    className="home-search-input"
+                    placeholder={`Try "HR group presentation"`}
+                    readOnly
+                  />
+                  <button className="home-search-btn" type="button">
+                    Browse creators
+                  </button>
                 </div>
-                <div className="home-desktop-card">
-                  <h3>Clear approvals</h3>
-                  <p>
-                    You review, approve, or request edits. Creators get paid only after
-                    your final approval.
-                  </p>
-                </div>
+                <p className="home-search-hint">
+                  No public contact details. Students and creators stay inside Workly.
+                </p>
               </div>
             </section>
 
+            {/* Categories row */}
             <section className="home-section">
-              <h2 className="home-section-title">How it works — simple 3 steps</h2>
-              <div className="home-steps-grid">
-                <article className="home-step-card">
-                  <div className="home-step-tag">Step 1 · Student</div>
-                  <h3>Upload rubric and requirements</h3>
-                  <p>
-                    Attach the rubric, files, and deadline. Add a short note about what
-                    you want. No long messages needed.
-                  </p>
-                </article>
-                <article className="home-step-card">
-                  <div className="home-step-tag">Step 2 · Creator</div>
-                  <h3>Creator does the whole project</h3>
-                  <p>
-                    A vetted creator accepts your task and builds the full project:
-                    report, slides, research, or code – end to end.
-                  </p>
-                </article>
-                <article className="home-step-card">
-                  <div className="home-step-tag">Step 3 · Approval</div>
-                  <h3>Checks, approval, and payout</h3>
-                  <p>
-                    You review the work, request edits if needed, then approve and
-                    download. Only then the creator gets paid.
-                  </p>
-                </article>
+              <h2 className="home-section-title">Popular uni work categories</h2>
+              <div className="home-categories-grid">
+                {categories.map((cat) => (
+                  <button
+                    key={cat.key}
+                    type="button"
+                    className="home-category-card"
+                  >
+                    <div className="home-category-label">{cat.label}</div>
+                    <div className="home-category-hint">{cat.hint}</div>
+                  </button>
+                ))}
               </div>
             </section>
           </main>
@@ -111,50 +127,66 @@ export default function Home() {
         </div>
       </div>
 
-      {/* MOBILE LAYOUT */}
+      {/* ===== MOBILE LAYOUT ===== */}
       <div className="mobile-layout">
         <div className="home-mobile-shell">
+          {/* Top bar */}
           <header className="home-mobile-header">
+            <button
+              type="button"
+              className="home-burger-btn"
+              onClick={() => setNavOpen(true)}
+              aria-label="Open menu"
+            >
+              <span />
+              <span />
+            </button>
             <div className="home-logo">WORKLY</div>
-            <Link href="/login" className="home-mobile-login-link">
-              Log in
+            <Link href="/get-started" className="home-mobile-join">
+              Join
             </Link>
           </header>
 
           <main className="home-mobile-main">
+            {/* Hero like Fiverr mobile */}
             <section className="home-mobile-hero">
-              <p className="home-kicker">University projects, done for you.</p>
-              <h1 className="home-title">
-                What will you <span>submit</span> today?
+              <h1 className="home-mobile-title">
+                Our creators will take it <span>from here.</span>
               </h1>
               <p className="home-sub">
-                Upload your rubric, choose a creator, and track everything inside
-                Workly.
+                Search what you need, choose a creator, and keep everything private
+                inside Workly.
               </p>
-
-              <div className="home-actions">
-                <Link href="/get-started" className="home-primary-btn">
-                  Get started
-                </Link>
-                <Link href="/login" className="home-secondary-btn">
-                  Log in
-                </Link>
+              <div className="home-mobile-search">
+                <input
+                  className="home-search-input"
+                  placeholder={`Try "HR group project"`}
+                  readOnly
+                />
+                <button className="home-search-btn" type="button">
+                  Search
+                </button>
               </div>
             </section>
 
-            <section className="home-mobile-steps">
-              <h2 className="home-section-title">3 clear steps</h2>
-              <ol className="home-mobile-steps-list">
-                <li>
-                  <strong>Upload rubric</strong> – drop the files and deadline.
-                </li>
-                <li>
-                  <strong>Creator works</strong> – a creator handles the full project.
-                </li>
-                <li>
-                  <strong>You approve</strong> – download, request edits, or approve.
-                </li>
-              </ol>
+            {/* Category cards like Fiverr screenshot */}
+            <section className="home-mobile-categories">
+              <div className="home-mobile-cards-grid">
+                {categories.map((cat) => (
+                  <button
+                    key={cat.key}
+                    type="button"
+                    className="home-mobile-category-card"
+                  >
+                    <div className="home-mobile-category-icon">
+                      {cat.label[0]}
+                    </div>
+                    <div className="home-mobile-category-text">
+                      {cat.label}
+                    </div>
+                  </button>
+                ))}
+              </div>
             </section>
           </main>
 
@@ -164,52 +196,53 @@ export default function Home() {
         </div>
       </div>
 
-      {/* AUTH MODAL – يظهر فقط في الموبايل */}
-      {showAuthModal && (
+      {/* ===== SIDE MENU (desktop + mobile) ===== */}
+      {navOpen && (
         <div
-          className="authm-overlay authm-mobile-only"
-          onClick={() => setShowAuthModal(false)}
+          className="home-side-overlay"
+          onClick={() => setNavOpen(false)}
         >
-          <div
-            className="authm-modal"
+          <aside
+            className="home-side-panel"
             onClick={(e) => e.stopPropagation()}
           >
-            <button
-              type="button"
-              className="authm-close"
-              onClick={() => setShowAuthModal(false)}
-              aria-label="Close"
-            >
-              ×
-            </button>
-
-            <div className="authm-header">
-              <p className="authm-kicker">Welcome to Workly</p>
-              <h2 className="authm-title">
-                Success <span>starts</span> here.
-              </h2>
-              <p className="authm-sub">
-                Continue with Google or email to upload projects as a student or
-                complete tasks as a creator.
-              </p>
+            <div className="home-side-header">
+              <div className="home-logo">WORKLY</div>
+              <button
+                type="button"
+                className="home-side-close"
+                onClick={() => setNavOpen(false)}
+                aria-label="Close menu"
+              >
+                ×
+              </button>
             </div>
 
-            <div className="authm-actions">
-              <Link href="/login" className="authm-btn authm-btn-google">
-                Continue with Google
+            <nav className="home-side-nav">
+              <div className="home-side-section-label">General</div>
+              <Link href="/" className="home-side-link">
+                Home
               </Link>
-              <Link href="/get-started" className="authm-btn authm-btn-email">
-                Continue with email
+              <button type="button" className="home-side-link muted">
+                Languages
+              </button>
+              <button type="button" className="home-side-link">
+                AED (currency)
+              </button>
+            </nav>
+
+            <div className="home-side-bottom">
+              <Link href="/creator/apply" className="home-side-link">
+                Become a creator
+              </Link>
+              <Link href="/login" className="home-side-link">
+                Sign in
+              </Link>
+              <Link href="/get-started" className="home-side-join">
+                Join Workly
               </Link>
             </div>
-
-            <div className="authm-footer-text">
-              <p>
-                Already have an account?{" "}
-                <Link href="/login">Sign in</Link>
-              </p>
-            </div>
-          </div>
+          </aside>
         </div>
       )}
     </div>
