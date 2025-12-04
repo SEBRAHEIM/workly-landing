@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import BackToWorklyLink from "@/components/BackToWorklyLink";
 import { supabase } from "@/lib/supabaseClient";
@@ -7,59 +7,59 @@ export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loadingEmail, setLoadingEmail] = useState(false);
+  const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [verifiedBanner, setVerifiedBanner] = useState(false);
 
-  useEffect(() => {
-    if (!router.isReady) return;
-    const v = router.query.verified;
-    if (v === "1" || v === "true") {
-      setVerifiedBanner(true);
-    }
-  }, [router.isReady, router.query.verified]);
+  // If the user came from the verification email, Supabase redirects to:
+  // https://workly.day/login?verified=1
+  const isVerified =
+    router.query.verified === "1" || router.query.verified === "true";
 
   const handleEmailLogin = async (e) => {
     e.preventDefault();
     setErrorMsg("");
-    setLoading(true);
+    setLoadingEmail(true);
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    setLoading(false);
+    setLoadingEmail(false);
 
     if (error) {
-      setErrorMsg(error.message || "Something went wrong. Try again.");
+      setErrorMsg(error.message || "Incorrect email or password.");
       return;
     }
 
-    const user = data?.user;
-    const role =
-      user?.user_metadata?.role === "creator" ? "creator" : "student";
-
+      // Decide where to send them based on stored role
+    const role = data.user?.user_metadata?.role || "student";
     router.replace(`/dashboard/${role}`);
   };
 
   const handleGoogleLogin = async () => {
-    setErrorMsg("");
-    setLoading(true);
+    try {
+      setErrorMsg("");
+      setLoadingGoogle(true);
 
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: typeof window !== "undefined"
-          ? `${window.location.origin}/auth/callback`
-          : undefined,
-      },
-    });
+      const origin =
+        typeof window !== "undefined" ? window.location.origin : "";
+      const redirectTo = origin ? `${origin}/auth/callback` : undefined;
 
-    setLoading(false);
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo },
+      });
 
-    if (error) {
-      setErrorMsg(error.message || "Something went wrong. Try again.");
+      if (error) {
+        setErrorMsg(error.message || "Something went wrong with Google login.");
+        setLoadingGoogle(false);
+      }
+      // On success, Supabase will redirect away; we don't clear loading here.
+    } catch (err) {
+      setLoadingGoogle(false);
+      setErrorMsg("Something went wrong. Please try again.");
     }
   };
 
@@ -67,13 +67,30 @@ export default function LoginPage() {
     <div className="auth-shell">
       <BackToWorklyLink />
 
-      {verifiedBanner && (
-        <div className="auth-banner auth-banner-success">
-          <span>Your email is verified. You can log in now.</span>
-        </div>
-      )}
+      <div
+        className="auth-card"
+        style={{
+          maxWidth: 520,
+          margin: "72px auto 80px",
+        }}
+      >
+        {isVerified && (
+          <div
+            style={{
+              marginBottom: 16,
+              padding: "10px 12px",
+              borderRadius: 12,
+              fontSize: 14,
+              background: "rgba(34,197,94,0.1)",
+              color: "#166534",
+              border: "1px solid rgba(34,197,94,0.4)",
+            }}
+          >
+            Email verified successfully. You can now log in to your Workly
+            account.
+          </div>
+        )}
 
-      <div className="auth-card login-card">
         <h1>Log in</h1>
         <p className="auth-sub">
           Enter your email and password, or continue with Google.
@@ -101,46 +118,61 @@ export default function LoginPage() {
           <button
             type="submit"
             className="auth-primary-btn"
-            disabled={loading}
+            disabled={loadingEmail}
           >
-            {loading ? "Signing in…" : "Continue"}
+            {loadingEmail ? "Signing in…" : "Continue"}
           </button>
+
+          {errorMsg && (
+            <p
+              style={{
+                marginTop: 12,
+                fontSize: 14,
+                color: "#ef4444",
+              }}
+            >
+              {errorMsg}
+            </p>
+          )}
         </form>
+
+        <div
+          style={{
+            marginTop: 18,
+            marginBottom: 6,
+            fontSize: 13,
+            color: "rgba(15,23,42,0.6)",
+          }}
+        >
+          or continue with
+        </div>
 
         <button
           type="button"
           className="auth-google-button"
           onClick={handleGoogleLogin}
-          disabled={loading}
-          style={{ marginTop: 16 }}
+          disabled={loadingGoogle}
         >
-          Continue with Google
+          <span className="google-icon">
+            <span className="google-icon-inner" />
+          </span>
+          {loadingGoogle ? "Connecting to Google…" : "Continue with Google"}
         </button>
-
-        {errorMsg && (
-          <p
-            style={{
-              marginTop: 12,
-              fontSize: 14,
-              color: "#ef4444",
-            }}
-          >
-            {errorMsg}
-          </p>
-        )}
 
         <p
           style={{
-            marginTop: 16,
+            marginTop: 18,
             fontSize: 14,
             color: "rgba(15,23,42,0.7)",
           }}
         >
           Need an account?{" "}
-          <a href="/signup" style={{ textDecoration: "underline" }}>
-            Sign up as student or creator
+          <a
+            href="/signup"
+            style={{ color: "#4f46e5", textDecoration: "underline" }}
+          >
+            Sign up as student or creator.
           </a>
-          .
         </p>
       </div>
     </div>
