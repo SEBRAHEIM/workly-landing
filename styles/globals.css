@@ -2925,3 +2925,59 @@ footer {
   font-size: 14px;
   color: #4b5563;
 }
+/* === Auth layout refinements (login + signup) === */
+
+.auth-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 32px 16px 40px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 640px;
+  margin-top: 24px;
+  border-radius: 32px;
+  background: rgba(248, 250, 252, 0.98);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.45);
+  padding: 28px 22px 26px;
+}
+
+/* نصوص داخل كارد الـ auth */
+.auth-card h1 {
+  font-size: 28px;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.auth-card .auth-sub {
+  font-size: 14px;
+  color: rgba(15, 23, 42, 0.7);
+  margin-bottom: 18px;
+}
+
+/* حق الشاشات الكبيرة (لابتوب) */
+@media (min-width: 768px) {
+  .auth-shell {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+
+  .auth-card {
+    max-width: 700px;
+    padding: 34px 32px 30px;
+    margin-top: 28px;
+  }
+}
+
+/* محاذاة رابط Back to Workly مع الكارد */
+.auth-shell > a,
+.auth-shell > .back-link,
+.auth-shell > .back-to-workly {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+}
