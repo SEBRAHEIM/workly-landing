@@ -1147,3 +1147,273 @@ button {
     font-size: 22px;
   }
 }
+
+/* Home layout root */
+.home-root {
+  min-height: 100vh;
+  background: radial-gradient(circle at top right, var(--sand-2), var(--sand-1));
+  color: var(--sand-5);
+}
+
+/* Desktop vs mobile visibility */
+.desktop-layout {
+  display: none;
+}
+
+.mobile-layout {
+  display: block;
+}
+
+@media (min-width: 761px) {
+  .desktop-layout {
+    display: block;
+  }
+  .mobile-layout {
+    display: none;
+  }
+}
+
+/* Desktop shell */
+.home-desktop-shell {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 32px 32px 40px;
+}
+
+.home-desktop-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 36px;
+}
+
+.home-logo {
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.home-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.home-nav-links a {
+  text-decoration: none;
+  color: var(--sand-5);
+}
+
+.home-desktop-main {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.home-desktop-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: center;
+}
+
+.home-desktop-copy {
+  max-width: 520px;
+}
+
+.home-kicker {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  margin-bottom: 10px;
+  color: rgba(90, 84, 73, 0.9);
+}
+
+.home-title {
+  font-size: 36px;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin: 0 0 12px;
+}
+
+.home-title span {
+  color: var(--sand-4);
+}
+
+.home-sub {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(90, 84, 73, 0.9);
+  max-width: 520px;
+}
+
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.home-primary-btn,
+.home-secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.home-primary-btn {
+  background: var(--sand-3);
+  color: var(--sand-1);
+}
+
+.home-secondary-btn {
+  background: transparent;
+  border: 1px solid var(--sand-4);
+  color: var(--sand-5);
+}
+
+.home-desktop-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.home-desktop-card {
+  background: rgba(246, 245, 244, 0.94);
+  border-radius: 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(138, 129, 124, 0.25);
+  font-size: 14px;
+}
+
+.home-desktop-card h3 {
+  margin: 0 0 6px;
+  font-size: 15px;
+}
+
+.home-section {
+  margin-top: 8px;
+}
+
+.home-section-title {
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+
+.home-section-sub {
+  font-size: 14px;
+  color: rgba(90, 84, 73, 0.9);
+  max-width: 640px;
+}
+
+.home-steps-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 10px;
+}
+
+.home-step-card {
+  background: rgba(246, 245, 244, 0.9);
+  border-radius: 18px;
+  padding: 16px 16px 14px;
+  border: 1px solid rgba(138, 129, 124, 0.3);
+  font-size: 14px;
+}
+
+.home-step-card h3 {
+  margin: 6px 0 6px;
+  font-size: 15px;
+}
+
+.home-step-tag {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(90, 84, 73, 0.8);
+}
+
+.home-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  font-size: 12px;
+  color: rgba(90, 84, 73, 0.8);
+}
+
+.home-footer-links {
+  display: flex;
+  gap: 6px;
+}
+
+/* Mobile shell */
+.home-mobile-shell {
+  min-height: 100vh;
+  padding: 20px 18px 26px;
+}
+
+.home-mobile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.home-mobile-login-link {
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.home-mobile-main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.home-mobile-hero .home-title {
+  font-size: 28px;
+}
+
+.home-mobile-steps {
+  padding: 14px 14px 16px;
+  border-radius: 18px;
+  background: rgba(246, 245, 244, 0.9);
+  border: 1px solid rgba(138, 129, 124, 0.25);
+}
+
+.home-mobile-steps-list {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-size: 14px;
+}
+
+.home-footer-mobile {
+  margin-top: 28px;
+  justify-content: center;
+}
+
+/* Auth modal only on mobile */
+.authm-mobile-only {
+  display: flex;
+}
+
+@media (min-width: 761px) {
+  .authm-mobile-only {
+    display: none;
+  }
+}
+
+/* ضبط بسيط للموبايل الصغير */
+@media (max-width: 760px) {
+  .home-sub {
+    font-size: 14px;
+  }
+}
