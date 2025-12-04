@@ -1,87 +1,4 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { supabase } from "@/lib/supabaseClient";
-
-function StudentShell({ children, active }) {
-  const router = useRouter();
-  const [userEmail, setUserEmail] = useState("");
-
-  useEffect(() => {
-    async function loadUser() {
-      const { data, error } = await supabase.auth.getUser();
-      if (error || !data?.user) {
-        router.replace("/login");
-        return;
-      }
-      setUserEmail(data.user.email || "");
-    }
-    loadUser();
-  }, [router]);
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.replace("/login");
-  };
-
-  const go = (path) => {
-    router.push(path);
-  };
-
-  return (
-    <div className="app-shell">
-      <header className="app-topbar">
-        <div className="app-brand">
-          <span className="app-brand-logo">W</span>
-          <span className="app-brand-text">Workly · Student</span>
-        </div>
-        <div className="app-topbar-right">
-          <span className="app-user-email">{userEmail}</span>
-          <button className="app-logout-btn" onClick={handleLogout}>
-            Log out
-          </button>
-        </div>
-      </header>
-
-      <div className="app-body">
-        <aside className="app-sidebar">
-          <div className="sidebar-section">
-            <div className="sidebar-title">Overview</div>
-            <button
-              className={
-                "sidebar-link" + (active === "home" ? " is-active" : "")
-              }
-              onClick={() => go("/dashboard/student")}
-            >
-              Home
-            </button>
-          </div>
-
-          <div className="sidebar-section">
-            <div className="sidebar-title">Work</div>
-            <button
-              className={
-                "sidebar-link" + (active === "browse" ? " is-active" : "")
-              }
-              onClick={() => go("/dashboard/student/browse")}
-            >
-              Browse creators
-            </button>
-            <button className="sidebar-link">My projects</button>
-            <button className="sidebar-link">Messages</button>
-          </div>
-
-          <div className="sidebar-section">
-            <div className="sidebar-title">Account</div>
-            <button className="sidebar-link">Wallet</button>
-            <button className="sidebar-link">Settings</button>
-          </div>
-        </aside>
-
-        <main className="app-main">{children}</main>
-      </div>
-    </div>
-  );
-}
+import StudentDashboardShell from "@/components/StudentDashboardShell";
 
 export default function StudentDashboardHome() {
   const metrics = [
@@ -94,18 +11,22 @@ export default function StudentDashboardHome() {
   const projects = [];
 
   return (
-    <StudentShell active="home">
+    <StudentDashboardShell
+      active="home"
+      title="Student dashboard"
+      subtitle="Upload rubrics, track creator progress, and approve deliveries in one calm place."
+    >
       <section className="dash-section">
-        <h1 className="dash-section-title">Overview</h1>
+        <h2 className="dash-section-title">This week at a glance</h2>
         <p className="dash-section-sub">
-          Track your projects, approvals and spending on Workly.
+          Everything updates automatically once a creator accepts your project.
         </p>
         <div className="dash-metrics-row">
           {metrics.map((m) => (
             <div key={m.label} className="dash-metric-card">
               <div className="dash-metric-label">{m.label}</div>
               <div className="dash-metric-value">{m.value}</div>
-              <div className="dash-metric-caption">This semester</div>
+              <div className="dash-metric-caption">Refreshed daily</div>
             </div>
           ))}
         </div>
@@ -116,14 +37,15 @@ export default function StudentDashboardHome() {
           <div className="dash-card">
             <div className="dash-card-head">
               <div>
-                <h2 className="dash-card-title">My projects</h2>
+                <h3 className="dash-card-title">My projects</h3>
                 <p className="dash-card-sub">
-                  All projects you submit will appear here.
+                  Upload your rubric to open a new request for a creator.
                 </p>
               </div>
-              <button className="dash-primary-btn">Upload new project</button>
+              <button type="button" className="dash-primary-btn">
+                Upload rubric
+              </button>
             </div>
-
             <div className="dash-table">
               <div className="dash-table-header">
                 <span>Project</span>
@@ -132,10 +54,10 @@ export default function StudentDashboardHome() {
               </div>
               {projects.length === 0 ? (
                 <div className="dash-table-empty">
-                  <p>You have no projects yet.</p>
+                  <p>No projects yet.</p>
                   <p className="dash-table-empty-sub">
-                    Start by uploading a rubric or assessment so a creator can
-                    work on it for you.
+                    Once you share your rubric, the Workly team will match you
+                    with a trusted creator.
                   </p>
                 </div>
               ) : (
@@ -143,7 +65,7 @@ export default function StudentDashboardHome() {
                   <div className="dash-table-row" key={p.id}>
                     <span>{p.title}</span>
                     <span>
-                      <span className={"status-pill status-" + p.status}>
+                      <span className={`status-pill status-${p.status}`}>
                         {p.statusLabel}
                       </span>
                     </span>
@@ -153,43 +75,61 @@ export default function StudentDashboardHome() {
               )}
             </div>
           </div>
+
+          <div className="dash-card">
+            <h3 className="dash-card-title">Next steps</h3>
+            <p className="dash-card-sub">
+              The process stays the same each time you submit a project.
+            </p>
+            <ul className="dashboard-steps-list">
+              <li>
+                1. Upload rubric and supporting docs (Word, PPT, Excel, or PDF).
+              </li>
+              <li>
+                2. Workly pairs you with a creator based on subject and
+                deadline.
+              </li>
+              <li>
+                3. Review the delivery, request edits, and approve when ready.
+              </li>
+            </ul>
+          </div>
         </section>
 
         <section className="dash-column-right">
           <div className="dash-card">
-            <h2 className="dash-card-title">Wallet & payments</h2>
+            <h3 className="dash-card-title">Wallet &amp; payments</h3>
             <p className="dash-card-sub">
-              A quick view of what you spent on Workly.
+              Keep track of how much you spend on each project.
             </p>
             <div className="wallet-main-amount">AED 0.00</div>
-            <p className="wallet-caption">Total spent on finished projects</p>
-
+            <p className="wallet-caption">Available balance</p>
             <div className="wallet-list">
               <div className="wallet-row-header">
                 <span>Recent payments</span>
                 <span className="wallet-badge">Coming soon</span>
               </div>
               <p className="wallet-empty">
-                When you approve a project, payments will appear here.
+                When you approve a project, payment history will appear here.
               </p>
             </div>
           </div>
 
           <div className="dash-card">
-            <h2 className="dash-card-title">Activity</h2>
+            <h3 className="dash-card-title">Messages &amp; updates</h3>
             <p className="dash-card-sub">
-              Important events for your projects will show up here.
+              Creators will reply inside this inbox for every project.
             </p>
             <div className="activity-empty">
-              <p>No activity yet.</p>
+              <p>No messages yet.</p>
               <p className="activity-empty-sub">
-                As soon as you upload your first project and a creator starts
-                working on it, you will see updates in this feed.
+                Once a creator starts, all feedback and file exchanges live in
+                this thread.
               </p>
             </div>
           </div>
         </section>
       </div>
-    </StudentShell>
+    </StudentDashboardShell>
   );
 }

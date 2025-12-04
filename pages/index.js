@@ -41,8 +41,19 @@ export default function Home() {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    if (!searchValue.trim()) return;
-    alert("Search will be connected soon: " + searchValue.trim());
+    alert("Search coming soon");
+    setSearchValue("");
+  };
+
+  const handleCategoryClick = (label) => {
+    alert(label);
+  };
+
+  const handleMobileHome = () => {
+    setMobileMenuOpen(false);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   return (
@@ -66,10 +77,10 @@ export default function Home() {
             </div>
             <div className="landing-nav-center">
               <button type="button" className="landing-nav-link muted">
-                Browse creators
+                Student services
               </button>
               <button type="button" className="landing-nav-link muted">
-                Student services
+                Browse creators
               </button>
             </div>
             <div className="landing-nav-right">
@@ -158,6 +169,7 @@ export default function Home() {
                   key={cat.key}
                   type="button"
                   className="landing-category-card"
+                  onClick={() => handleCategoryClick(cat.title)}
                 >
                   <div className="landing-category-icon">
                     <span>{cat.title.charAt(0)}</span>
@@ -205,7 +217,7 @@ export default function Home() {
                   href="/signup/creator"
                   className="landing-secondary-link"
                 >
-                  See creator requirements
+                  Become a creator instead
                 </Link>
               </div>
             </section>
@@ -259,7 +271,7 @@ export default function Home() {
                 <Link
                   href="/"
                   className="mobile-menu-item"
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={handleMobileHome}
                 >
                   Home
                 </Link>
@@ -325,6 +337,7 @@ export default function Home() {
                     key={cat.key}
                     type="button"
                     className="landing-category-pill-card"
+                    onClick={() => handleCategoryClick(cat.title)}
                   >
                     <div className="pill-icon">
                       <span>{cat.title.charAt(0)}</span>

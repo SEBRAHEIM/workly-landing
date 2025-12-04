@@ -1,6 +1,6 @@
 export default function BackToWorklyLink() {
   return (
-    <a href="/" className="auth-back">
+    <a href="/" className="back-link">
       ← Back to Workly
     </a>
   );

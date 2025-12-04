@@ -1,87 +1,4 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { supabase } from "@/lib/supabaseClient";
-
-function StudentShell({ children, active }) {
-  const router = useRouter();
-  const [userEmail, setUserEmail] = useState("");
-
-  useEffect(() => {
-    async function loadUser() {
-      const { data, error } = await supabase.auth.getUser();
-      if (error || !data?.user) {
-        router.replace("/login");
-        return;
-      }
-      setUserEmail(data.user.email || "");
-    }
-    loadUser();
-  }, [router]);
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.replace("/login");
-  };
-
-  const go = (path) => {
-    router.push(path);
-  };
-
-  return (
-    <div className="app-shell">
-      <header className="app-topbar">
-        <div className="app-brand">
-          <span className="app-brand-logo">W</span>
-          <span className="app-brand-text">Workly · Student</span>
-        </div>
-        <div className="app-topbar-right">
-          <span className="app-user-email">{userEmail}</span>
-          <button className="app-logout-btn" onClick={handleLogout}>
-            Log out
-          </button>
-        </div>
-      </header>
-
-      <div className="app-body">
-        <aside className="app-sidebar">
-          <div className="sidebar-section">
-            <div className="sidebar-title">Overview</div>
-            <button
-              className={
-                "sidebar-link" + (active === "home" ? " is-active" : "")
-              }
-              onClick={() => go("/dashboard/student")}
-            >
-              Home
-            </button>
-          </div>
-
-          <div className="sidebar-section">
-            <div className="sidebar-title">Work</div>
-            <button
-              className={
-                "sidebar-link" + (active === "browse" ? " is-active" : "")
-              }
-              onClick={() => go("/dashboard/student/browse")}
-            >
-              Browse creators
-            </button>
-            <button className="sidebar-link">My projects</button>
-            <button className="sidebar-link">Messages</button>
-          </div>
-
-          <div className="sidebar-section">
-            <div className="sidebar-title">Account</div>
-            <button className="sidebar-link">Wallet</button>
-            <button className="sidebar-link">Settings</button>
-          </div>
-        </aside>
-
-        <main className="app-main">{children}</main>
-      </div>
-    </div>
-  );
-}
+import StudentDashboardShell from "@/components/StudentDashboardShell";
 
 export default function BrowseCreatorsPage() {
   const mockCreators = [
@@ -120,11 +37,16 @@ export default function BrowseCreatorsPage() {
   ];
 
   return (
-    <StudentShell active="browse">
+    <StudentDashboardShell
+      active="browse"
+      title="Browse creators"
+      subtitle="Handpicked profiles for business, PPT, coding, and more."
+    >
       <section className="dash-section">
-        <h1 className="dash-section-title">Browse creators</h1>
+        <h2 className="dash-section-title">Featured creators</h2>
         <p className="dash-section-sub">
-          Find trusted creators who can complete your projects privately.
+          Choose the style you need, then attach your rubric so we can brief
+          them properly.
         </p>
 
         <div className="browse-grid">
@@ -132,22 +54,25 @@ export default function BrowseCreatorsPage() {
             <article key={c.id} className="creator-card">
               <div className="creator-avatar">{c.name.charAt(0)}</div>
               <div className="creator-main">
-                <h2 className="creator-name">{c.name}</h2>
+                <div className="creator-name-row">
+                  <h3 className="creator-name">{c.name}</h3>
+                  <span className="creator-price">{c.price}</span>
+                </div>
                 <p className="creator-subjects">
                   {c.subjects.join(" · ")} · {c.university}
                 </p>
                 <p className="creator-bio">{c.bio}</p>
               </div>
               <div className="creator-meta">
-                <div className="creator-price">{c.price}</div>
-                <button className="dash-primary-btn creator-btn">
-                  View profile
+                <button type="button" className="dash-primary-btn creator-btn">
+                  Request project
                 </button>
+                <span className="creator-note">Profile preview</span>
               </div>
             </article>
           ))}
         </div>
       </section>
-    </StudentShell>
+    </StudentDashboardShell>
   );
 }
