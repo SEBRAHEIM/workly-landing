@@ -327,6 +327,17 @@ footer {
   color: #020617;
 }
 
+.auth-verified-banner {
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #065f46;
+  background: #d1fae5;
+  border: 1px solid rgba(16,185,129,0.6);
+}
+
 .auth-card h1 {
   font-size: 20px;
   margin-bottom: 4px;
@@ -940,4 +951,20 @@ footer {
 .dash-blank p {
   font-size: 14px;
   color: #cbd5f5;
+}
+.auth-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 18px;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  z-index: 60;
+}
+
+.auth-banner-success {
+  background: rgba(22, 163, 74, 0.98);
+  color: #ecfdf5;
 }

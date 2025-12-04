@@ -1,139 +1,147 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { supabase } from "@/lib/supabaseClient";
 import BackToWorklyLink from "@/components/BackToWorklyLink";
+import { supabase } from "@/lib/supabaseClient";
 
-export default function Login() {
+export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [verifiedBanner, setVerifiedBanner] = useState(false);
 
-  async function handleSubmit(e) {
+  useEffect(() => {
+    if (!router.isReady) return;
+    const v = router.query.verified;
+    if (v === "1" || v === "true") {
+      setVerifiedBanner(true);
+    }
+  }, [router.isReady, router.query.verified]);
+
+  const handleEmailLogin = async (e) => {
     e.preventDefault();
-    setError("");
+    setErrorMsg("");
     setLoading(true);
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
-      password
+      password,
     });
 
     setLoading(false);
 
     if (error) {
-      setError(error.message);
+      setErrorMsg(error.message || "Something went wrong. Try again.");
       return;
     }
 
-    const user = data.user;
-    if (!user) {
-      setError("Unable to load user after login.");
-      return;
-    }
+    const user = data?.user;
+    const role =
+      user?.user_metadata?.role === "creator" ? "creator" : "student";
 
-    const role = user.user_metadata?.role || "student";
+    router.replace(`/dashboard/${role}`);
+  };
 
-    if (role === "creator") {
-      router.push("/dashboard/creator");
-    } else {
-      router.push("/dashboard/student");
-    }
-  }
+  const handleGoogleLogin = async () => {
+    setErrorMsg("");
+    setLoading(true);
 
-  async function handleGoogle() {
-    setError("");
-    setGoogleLoading(true);
-    try {
-      const redirectTo = `${window.location.origin}/auth/callback`;
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: { redirectTo }
-      });
-      if (error) {
-        setError(error.message);
-        setGoogleLoading(false);
-      }
-    } catch (e) {
-      setError("Could not start Google login.");
-      setGoogleLoading(false);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: typeof window !== "undefined"
+          ? `${window.location.origin}/auth/callback`
+          : undefined,
+      },
+    });
+
+    setLoading(false);
+
+    if (error) {
+      setErrorMsg(error.message || "Something went wrong. Try again.");
     }
-  }
+  };
 
   return (
     <div className="auth-shell">
       <BackToWorklyLink />
+
+      {verifiedBanner && (
+        <div className="auth-banner auth-banner-success">
+          <span>Your email is verified. You can log in now.</span>
+        </div>
+      )}
+
       <div className="auth-card login-card">
         <h1>Log in</h1>
-        <p className="auth-intro">
+        <p className="auth-sub">
           Enter your email and password, or continue with Google.
         </p>
 
-        <form onSubmit={handleSubmit}>
-          <div className="auth-field">
-            <label className="auth-label" htmlFor="email">
-              Email
-            </label>
-            <input
-              id="email"
-              className="auth-input"
-              type="email"
-              placeholder="you@email.com"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="auth-field">
-            <label className="auth-label" htmlFor="password">
-              Password
-            </label>
-            <input
-              id="password"
-              className="auth-input"
-              type="password"
-              placeholder="••••••••"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          {error && (
-            <div className="auth-hint" style={{ color: "#b91c1c" }}>
-              {error}
-            </div>
-          )}
-          <button className="auth-button" type="submit" disabled={loading}>
-            {loading ? "Signing in..." : "Continue"}
+        <form onSubmit={handleEmailLogin} className="auth-form">
+          <label>Email</label>
+          <input
+            className="auth-input"
+            required
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+
+          <label>Password</label>
+          <input
+            className="auth-input"
+            required
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <button
+            type="submit"
+            className="auth-primary-btn"
+            disabled={loading}
+          >
+            {loading ? "Signing in…" : "Continue"}
           </button>
         </form>
 
-        <div className="login-or">or continue with</div>
-
         <button
           type="button"
-          className="auth-button auth-google-button"
-          onClick={handleGoogle}
-          disabled={googleLoading}
+          className="auth-google-button"
+          onClick={handleGoogleLogin}
+          disabled={loading}
+          style={{ marginTop: 16 }}
         >
-          <span className="google-pill">
-            <span className="google-icon">
-              <span className="google-icon-inner" />
-            </span>
-            <span>
-              {googleLoading ? "Connecting to Google…" : "Continue with Google"}
-            </span>
-          </span>
+          Continue with Google
         </button>
 
-        <div className="auth-switch" style={{ marginTop: 10 }}>
-          <span>Need an account?</span>
-          <button type="button" onClick={() => router.push("/signup")}>
+        {errorMsg && (
+          <p
+            style={{
+              marginTop: 12,
+              fontSize: 14,
+              color: "#ef4444",
+            }}
+          >
+            {errorMsg}
+          </p>
+        )}
+
+        <p
+          style={{
+            marginTop: 16,
+            fontSize: 14,
+            color: "rgba(15,23,42,0.7)",
+          }}
+        >
+          Need an account?{" "}
+          <a href="/signup" style={{ textDecoration: "underline" }}>
             Sign up as student or creator
-          </button>
-        </div>
+          </a>
+          .
+        </p>
       </div>
     </div>
   );
