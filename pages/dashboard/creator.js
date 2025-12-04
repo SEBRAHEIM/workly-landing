@@ -7,15 +7,15 @@ export default function CreatorDashboard() {
   const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
-    const run = async () => {
+    async function loadUser() {
       const { data, error } = await supabase.auth.getUser();
-      if (error || !data.user) {
+      if (error || !data?.user) {
         router.replace("/login");
         return;
       }
       setUserEmail(data.user.email || "");
-    };
-    run();
+    }
+    loadUser();
   }, [router]);
 
   const handleLogout = async () => {
@@ -23,145 +23,149 @@ export default function CreatorDashboard() {
     router.replace("/login");
   };
 
+  const metrics = [
+    { label: "Open tasks", value: "0" },
+    { label: "Delivered this month", value: "0" },
+    { label: "Completed all time", value: "0" },
+    { label: "Total earned (AED)", value: "0" },
+  ];
+
+  const tasks = [];
+
   return (
-    <div className="dash-full">
-      <header className="dash-topbar">
-        <div className="dash-brand">WORKLY · CREATOR</div>
-        <div className="dash-user">
-          <span className="dash-user-email">{userEmail}</span>
-          <button className="dash-logout" onClick={handleLogout}>
+    <div className="app-shell">
+      <header className="app-topbar">
+        <div className="app-brand">
+          <span className="app-brand-logo">W</span>
+          <span className="app-brand-text">Workly · Creator</span>
+        </div>
+        <div className="app-topbar-right">
+          <span className="app-user-email">{userEmail}</span>
+          <button className="app-logout-btn" onClick={handleLogout}>
             Log out
           </button>
         </div>
       </header>
 
-      <main className="dash-main">
-        <div className="dash-inner">
-          <div className="dash-columns">
-            <section className="dash-left">
-              <div className="dash-metrics-row">
-                <div className="dash-metric-card">
-                  <p className="dash-metric-label">Open tasks</p>
-                  <p className="dash-metric-value">0</p>
-                  <p className="dash-metric-caption">
-                    Tasks you are currently doing
-                  </p>
-                </div>
-                <div className="dash-metric-card">
-                  <p className="dash-metric-label">Delivered this month</p>
-                  <p className="dash-metric-value">0</p>
-                  <p className="dash-metric-caption">Awaiting approval</p>
-                </div>
-                <div className="dash-metric-card">
-                  <p className="dash-metric-label">Completed all time</p>
-                  <p className="dash-metric-value">0</p>
-                  <p className="dash-metric-caption">Across all students</p>
-                </div>
-                <div className="dash-metric-card">
-                  <p className="dash-metric-label">Total earned</p>
-                  <p className="dash-metric-value">AED 0</p>
-                  <p className="dash-metric-caption">Paid out to you</p>
-                </div>
-              </div>
+      <div className="app-body">
+        <aside className="app-sidebar">
+          <div className="sidebar-section">
+            <div className="sidebar-title">Overview</div>
+            <button className="sidebar-link is-active">Home</button>
+          </div>
 
-              <section className="dash-section">
-                <div className="dash-section-head">
+          <div className="sidebar-section">
+            <div className="sidebar-title">Work</div>
+            <button className="sidebar-link">My tasks</button>
+            <button className="sidebar-link">Messages</button>
+          </div>
+
+          <div className="sidebar-section">
+            <div className="sidebar-title">Account</div>
+            <button className="sidebar-link">Earnings</button>
+            <button className="sidebar-link">Profile</button>
+          </div>
+        </aside>
+
+        <main className="app-main">
+          <section className="dash-section">
+            <h1 className="dash-section-title">Overview</h1>
+            <p className="dash-section-sub">
+              See your tasks, delivery status and earnings at a glance.
+            </p>
+            <div className="dash-metrics-row">
+              {metrics.map((m) => (
+                <div key={m.label} className="dash-metric-card">
+                  <div className="dash-metric-label">{m.label}</div>
+                  <div className="dash-metric-value">{m.value}</div>
+                  <div className="dash-metric-caption">Updated daily</div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <div className="dash-main-grid">
+            <section className="dash-column-left">
+              <div className="dash-card">
+                <div className="dash-card-head">
                   <div>
-                    <h2 className="dash-section-title">My tasks</h2>
-                    <p className="dash-section-sub">
-                      Every project assigned to you in one place.
+                    <h2 className="dash-card-title">My tasks</h2>
+                    <p className="dash-card-sub">
+                      Tasks assigned to you or accepted by you will appear here.
                     </p>
                   </div>
                 </div>
 
-                <div className="dash-table-empty">
-                  <h3>No tasks yet</h3>
-                  <p>
-                    Once Workly assigns projects to you, they will appear here
-                    with deadline, price, and status.
-                  </p>
-                  <p className="dash-mini-note">
-                    You will be able to open a task, chat, and upload drafts and
-                    final files from this page.
-                  </p>
-                </div>
-
-                {false && (
-                  <div className="dash-table">
-                    <div className="dash-table-header">
-                      <span>Project</span>
-                      <span>Status</span>
-                      <span>Deadline</span>
-                      <span>Price</span>
-                      <span>Student</span>
-                      <span></span>
-                    </div>
-                    <div className="dash-table-row">
-                      <div className="dash-table-main">
-                        <p className="dash-project-title">
-                          Accounting assignment – Midterm
-                        </p>
-                        <p className="dash-project-meta">
-                          Assigned 1 hour ago
-                        </p>
-                      </div>
-                      <span className="dash-badge dash-badge-new">New</span>
-                      <span className="dash-project-deadline">
-                        10 Dec · in 3 days
-                      </span>
-                      <span className="dash-project-price">AED 380</span>
-                      <span className="dash-project-creator">
-                        Student – hidden
-                      </span>
-                      <button className="dash-link-btn">Open task</button>
-                    </div>
+                <div className="dash-table">
+                  <div className="dash-table-header">
+                    <span>Project</span>
+                    <span>Status</span>
+                    <span>Deadline</span>
                   </div>
-                )}
-              </section>
+                  {tasks.length === 0 ? (
+                    <div className="dash-table-empty">
+                      <p>No tasks yet.</p>
+                      <p className="dash-table-empty-sub">
+                        Once you are approved as a creator, the admin will start
+                        assigning student projects to you.
+                      </p>
+                    </div>
+                  ) : (
+                    tasks.map((t) => (
+                      <div className="dash-table-row" key={t.id}>
+                        <span>{t.title}</span>
+                        <span>
+                          <span className={"status-pill status-" + t.status}>
+                            {t.statusLabel}
+                          </span>
+                        </span>
+                        <span>{t.deadline}</span>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
             </section>
 
-            <aside className="dash-right">
-              <section className="dash-card-pane">
-                <h3 className="dash-pane-title">Earnings</h3>
-                <p className="dash-pane-sub">
-                  Overview of what you have earned on Workly.
+            <section className="dash-column-right">
+              <div className="dash-card">
+                <h2 className="dash-card-title">Earnings</h2>
+                <p className="dash-card-sub">
+                  When you finish tasks and get paid, amounts will appear here.
                 </p>
-                <div className="dash-wallet-main">
-                  <div>
-                    <p className="dash-wallet-label">Total earned</p>
-                    <p className="dash-wallet-value">AED 0</p>
+                <div className="wallet-main-amount">AED 0.00</div>
+                <p className="wallet-caption">Total earned on Workly</p>
+
+                <div className="wallet-list">
+                  <div className="wallet-row-header">
+                    <span>Withdrawal history</span>
+                    <span className="wallet-badge">Soon</span>
                   </div>
-                  <div>
-                    <p className="dash-wallet-label">Available to withdraw</p>
-                    <p className="dash-wallet-value-small">AED 0</p>
-                  </div>
-                </div>
-                <div className="dash-divider" />
-                <div className="dash-mini-list">
-                  <p className="dash-mini-label">Locked in review</p>
-                  <p className="dash-mini-empty">
-                    Amounts from tasks that are still waiting for student
-                    approval will appear here.
+                  <p className="wallet-empty">
+                    Every time an admin pays you, the record will show up in
+                    this list.
                   </p>
                 </div>
-              </section>
+              </div>
 
-              <section className="dash-card-pane">
-                <h3 className="dash-pane-title">Withdrawal history</h3>
-                <p className="dash-pane-sub">
-                  Every time Workly pays you, it will be listed here.
+              <div className="dash-card">
+                <h2 className="dash-card-title">Activity</h2>
+                <p className="dash-card-sub">
+                  When students approve, request changes, or send messages, you
+                  will see it here.
                 </p>
-                <ul className="dash-activity-list">
-                  <li className="dash-activity-empty">
-                    No withdrawals yet. After you complete tasks and get paid,
-                    you will see dates, amounts, and methods here.
-                  </li>
-                </ul>
-              </section>
-            </aside>
+                <div className="activity-empty">
+                  <p>No activity yet.</p>
+                  <p className="activity-empty-sub">
+                    Finish your profile and wait for the first project to be
+                    assigned to you.
+                  </p>
+                </div>
+              </div>
+            </section>
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }
