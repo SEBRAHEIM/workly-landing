@@ -1,107 +1,84 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import BackToWorklyLink from "@/components/BackToWorklyLink";
 import { supabase } from "@/lib/supabaseClient";
+import BackToWorklyLink from "@/components/BackToWorklyLink";
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loadingEmail, setLoadingEmail] = useState(false);
-  const [loadingGoogle, setLoadingGoogle] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  // If the user came from the verification email, Supabase redirects to:
-  // https://workly.day/login?verified=1
-  const isVerified =
-    router.query.verified === "1" || router.query.verified === "true";
+  const handleAfterLoginRedirect = async () => {
+    const { data, error } = await supabase.auth.getUser();
 
-  const handleEmailLogin = async (e) => {
+    if (error || !data?.user) {
+      router.replace("/");
+      return;
+    }
+
+    const role =
+      data.user.user_metadata?.role ||
+      data.user.app_metadata?.role ||
+      "student";
+
+    if (role === "creator") {
+      router.replace("/dashboard/creator");
+    } else {
+      router.replace("/dashboard/student");
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg("");
-    setLoadingEmail(true);
+    setLoading(true);
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    setLoadingEmail(false);
+    setLoading(false);
 
     if (error) {
-      setErrorMsg(error.message || "Incorrect email or password.");
+      setErrorMsg(error.message || "Something went wrong. Try again.");
       return;
     }
 
-      // Decide where to send them based on stored role
-    const role = data.user?.user_metadata?.role || "student";
-    router.replace(`/dashboard/${role}`);
+    await handleAfterLoginRedirect();
   };
 
   const handleGoogleLogin = async () => {
-    try {
-      setErrorMsg("");
-      setLoadingGoogle(true);
+    setErrorMsg("");
+    setLoading(true);
 
-      const origin =
-        typeof window !== "undefined" ? window.location.origin : "";
-      const redirectTo = origin ? `${origin}/auth/callback` : undefined;
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+    });
 
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: { redirectTo },
-      });
-
-      if (error) {
-        setErrorMsg(error.message || "Something went wrong with Google login.");
-        setLoadingGoogle(false);
-      }
-      // On success, Supabase will redirect away; we don't clear loading here.
-    } catch (err) {
-      setLoadingGoogle(false);
-      setErrorMsg("Something went wrong. Please try again.");
+    if (error) {
+      setLoading(false);
+      setErrorMsg(error.message || "Google login failed. Try again.");
     }
   };
 
   return (
     <div className="auth-shell">
       <BackToWorklyLink />
-
-      <div
-        className="auth-card"
-        style={{
-          maxWidth: 520,
-          margin: "72px auto 80px",
-        }}
-      >
-        {isVerified && (
-          <div
-            style={{
-              marginBottom: 16,
-              padding: "10px 12px",
-              borderRadius: 12,
-              fontSize: 14,
-              background: "rgba(34,197,94,0.1)",
-              color: "#166534",
-              border: "1px solid rgba(34,197,94,0.4)",
-            }}
-          >
-            Email verified successfully. You can now log in to your Workly
-            account.
-          </div>
-        )}
-
+      <div className="auth-card">
         <h1>Log in</h1>
         <p className="auth-sub">
           Enter your email and password, or continue with Google.
         </p>
 
-        <form onSubmit={handleEmailLogin} className="auth-form">
+        <form onSubmit={handleSubmit} className="auth-form">
           <label>Email</label>
           <input
             className="auth-input"
-            required
             type="email"
+            required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -109,8 +86,8 @@ export default function LoginPage() {
           <label>Password</label>
           <input
             className="auth-input"
-            required
             type="password"
+            required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -118,59 +95,40 @@ export default function LoginPage() {
           <button
             type="submit"
             className="auth-primary-btn"
-            disabled={loadingEmail}
+            disabled={loading}
           >
-            {loadingEmail ? "Signing in…" : "Continue"}
+            {loading ? "Logging in…" : "Continue"}
           </button>
-
-          {errorMsg && (
-            <p
-              style={{
-                marginTop: 12,
-                fontSize: 14,
-                color: "#ef4444",
-              }}
-            >
-              {errorMsg}
-            </p>
-          )}
         </form>
 
-        <div
-          style={{
-            marginTop: 18,
-            marginBottom: 6,
-            fontSize: 13,
-            color: "rgba(15,23,42,0.6)",
-          }}
-        >
-          or continue with
+        <div className="auth-divider">
+          <span>or continue with</span>
         </div>
 
         <button
           type="button"
-          className="auth-google-button"
+          className="auth-google-btn"
           onClick={handleGoogleLogin}
-          disabled={loadingGoogle}
+          disabled={loading}
         >
-          <span className="google-icon">
-            <span className="google-icon-inner" />
-          </span>
-          {loadingGoogle ? "Connecting to Google…" : "Continue with Google"}
+          Continue with Google
         </button>
 
-        <p
-          style={{
-            marginTop: 18,
-            fontSize: 14,
-            color: "rgba(15,23,42,0.7)",
-          }}
-        >
-          Need an account?{" "}
-          <a
-            href="/signup"
-            style={{ color: "#4f46e5", textDecoration: "underline" }}
+        {errorMsg && (
+          <p
+            style={{
+              marginTop: 12,
+              fontSize: 14,
+              color: "#ef4444",
+            }}
           >
+            {errorMsg}
+          </p>
+        )}
+
+        <p className="auth-footer-text">
+          Need an account?{" "}
+          <a href="/signup" className="auth-footer-link">
             Sign up as student or creator.
           </a>
         </p>
