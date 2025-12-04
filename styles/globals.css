@@ -1032,3 +1032,118 @@ button {
     font-size: 22px;
   }
 }
+
+/* ========================= */
+/* AUTH MODAL – Fiverr style */
+/* ========================= */
+
+.authm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+}
+
+.authm-modal {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  background: var(--sand-1);
+  border-radius: 24px;
+  padding: 24px 22px 22px;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.35);
+}
+
+.authm-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--sand-5);
+}
+
+.authm-header {
+  margin-bottom: 18px;
+}
+
+.authm-kicker {
+  font-size: 13px;
+  color: rgba(90, 84, 73, 0.85);
+  margin: 0 0 4px;
+}
+
+.authm-title {
+  margin: 0 0 6px;
+  font-size: 24px;
+  letter-spacing: -0.02em;
+}
+
+.authm-title span {
+  color: #ff5fa2; /* لمسة لون مختلفة عن الففير الوردي */
+}
+
+.authm-sub {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(90, 84, 73, 0.9);
+}
+
+.authm-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+  margin-bottom: 12px;
+}
+
+.authm-btn {
+  width: 100%;
+  border-radius: 999px;
+  padding: 11px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.authm-btn-google {
+  background: var(--sand-5);
+  color: var(--sand-1);
+}
+
+.authm-btn-email {
+  background: transparent;
+  border: 1px solid rgba(138, 129, 124, 0.8);
+  color: var(--sand-5);
+}
+
+.authm-footer-text {
+  font-size: 13px;
+  color: rgba(90, 84, 73, 0.85);
+  text-align: center;
+}
+
+.authm-footer-text a {
+  text-decoration: underline;
+}
+
+/* موبايل */
+@media (max-width: 600px) {
+  .authm-modal {
+    margin: 0 16px;
+    padding: 22px 18px 20px;
+  }
+
+  .authm-title {
+    font-size: 22px;
+  }
+}
