@@ -1814,3 +1814,74 @@ footer {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+
+/* === Workly dashboard light shell overrides ===================== */
+
+/* Root shell for all dashboards */
+.dash-app-shell,
+.dash-screen,
+.dash-layout-root {
+  min-height: 100vh;
+  background: #f3f4f6; /* light grey app background */
+}
+
+/* Top bar (brand + email + logout) */
+.dash-topbar {
+  background: #ffffff;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+}
+
+/* Left sidebar navigation */
+.dash-sidebar {
+  background: #ffffff;
+  border-right: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow: 14px 0 40px rgba(15, 23, 42, 0.03);
+}
+
+/* Main content area */
+.dash-main {
+  background: transparent; /* let root light grey show */
+}
+
+/* Inner content wrapper */
+.dash-main-inner,
+.dash-content-card {
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 26px 70px rgba(15, 23, 42, 0.06);
+}
+
+/* Metric cards + right-hand panels */
+.dash-metric-card,
+.dash-panel,
+.dash-wallet-card,
+.dash-activity-card,
+.dash-earnings-card,
+.dash-withdrawals-card {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.05);
+}
+
+/* Optional: soften table rows on white */
+.dash-table-header {
+  background: #f9fafb;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.dash-table-row {
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+/* Keep status badges visible on white */
+.dash-status-pill {
+  background: rgba(15, 23, 42, 0.04);
+}
+
+/* Creator browse cards on white shell */
+.dash-creator-card {
+  background: #ffffff;
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.05);
+}
