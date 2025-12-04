@@ -1,96 +1,122 @@
 import Head from "next/head";
 import { useState } from "react";
 
+const CATEGORIES = [
+  "Reports & Essays",
+  "Presentations & PPT",
+  "Group Projects",
+  "Excel & Data",
+  "Programming & Tech",
+  "Other Tasks",
+];
+
 export default function HomePage() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="home-root">
+    <div className="wl-root">
       <Head>
         <title>Workly – University projects, done for you.</title>
         <meta
           name="description"
-          content="Upload your university work, choose a category, and let trusted creators handle the full project."
+          content="Upload your university work, choose a category, and let trusted creators deliver the full project."
         />
       </Head>
 
-      <header className="home-header">
-        <div className="home-header-left">
+      {/* HEADER */}
+      <header className="wl-header">
+        <div className="wl-header-left">
           <button
-            className="home-hamburger"
-            onClick={() => setMenuOpen(!menuOpen)}
+            className="wl-hamburger wl-only-mobile"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Open menu"
           >
             ☰
           </button>
-          <span className="home-logo">Workly</span>
+          <span className="wl-logo">Workly</span>
         </div>
 
-        <nav className="home-nav-actions">
-          <a href="/become-creator" className="home-nav-link">
+        <nav className="wl-header-right">
+          <a href="/become-creator" className="wl-nav-link">
             Become a creator
           </a>
-          <a href="/login" className="home-nav-link">
+          <a href="/login" className="wl-nav-link">
             Sign in
           </a>
-          <a href="/signup" className="home-nav-cta">
+          <a href="/signup" className="wl-nav-cta">
             Join
           </a>
         </nav>
       </header>
 
-      {menuOpen && (
-        <aside className="home-sidepanel">
-          <div className="home-sidepanel-inner">
-            <p className="home-side-label">General</p>
-            <a href="/" className="home-side-item">
+      {/* MOBILE SIDE PANEL */}
+      {mobileMenuOpen && (
+        <aside className="wl-sidepanel wl-only-mobile">
+          <div className="wl-sidepanel-inner">
+            <p className="wl-side-label">General</p>
+            <a href="/" className="wl-side-item">
               Home
             </a>
-            <a href="#" className="home-side-item">
+            <a href="#" className="wl-side-item">
               Languages
             </a>
-            <a href="#" className="home-side-item">
+            <a href="#" className="wl-side-item">
               AED
             </a>
           </div>
         </aside>
       )}
 
-      <main className="home-main">
-        {/* Desktop layout */}
-        <section className="home-hero home-desktop">
-          <div className="home-hero-text">
+      {/* MAIN */}
+      <main className="wl-main">
+        {/* DESKTOP LAYOUT */}
+        <section className="wl-desktop-layout">
+          <div className="wl-hero-text">
             <h1>University projects, done for you.</h1>
             <p>
-              Choose a category and get your full project delivered. Reports,
-              slides, group projects and more.
+              Choose what you need help with. Upload your rubric, and Workly
+              connects you privately with trusted creators.
             </p>
+
+            <div className="wl-search-block">
+              <input
+                className="wl-search-input"
+                placeholder="Try “HR report”, “Marketing PPT”, “Group project help”…"
+              />
+              <button className="wl-search-btn">Get help</button>
+            </div>
           </div>
 
-          <div className="home-hero-cards">
-            <button className="home-cat-card">Reports &amp; Essays</button>
-            <button className="home-cat-card">Presentations &amp; PPT</button>
-            <button className="home-cat-card">Group Projects</button>
-            <button className="home-cat-card">Excel &amp; Data</button>
-            <button className="home-cat-card">Programming &amp; Tech</button>
-            <button className="home-cat-card">Other Tasks</button>
+          <div className="wl-hero-categories">
+            {CATEGORIES.map((cat) => (
+              <button key={cat} className="wl-cat-card" type="button">
+                {cat}
+              </button>
+            ))}
           </div>
         </section>
 
-        {/* Mobile layout */}
-        <section className="home-hero home-mobile">
-          <h2 className="home-mobile-title">We’ll take it from here.</h2>
-          <p className="home-mobile-sub">
+        {/* MOBILE LAYOUT */}
+        <section className="wl-mobile-layout">
+          <h2 className="wl-mobile-title">We’ll take it from here.</h2>
+          <p className="wl-mobile-sub">
             Tap what you need help with and we’ll match you with creators.
           </p>
 
-          <div className="home-mobile-chips">
-            <button className="home-chip">Reports &amp; Essays</button>
-            <button className="home-chip">Presentations &amp; PPT</button>
-            <button className="home-chip">Group Projects</button>
-            <button className="home-chip">Excel &amp; Data</button>
-            <button className="home-chip">Programming &amp; Tech</button>
-            <button className="home-chip">Other Tasks</button>
+          <div className="wl-search-block wl-mobile-search">
+            <input
+              className="wl-search-input"
+              placeholder="What do you need help with?"
+            />
+            <button className="wl-search-btn">Start</button>
+          </div>
+
+          <div className="wl-mobile-chips">
+            {CATEGORIES.map((cat) => (
+              <button key={cat} className="wl-chip" type="button">
+                {cat}
+              </button>
+            ))}
           </div>
         </section>
       </main>
