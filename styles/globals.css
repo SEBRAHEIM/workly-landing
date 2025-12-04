@@ -1885,3 +1885,188 @@ footer {
   background: #ffffff;
   box-shadow: 0 18px 50px rgba(15, 23, 42, 0.05);
 }
+
+/* === Workly dashboard light theme (applies to student + creator) === */
+
+.dash-shell {
+  min-height: 100vh;
+  background: #f3f4f6;
+  color: #0f172a;
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-topbar {
+  flex-shrink: 0;
+  height: 60px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #020617;
+  color: #f9fafb;
+  border-bottom: 1px solid rgba(15,23,42,0.6);
+}
+
+.dash-brand {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.dash-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #e5e7eb;
+}
+
+.dash-user button {
+  border-radius: 999px;
+  border: 1px solid rgba(148,163,184,0.7);
+  background: transparent;
+  color: #e5e7eb;
+  padding: 4px 11px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.dash-user button:hover {
+  background: rgba(15,23,42,0.8);
+}
+
+.dash-main {
+  flex: 1;
+  max-width: 1200px;
+  margin: 24px auto 40px;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Summary strip */
+
+.dash-summary-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.dash-metric {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 14px 14px 12px;
+  border: 1px solid rgba(148,163,184,0.4);
+  box-shadow: 0 10px 30px rgba(15,23,42,0.04);
+}
+
+.dash-metric-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.dash-metric-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #020617;
+}
+
+.dash-metric-caption {
+  margin-top: 2px;
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+/* Two columns */
+
+.dash-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: flex-start;
+}
+
+/* Generic cards */
+
+.dash-card {
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid rgba(148,163,184,0.45);
+  box-shadow: 0 20px 60px rgba(15,23,42,0.06);
+  padding: 18px 18px 16px;
+}
+
+.dash-card-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.dash-card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #020617;
+}
+
+.dash-card-sub {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.dash-card-body {
+  font-size: 13px;
+  color: #111827;
+}
+
+/* Simple pill / badge */
+
+.dash-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  border: 1px solid rgba(148,163,184,0.7);
+  color: #111827;
+  background: #f9fafb;
+}
+
+/* Tables & lists */
+
+.dash-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.dash-list-empty {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+/* For narrow screens */
+
+@media (max-width: 960px) {
+  .dash-summary-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dash-columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dash-main {
+    margin-top: 18px;
+  }
+}
