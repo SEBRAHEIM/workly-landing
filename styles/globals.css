@@ -740,3 +740,180 @@ button {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ========================= */
+/* HOME (Landing) – Workly   */
+/* ========================= */
+
+.home-shell {
+  min-height: 100vh;
+  padding: 40px 24px 52px;
+  background: radial-gradient(circle at top left, var(--sand-2), var(--sand-1))
+    fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home-inner {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.home-hero {
+  text-align: left;
+  margin-bottom: 36px;
+}
+
+.home-kicker {
+  font-size: 14px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(90, 84, 73, 0.8);
+  margin: 0 0 8px;
+}
+
+.home-title {
+  margin: 0 0 10px;
+  font-size: 34px;
+  letter-spacing: -0.03em;
+}
+
+.home-sub {
+  margin: 0 0 20px;
+  max-width: 640px;
+  font-size: 15px;
+  color: rgba(90, 84, 73, 0.86);
+}
+
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.home-primary-btn,
+.home-secondary-btn {
+  border-radius: 999px;
+  padding: 11px 22px;
+  font-size: 15px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-primary-btn {
+  background: var(--sand-5);
+  color: var(--sand-1);
+  box-shadow: 0 16px 32px rgba(90, 84, 73, 0.4);
+}
+
+.home-secondary-btn {
+  background: transparent;
+  color: var(--sand-5);
+  border: 1px solid rgba(138, 129, 124, 0.7);
+}
+
+/* How it works */
+
+.home-section {
+  margin-top: 16px;
+}
+
+.home-section-title {
+  margin: 0 0 4px;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+
+.home-section-sub {
+  margin: 0 0 18px;
+  max-width: 720px;
+  font-size: 14px;
+  color: rgba(90, 84, 73, 0.82);
+}
+
+.home-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.home-step-card {
+  background: #fbfaf8;
+  border-radius: 22px;
+  padding: 16px 16px 18px;
+  border: 1px solid rgba(216, 207, 196, 0.9);
+  box-shadow: var(--shadow-card);
+}
+
+.home-step-tag {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(90, 84, 73, 0.8);
+  margin-bottom: 6px;
+}
+
+.home-step-card h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+
+.home-step-card p {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(90, 84, 73, 0.86);
+}
+
+/* Footer */
+
+.home-footer {
+  margin-top: 36px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(216, 207, 196, 0.9);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: rgba(90, 84, 73, 0.85);
+}
+
+.home-footer-links {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.home-footer-links a {
+  text-decoration: underline;
+}
+
+/* Responsive tweaks for home */
+
+@media (max-width: 900px) {
+  .home-hero {
+    text-align: left;
+  }
+
+  .home-title {
+    font-size: 28px;
+  }
+
+  .home-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .home-steps-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
