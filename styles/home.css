@@ -1,0 +1,151 @@
+:root {
+  --sand-1: #F6F5F4;
+  --sand-2: #D8CFC4;
+  --sand-3: #B7A99A;
+  --sand-4: #8A817C;
+  --sand-5: #5A5449;
+}
+
+.site-root {
+  background: var(--sand-1);
+  min-height: 100vh;
+  color: var(--sand-5);
+}
+
+/* Desktop Nav */
+.desktop-nav {
+  height: 70px;
+  padding: 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--sand-2);
+  border-bottom: 1px solid var(--sand-4);
+}
+
+.brand {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--sand-5);
+}
+
+.hamburger {
+  background: none;
+  border: none;
+  font-size: 28px;
+  margin-right: 14px;
+  cursor: pointer;
+  color: var(--sand-5);
+}
+
+.nav-link {
+  margin: 0 18px;
+  text-decoration: none;
+  color: var(--sand-5);
+  font-weight: 500;
+}
+
+.nav-btn {
+  padding: 8px 16px;
+  background: var(--sand-3);
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 230px;
+  height: 100vh;
+  background: var(--sand-2);
+  padding: 30px;
+  border-right: 1px solid var(--sand-4);
+}
+
+.sidebar-title {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: var(--sand-5);
+}
+
+.sidebar-item {
+  display: block;
+  margin: 12px 0;
+  text-decoration: none;
+  color: var(--sand-5);
+}
+
+/* Desktop Hero */
+.desktop-hero {
+  padding: 80px 60px;
+}
+
+.hero-title {
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.hero-sub {
+  font-size: 20px;
+  margin-bottom: 40px;
+}
+
+.categories {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.cat-card {
+  padding: 22px;
+  background: var(--sand-2);
+  border-radius: 12px;
+  border: 1px solid var(--sand-4);
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* MOBILE */
+@media (max-width: 760px) {
+  .desktop-nav,
+  .desktop-hero,
+  .sidebar {
+    display: none;
+  }
+
+  .mobile-layout {
+    padding: 30px 20px;
+  }
+
+  .mobile-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .mobile-categories {
+    display: grid;
+    gap: 12px;
+  }
+
+  .mobile-card {
+    padding: 16px;
+    font-size: 18px;
+    background: var(--sand-3);
+    border-radius: 10px;
+    color: white;
+    border: none;
+  }
+}
+
+/* DESKTOP ONLY */
+@media (min-width: 761px) {
+  .mobile-layout {
+    display: none;
+  }
+}
