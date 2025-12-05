@@ -382,3 +382,10 @@ a {
   height: 60px;
   border-radius: 20px;
 }
+
+/* Force icon background to be a rounded square, not a pill */
+.home-category-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px !important;
+}
