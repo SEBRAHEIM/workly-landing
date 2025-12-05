@@ -2252,3 +2252,253 @@ ul {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+/* === Workly home page reset === */
+
+.home-root {
+  min-height: 100vh;
+  background: var(--sand-1);
+  color: var(--sand-5);
+  display: flex;
+  flex-direction: column;
+}
+
+.home-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--sand-1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.home-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hamburger {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: transparent;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+}
+
+.hamburger span {
+  width: 14px;
+  height: 1.5px;
+  border-radius: 999px;
+  background: var(--sand-5);
+}
+
+.brand {
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  font-size: 13px;
+}
+
+.home-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 14px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--sand-5);
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
+.nav-join {
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--sand-3);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.nav-join:hover {
+  filter: brightness(0.95);
+}
+
+.home-main {
+  flex: 1;
+  padding: 24px 16px 40px;
+}
+
+.hero {
+  max-width: 720px;
+  margin: 0 auto 32px;
+}
+
+.hero h1 {
+  font-size: clamp(26px, 5vw, 34px);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.hero p {
+  font-size: 15px;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 18px;
+}
+
+.hero-search {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 999px;
+  padding: 4px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.hero-search input {
+  border: none;
+  flex: 1;
+  padding: 10px 16px 10px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  outline: none;
+  background: transparent;
+}
+
+.hero-search button {
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: var(--sand-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.search-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 2px solid #fff;
+  position: relative;
+}
+
+.search-icon::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 2px;
+  border-radius: 999px;
+  background: #fff;
+  transform: rotate(45deg);
+  right: -4px;
+  bottom: -1px;
+}
+
+.categories {
+  max-width: 960px;
+  margin: 24px auto 0;
+}
+
+.categories-header h2 {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.categories-header p {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 16px;
+}
+
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.cat-card {
+  border: none;
+  text-align: left;
+  padding: 18px 16px;
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.cat-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.06);
+}
+
+.cat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 16px;
+  background: var(--sand-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.cat-card h3 {
+  font-size: 15px;
+  margin: 0;
+}
+
+.cat-card p {
+  font-size: 13px;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.home-footer {
+  padding: 16px;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+/* Desktop tweaks */
+@media (min-width: 900px) {
+  .home-main {
+    padding-inline: 40px;
+  }
+
+  .home-header {
+    padding-inline: 40px;
+  }
+
+  .hero {
+    margin-top: 32px;
+  }
+
+  .cat-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+}
