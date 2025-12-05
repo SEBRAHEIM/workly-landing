@@ -778,3 +778,84 @@ a {
     }
   }
 }
+
+/* === Workly PRO keyboard-style animation override (mobile only) === */
+@media (max-width: 760px) {
+  .home-pro-media {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    border-radius: 18px;
+    overflow: hidden;
+    isolation: isolate;
+    background:
+      radial-gradient(circle at 14% 18%, rgba(255, 255, 255, 0.28), transparent 55%),
+      linear-gradient(145deg, #050816 0%, #020617 55%, #00010a 100%),
+      repeating-linear-gradient(
+        to right,
+        rgba(148, 163, 184, 0.30) 0px,
+        rgba(148, 163, 184, 0.30) 34px,
+        transparent 34px,
+        transparent 40px
+      ),
+      repeating-linear-gradient(
+        to bottom,
+        rgba(148, 163, 184, 0.30) 0px,
+        rgba(148, 163, 184, 0.30) 26px,
+        transparent 26px,
+        transparent 32px
+      );
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.55);
+  }
+
+  .home-pro-media::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.35), transparent 65%);
+    mix-blend-mode: screen;
+    opacity: 0.75;
+    pointer-events: none;
+  }
+
+  .home-pro-media::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(248, 250, 252, 0.95) 0%, rgba(248, 250, 252, 0.45) 40%, transparent 72%);
+    box-shadow:
+      0 0 16px rgba(248, 250, 252, 0.9),
+      0 0 32px rgba(56, 189, 248, 0.45);
+    mix-blend-mode: screen;
+    pointer-events: none;
+    animation: proKeyCursor 4.8s ease-in-out infinite;
+  }
+
+  @keyframes proKeyCursor {
+    0% {
+      transform: translate(10%, 26%);
+    }
+    18% {
+      transform: translate(30%, 26%);
+    }
+    36% {
+      transform: translate(52%, 26%);
+    }
+    52% {
+      transform: translate(70%, 40%);
+    }
+    70% {
+      transform: translate(46%, 58%);
+    }
+    86% {
+      transform: translate(22%, 58%);
+    }
+    100% {
+      transform: translate(10%, 26%);
+    }
+  }
+}
