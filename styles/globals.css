@@ -599,3 +599,99 @@ a {
     color: rgba(32, 24, 16, 0.78);
   }
 }
+
+/* === Workly PRO media – watery keyboard animation (mobile only override) === */
+@media (max-width: 760px) {
+  .home-pro-media {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    border-radius: 18px;
+    overflow: hidden;
+    background: radial-gradient(circle at 0% 0%, rgba(255,255,255,0.18), #050814 55%, #02030a 100%);
+    box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.45);
+    isolation: isolate;
+  }
+
+  .home-pro-media::before {
+    content: "";
+    position: absolute;
+    inset: -20%;
+    background:
+      radial-gradient(circle at 28% 18%, rgba(255,255,255,0.26), transparent 55%),
+      radial-gradient(circle at 80% 80%, rgba(120,220,255,0.22), transparent 60%);
+    opacity: 0.9;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    animation: worklyWater 6s ease-in-out infinite;
+  }
+
+  .home-pro-media::after {
+    content: "";
+    position: absolute;
+    left: 12%;
+    top: 32%;
+    width: 16px;
+    height: 11px;
+    border-radius: 999px;
+    background: rgba(226,254,255,0.96);
+    box-shadow:
+      20px 0   0 rgba(226,254,255,0.12),
+      40px 0   0 rgba(226,254,255,0.10),
+      60px 0   0 rgba(226,254,255,0.08),
+      80px 0   0 rgba(226,254,255,0.06),
+      0   18px 0 rgba(226,254,255,0.14),
+      20px 18px 0 rgba(226,254,255,0.10),
+      40px 18px 0 rgba(226,254,255,0.08),
+      60px 18px 0 rgba(226,254,255,0.06),
+      0   36px 0 rgba(226,254,255,0.12),
+      20px 36px 0 rgba(226,254,255,0.09),
+      40px 36px 0 rgba(226,254,255,0.07),
+      60px 36px 0 rgba(226,254,255,0.05);
+    filter: drop-shadow(0 0 9px rgba(200,255,255,0.9));
+    pointer-events: none;
+    animation: worklyKeyPress 2.6s ease-in-out infinite;
+  }
+
+  @keyframes worklyWater {
+    0% {
+      transform: translate3d(0,0,0) scale(1);
+      opacity: 0.9;
+    }
+    40% {
+      transform: translate3d(-8px,4px,0) scale(1.04);
+      opacity: 1;
+    }
+    80% {
+      transform: translate3d(6px,-3px,0) scale(1.02);
+      opacity: 0.95;
+    }
+    100% {
+      transform: translate3d(0,0,0) scale(1);
+      opacity: 0.9;
+    }
+  }
+
+  @keyframes worklyKeyPress {
+    0%, 10% {
+      transform: translate3d(0,0,0);
+      opacity: 1;
+    }
+    20%, 30% {
+      transform: translate3d(32px,0,0);
+      opacity: 1;
+    }
+    40%, 50% {
+      transform: translate3d(64px,18px,0);
+      opacity: 1;
+    }
+    60%, 70% {
+      transform: translate3d(32px,36px,0);
+      opacity: 1;
+    }
+    80%, 100% {
+      transform: translate3d(0,18px,0);
+      opacity: 1;
+    }
+  }
+}
