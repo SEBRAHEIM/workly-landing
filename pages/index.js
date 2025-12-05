@@ -99,34 +99,39 @@ export default function Home() {
       </Head>
 
       <div className="home-root">
+        {/* NAVBAR */}
         <header className="home-topbar">
-          <div className="home-topbar-left">
-            <button type="button" aria-label="Open menu" className="home-menu-btn">
-              <span />
-              <span />
-            </button>
-            <span className="home-logo-text">WORKLY</span>
-          </div>
+          <button
+            type="button"
+            aria-label="Open menu"
+            className="home-menu-btn"
+          >
+            <span />
+            <span />
+          </button>
 
-          <nav className="home-topbar-right">
-            <Link href="/signup/creator" className="home-nav-link">
+          <span className="home-logo-text">WORKLY</span>
+
+          <div className="home-top-actions">
+            <Link href="/signup/creator" className="home-nav-link desktop-only">
               Become a creator
             </Link>
-            <Link href="/login" className="home-nav-link">
+            <Link href="/login" className="home-nav-link desktop-only">
               Sign in
             </Link>
             <Link href="/signup" className="home-nav-cta">
               Join
             </Link>
-          </nav>
+          </div>
         </header>
 
+        {/* MAIN */}
         <main className="home-main">
           <section className="home-hero">
             <h1>University projects, done for you.</h1>
             <p>
-              Pick a creator, upload your requirements, and get your complete project
-              delivered with zero effort.
+              Pick a creator, upload your requirements, and get your complete
+              project delivered with zero effort.
             </p>
 
             <div className="home-search">
@@ -157,8 +162,12 @@ export default function Home() {
                     {ICONS[cat.id]}
                   </div>
                   <div className="home-category-body">
-                    <div className="home-category-name">{cat.name}</div>
-                    <div className="home-category-desc">{cat.description}</div>
+                    <div className="home-category-name">
+                      {cat.name}
+                    </div>
+                    <div className="home-category-desc">
+                      {cat.description}
+                    </div>
                   </div>
                 </button>
               ))}
@@ -166,9 +175,7 @@ export default function Home() {
           </section>
         </main>
 
-        <footer className="home-footer">
-          <span>workly.day</span>
-        </footer>
+        <footer className="home-footer">workly.day</footer>
       </div>
     </>
   );

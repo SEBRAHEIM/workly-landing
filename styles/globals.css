@@ -1,9 +1,9 @@
 :root {
-  --sand-1: #F6F5F4;
-  --sand-2: #D8CFC4;
-  --sand-3: #B7A99A;
-  --sand-4: #8A817C;
-  --sand-5: #5A5449;
+  --sand-1: #F6F5F4; /* Main clean background */
+  --sand-2: #D8CFC4; /* Soft warm neutral */
+  --sand-3: #B7A99A; /* Taupe accent, buttons */
+  --sand-4: #8A817C; /* Stone highlight, borders */
+  --sand-5: #5A5449; /* Text, strong contrast */
 }
 
 *,
@@ -16,176 +16,168 @@ html,
 body {
   margin: 0;
   padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top left, #f8f4ef 0, var(--sand-1) 55%, #eee4d7 100%);
+  color: var(--sand-5);
 }
 
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-  background: var(--sand-1);
-  color: var(--sand-5);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
 /* ROOT LAYOUT */
 
 .home-root {
   min-height: 100vh;
-  background: radial-gradient(circle at top right, #f0ebe5 0, #f6f5f4 45%, #f4f2ef 100%);
-  color: var(--sand-5);
   display: flex;
   flex-direction: column;
 }
 
-/* TOPBAR – shared structure */
+.home-main {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 32px 20px 40px;
+}
+
+/* NAVBAR */
 
 .home-topbar {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--sand-1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  padding: 12px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 20px 0;
+  gap: 16px;
+  position: sticky;
 }
-
-/* Left side */
-
-.home-topbar-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* hamburger */
 
 .home-menu-btn {
   width: 34px;
   height: 34px;
   border-radius: 999px;
-  border: 1px solid rgba(138, 129, 124, 0.28);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   background: #ffffff;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 4px;
   padding: 0;
 }
 
 .home-menu-btn span {
-  display: block;
   width: 14px;
-  height: 1.6px;
+  height: 1.5px;
   border-radius: 999px;
   background: var(--sand-5);
+  display: block;
 }
-
-.home-menu-btn span + span {
-  margin-top: 4px;
-}
-
-/* logo text */
 
 .home-logo-text {
-  font-size: 14px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   letter-spacing: 0.16em;
   text-transform: uppercase;
+  font-size: 0.85rem;
   font-weight: 600;
 }
 
-/* Right side nav */
-
-.home-topbar-right {
+.home-top-actions {
+  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 18px;
 }
 
 .home-nav-link {
-  font-size: 14px;
-  text-decoration: none;
-  color: var(--sand-5);
+  font-size: 0.9rem;
+  opacity: 0.85;
 }
 
 .home-nav-link:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  opacity: 1;
 }
-
-/* Join pill */
 
 .home-nav-cta {
-  text-decoration: none;
+  padding: 7px 18px;
   border-radius: 999px;
-  padding: 8px 20px;
-  background: var(--sand-3);
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 600;
   border: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* MAIN */
-
-.home-main {
-  flex: 1;
-  max-width: 1120px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 32px 20px 56px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: var(--sand-3);
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
 /* HERO */
 
+.home-hero {
+  text-align: left;
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
 .home-hero h1 {
-  margin: 4px 0 12px;
-  font-size: 28px;
-  line-height: 1.25;
-  letter-spacing: -0.02em;
+  font-size: clamp(1.9rem, 4vw, 2.4rem);
+  margin: 0 0 12px;
 }
 
 .home-hero p {
-  margin: 0 0 22px;
-  font-size: 15px;
-  line-height: 1.6;
-  color: rgba(90, 84, 73, 0.85);
+  margin: 0 0 20px;
+  max-width: 560px;
+  font-size: 1rem;
+  line-height: 1.5;
+  opacity: 0.9;
 }
 
-/* search */
+/* SEARCH BAR */
 
 .home-search {
-  margin-top: 4px;
-  width: 100%;
-  max-width: 560px;
-  border-radius: 999px;
-  background: #faf7f3;
-  border: 1px solid rgba(138, 129, 124, 0.15);
-  padding: 3px 4px 3px 16px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  margin-top: 8px;
+  max-width: 640px;
+  background: #fdfbf9;
+  border-radius: 999px;
+  padding: 4px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.05);
 }
 
 .home-search input {
+  flex: 1;
   border: none;
   outline: none;
-  flex: 1;
   background: transparent;
-  font-size: 15px;
+  padding: 10px 16px 10px 18px;
+  font-size: 0.95rem;
   color: var(--sand-5);
 }
 
 .home-search input::placeholder {
-  color: rgba(138, 129, 124, 0.8);
+  color: rgba(90, 84, 73, 0.55);
 }
 
 .home-search button {
-  border: none;
-  cursor: pointer;
+  width: 46px;
+  height: 46px;
   border-radius: 999px;
-  width: 44px;
-  height: 44px;
+  border: none;
   background: var(--sand-3);
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .home-search-icon {
@@ -216,151 +208,107 @@ body {
 
 .home-categories-header h2 {
   margin: 0 0 4px;
-  font-size: 20px;
+  font-size: 1.2rem;
 }
 
 .home-categories-header p {
-  margin: 0;
-  font-size: 14px;
-  color: rgba(90, 84, 73, 0.8);
+  margin: 0 0 20px;
+  opacity: 0.9;
+  font-size: 0.95rem;
 }
-
-/* grid */
 
 .home-category-grid {
-  margin-top: 22px;
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
 }
 
-/* card */
-
 .home-category-card {
-  border-radius: 22px;
-  padding: 18px 18px 20px;
-  background: #fbf9f6;
-  border: 1px solid rgba(138, 129, 124, 0.06);
+  border-radius: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.035);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 16px 18px;
   display: flex;
-  align-items: flex-start;
-  gap: 14px;
+  align-items: center;
+  gap: 16px;
   text-align: left;
   cursor: pointer;
-  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.03);
 }
 
 .home-category-card:hover {
-  box-shadow: 0 20px 36px rgba(0, 0, 0, 0.05);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
 }
-
-/* icon pill */
 
 .home-category-icon {
   width: 52px;
   height: 52px;
   border-radius: 18px;
-  background: var(--sand-2);
+  background: #e2d7c9;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: var(--sand-5);
-  flex-shrink: 0;
 }
 
-/* text in card */
+.home-category-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
 
 .home-category-name {
-  font-size: 15px;
   font-weight: 600;
-  margin-bottom: 3px;
+  font-size: 1rem;
+  color: var(--sand-5); /* force text NOT blue */
 }
 
 .home-category-desc {
-  font-size: 13px;
-  line-height: 1.6;
-  color: rgba(90, 84, 73, 0.85);
+  font-size: 0.9rem;
+  opacity: 0.9;
 }
 
 /* FOOTER */
 
 .home-footer {
-  padding: 18px 0 22px;
+  margin-top: auto;
   text-align: center;
-  font-size: 13px;
-  color: rgba(90, 84, 73, 0.7);
+  padding: 20px 0 24px;
+  font-size: 0.85rem;
+  opacity: 0.6;
 }
 
-/* ====== MOBILE NAV BEHAVIOUR ====== */
-/* phone: logo centered, menu left, only Join visible on the right */
+/* RESPONSIVE */
+
+.desktop-only {
+  display: none;
+}
 
 @media (max-width: 760px) {
   .home-topbar {
-    padding: 12px 20px 0;
-    justify-content: center;
-  }
-
-  .home-topbar-left {
-    flex: 1;
-    justify-content: center;
-    position: relative;
-  }
-
-  .home-menu-btn {
-    position: absolute;
-    left: 0;
-  }
-
-  .home-topbar-right {
-    position: absolute;
-    right: 20px;
-    top: 12px;
-    transform: translateY(0);
-  }
-
-  .home-nav-link {
-    display: none;
+    padding-inline: 16px;
   }
 
   .home-main {
-    padding-inline: 20px;
+    padding-inline: 16px;
+  }
+
+  .home-category-grid {
+    grid-template-columns: 1fr;
   }
 }
 
-/* ====== DESKTOP / LARGE SCREENS ====== */
-/* laptop: menu + WORKLY on the far left, nav links on the right */
-
 @media (min-width: 761px) {
-  .home-topbar {
-    padding: 18px 40px 0;
-    justify-content: space-between;
-  }
-
-  .home-topbar-left {
-    flex: 0 0 auto;
-    justify-content: flex-start;
-  }
-
-  .home-topbar-right {
-    position: static;
-    transform: none;
-    gap: 22px;
-  }
-
-  .home-nav-link {
+  .desktop-only {
     display: inline-flex;
   }
 
   .home-main {
-    padding: 52px 40px 72px;
+    padding-inline: 40px;
   }
 
-  .home-hero h1 {
-    font-size: 34px;
-  }
-
-  .home-category-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 18px;
+  .home-topbar {
+    padding-inline: 40px;
   }
 }
