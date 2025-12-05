@@ -175,18 +175,17 @@ export default function Home() {
               ))}
             </div>
           </section>
-                  <footer className="home-footer-links">
-            <a href="/students" className="home-footer-link">For students</a>
-            <a href="/creators" className="home-footer-link">For creators</a>
-            <a href="/company" className="home-footer-link">Company</a>
-          </footer>
           <section className="home-pro-strip">
-          <h3>Workly PRO.</h3>
-          <p>
-            Coming soon. A curated service for complex, high-stakes university
-            projects with vetted creators and extra support.
-          </p>
-        </section>
+            <div className="home-pro-media" aria-hidden="true" />
+            <div className="home-pro-content">
+              <h3>Workly PRO.</h3>
+              <p>
+                Coming soon. Get help with big, complex university projects from
+                vetted creators, with progress updates, priority support, and
+                extra quality checks.
+              </p>
+            </div>
+          </section>
 
       </main>
 
