@@ -2663,3 +2663,119 @@ ul {
     padding-inline: 14px;
   }
 }
+
+/* === Topbar layout (mobile-first) === */
+.home-topbar {
+  background: var(--sand-1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.home-topbar-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 10px 16px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+}
+
+.home-menu-btn {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+.home-menu-btn span {
+  display: block;
+  width: 12px;
+  height: 1.6px;
+  border-radius: 999px;
+  background: var(--sand-5);
+}
+
+.home-logo-text {
+  justify-self: center;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sand-5);
+}
+
+.home-topbar-right {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.home-nav-link {
+  font-size: 14px;
+  color: var(--sand-5);
+  text-decoration: none;
+}
+
+/* على الموبايل نخفي Become a creator + Sign in ونبقي Join فقط */
+@media (max-width: 767px) {
+  .home-nav-link {
+    display: none;
+  }
+
+  .home-nav-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: var(--sand-3);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+  }
+}
+
+/* === Desktop navbar: الهامبرغر + WORKLY يسار، الروابط يمين (Become - Sign in - Join) === */
+@media (min-width: 768px) {
+  .home-topbar-inner {
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .home-logo-text {
+    margin-left: 8px;
+  }
+
+  .home-topbar-right {
+    gap: 20px;
+  }
+
+  .home-nav-link {
+    display: inline-flex;
+    align-items: center;
+    font-size: 14px;
+  }
+
+  .home-nav-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: var(--sand-3);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+  }
+}

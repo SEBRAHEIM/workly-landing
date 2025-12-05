@@ -101,22 +101,24 @@ export default function Home() {
       <div className="home-root">
         <header className="home-topbar">
           <div className="home-topbar-inner">
-            <div className="home-topbar-left">
-              <button type="button" aria-label="Open menu" className="home-menu-btn">
-                <span />
-                <span />
-              </button>
-              <span className="home-logo-text">WORKLY</span>
-            </div>
+            <button
+              type="button"
+              aria-label="Open menu"
+              className="home-menu-btn"
+            >
+              <span />
+              <span />
+            </button>
+
+            <span className="home-logo-text">WORKLY</span>
+
             <nav className="home-topbar-right">
-              <div className="home-nav-links">
-                <Link href="/signup/creator" className="home-nav-link">
-                  Become a creator
-                </Link>
-                <Link href="/login" className="home-nav-link">
-                  Sign in
-                </Link>
-              </div>
+              <Link href="/signup/creator" className="home-nav-link">
+                Become a creator
+              </Link>
+              <Link href="/login" className="home-nav-link">
+                Sign in
+              </Link>
               <Link href="/signup" className="home-nav-cta">
                 Join
               </Link>
@@ -128,7 +130,8 @@ export default function Home() {
           <section className="home-hero">
             <h1>University projects, done for you.</h1>
             <p>
-              Pick a creator, upload your requirements, and get your complete project delivered with zero effort.
+              Pick a creator, upload your requirements, and get your complete
+              project delivered with zero effort.
             </p>
 
             <div className="home-search">
