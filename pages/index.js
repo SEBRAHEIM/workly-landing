@@ -98,80 +98,75 @@ export default function Home() {
         />
       </Head>
 
-      <div className="page-root">
-        <div className="page-shell">
-          <header className="home-header">
-            <div className="home-header-left">
-              <button type="button" aria-label="Open menu" className="nav-burger">
+      <div className="home-root">
+        <header className="home-topbar">
+          <div className="home-topbar-inner">
+            <div className="home-topbar-left">
+              <button type="button" aria-label="Open menu" className="home-menu-btn">
                 <span />
                 <span />
               </button>
-              <span className="nav-logo">WORKLY</span>
+              <span className="home-logo-text">WORKLY</span>
             </div>
-            <nav className="home-header-right">
-              <Link href="/signup/creator" className="nav-link">
-                Become a creator
-              </Link>
-              <Link href="/login" className="nav-link">
-                Sign in
-              </Link>
-              <Link href="/signup" className="nav-cta">
+            <nav className="home-topbar-right">
+              <div className="home-nav-links">
+                <Link href="/signup/creator" className="home-nav-link">
+                  Become a creator
+                </Link>
+                <Link href="/login" className="home-nav-link">
+                  Sign in
+                </Link>
+              </div>
+              <Link href="/signup" className="home-nav-cta">
                 Join
               </Link>
             </nav>
-          </header>
+          </div>
+        </header>
 
-          <main className="home-main">
-            <section className="hero">
-              <div className="hero-text">
-                <h1>University projects, done for you.</h1>
-                <p>
-                  Pick a creator, upload your requirements, and get your complete
-                  project delivered with zero effort.
-                </p>
-              </div>
+        <main className="home-main">
+          <section className="home-hero">
+            <h1>University projects, done for you.</h1>
+            <p>
+              Pick a creator, upload your requirements, and get your complete project delivered with zero effort.
+            </p>
 
-              <form
-                className="hero-search"
-                onSubmit={(e) => e.preventDefault()}
-              >
-                <input
-                  type="text"
-                  placeholder='Try "marketing group project"'
-                  className="hero-search-input"
-                />
-                <button type="submit" aria-label="Search" className="hero-search-button">
-                  <span className="hero-search-icon" />
+            <div className="home-search">
+              <input
+                type="text"
+                placeholder='Try "marketing group project"'
+              />
+              <button type="button" aria-label="Search">
+                <span className="home-search-icon" />
+              </button>
+            </div>
+          </section>
+
+          <section className="home-categories">
+            <div className="home-categories-header">
+              <h2>Choose a category</h2>
+              <p>Select what you need help with.</p>
+            </div>
+
+            <div className="home-category-grid">
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  className="home-category-card"
+                >
+                  <div className="home-category-icon">
+                    {ICONS[cat.id]}
+                  </div>
+                  <div className="home-category-body">
+                    <div className="home-category-name">{cat.name}</div>
+                    <div className="home-category-desc">{cat.description}</div>
+                  </div>
                 </button>
-              </form>
-            </section>
-
-            <section className="category-section">
-              <div className="category-header">
-                <h2>Choose a category</h2>
-                <p>Select what you need help with.</p>
-              </div>
-
-              <div className="cat-grid">
-                {CATEGORIES.map((cat) => (
-                  <button
-                    key={cat.id}
-                    type="button"
-                    className="cat-card"
-                  >
-                    <div className="cat-icon">
-                      {ICONS[cat.id]}
-                    </div>
-                    <h3>{cat.name}</h3>
-                    <p>{cat.description}</p>
-                  </button>
-                ))}
-              </div>
-            </section>
-          </main>
-
-          <footer className="home-footer">workly.day</footer>
-        </div>
+              ))}
+            </div>
+          </section>
+        </main>
       </div>
     </>
   );
