@@ -2624,3 +2624,42 @@ ul {
     display: flex;
   }
 }
+
+/* === Mobile topbar layout: menu left, logo center, Join right === */
+
+@media (max-width: 767px) {
+  .home-topbar-inner {
+    padding: 10px 16px;
+    justify-content: center;
+    position: relative;
+  }
+
+  .home-topbar-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* logo في النص */
+  }
+
+  .home-menu-btn {
+    position: absolute;
+    left: 16px; /* البرغر يسار */
+  }
+
+  .home-topbar-right {
+    position: absolute;
+    right: 16px; /* زر Join يمين */
+  }
+
+  .home-logo-text {
+    font-size: 13px;
+  }
+
+  .home-nav-links {
+    display: none; /* نخفي Become a creator / Sign in في الموبايل */
+  }
+
+  .home-nav-cta {
+    padding-inline: 14px;
+  }
+}
