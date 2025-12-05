@@ -479,3 +479,42 @@ a {
     font-size: 13px;
   }
 }
+
+.home-footer {
+  text-align: center;
+  padding: 32px 0 24px;
+  font-size: 0.85rem;
+  color: #8f8a84;
+}
+
+.home-footer-links {
+  margin-bottom: 4px;
+}
+
+.home-footer-links a {
+  color: inherit;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.home-footer-links a:hover {
+  text-decoration: underline;
+}
+
+.home-footer-links span {
+  margin: 0 6px;
+}
+
+.home-footer-brand {
+  font-size: 0.8rem;
+}
+
+@media (max-width: 760px) {
+  .home-footer {
+    padding-bottom: 20px;
+  }
+
+  .home-footer-links {
+    font-size: 0.8rem;
+  }
+}
