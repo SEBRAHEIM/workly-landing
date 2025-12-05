@@ -100,38 +100,33 @@ export default function Home() {
 
       <div className="home-root">
         <header className="home-topbar">
-          <div className="home-topbar-inner">
-            <button
-              type="button"
-              aria-label="Open menu"
-              className="home-menu-btn"
-            >
+          <div className="home-topbar-left">
+            <button type="button" aria-label="Open menu" className="home-menu-btn">
               <span />
               <span />
             </button>
-
             <span className="home-logo-text">WORKLY</span>
-
-            <nav className="home-topbar-right">
-              <Link href="/signup/creator" className="home-nav-link">
-                Become a creator
-              </Link>
-              <Link href="/login" className="home-nav-link">
-                Sign in
-              </Link>
-              <Link href="/signup" className="home-nav-cta">
-                Join
-              </Link>
-            </nav>
           </div>
+
+          <nav className="home-topbar-right">
+            <Link href="/signup/creator" className="home-nav-link">
+              Become a creator
+            </Link>
+            <Link href="/login" className="home-nav-link">
+              Sign in
+            </Link>
+            <Link href="/signup" className="home-nav-cta">
+              Join
+            </Link>
+          </nav>
         </header>
 
         <main className="home-main">
           <section className="home-hero">
             <h1>University projects, done for you.</h1>
             <p>
-              Pick a creator, upload your requirements, and get your complete
-              project delivered with zero effort.
+              Pick a creator, upload your requirements, and get your complete project
+              delivered with zero effort.
             </p>
 
             <div className="home-search">
@@ -170,6 +165,10 @@ export default function Home() {
             </div>
           </section>
         </main>
+
+        <footer className="home-footer">
+          <span>workly.day</span>
+        </footer>
       </div>
     </>
   );
