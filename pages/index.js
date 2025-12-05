@@ -1,91 +1,98 @@
 import Head from "next/head";
-import Link from "next/link";
-
-const ICONS = {
-  reports: (
-    <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="4" y="3" width="14" height="18" rx="2" ry="2" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <line x1="8" y1="9" x2="16" y2="9" stroke="currentColor" strokeWidth="1.4" />
-      <line x1="8" y1="13" x2="14" y2="13" stroke="currentColor" strokeWidth="1.4" />
-      <line x1="8" y1="17" x2="12" y2="17" stroke="currentColor" strokeWidth="1.4" />
-    </svg>
-  ),
-  ppt: (
-    <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="3" y="5" width="18" height="12" rx="2" ry="2" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <rect x="7" y="8" width="5" height="6" fill="none" stroke="currentColor" strokeWidth="1.4" />
-      <line x1="14" y1="9" x2="18" y2="9" stroke="currentColor" strokeWidth="1.4" />
-      <line x1="14" y1="12" x2="18" y2="12" stroke="currentColor" strokeWidth="1.4" />
-      <line x1="10" y1="17" x2="14" y2="21" stroke="currentColor" strokeWidth="1.4" />
-    </svg>
-  ),
-  group: (
-    <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="8" cy="9" r="3" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <circle cx="16" cy="9" r="2.5" fill="none" stroke="currentColor" strokeWidth="1.4" />
-      <path d="M4.5 18c0-2.2 1.9-4 4.5-4s4.5 1.8 4.5 4" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M13.5 17.5c.4-1.5 1.7-2.5 3.1-2.5 1.9 0 3.4 1.5 3.4 3.3" fill="none" stroke="currentColor" strokeWidth="1.4" />
-    </svg>
-  ),
-  excel: (
-    <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="4" y="4" width="16" height="16" rx="2" ry="2" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <line x1="8" y1="4" x2="8" y2="20" stroke="currentColor" strokeWidth="1.4" />
-      <line x1="14" y1="4" x2="14" y2="20" stroke="currentColor" strokeWidth="1.4" />
-      <line x1="4" y1="9" x2="20" y2="9" stroke="currentColor" strokeWidth="1.4" />
-      <line x1="4" y1="14" x2="20" y2="14" stroke="currentColor" strokeWidth="1.4" />
-    </svg>
-  ),
-  tech: (
-    <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="3" y="5" width="18" height="12" rx="2" ry="2" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <polyline points="8,10 6,12 8,14" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <polyline points="13,10 15,12 13,14" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <line x1="10" y1="16" x2="14" y2="16" stroke="currentColor" strokeWidth="1.4" />
-    </svg>
-  ),
-  other: (
-    <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="8" cy="8" r="2.5" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <rect x="11.5" y="6.5" width="7" height="7" rx="1.5" ry="1.5" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M5 18c0-2 1.7-3.5 3.8-3.5h1.4" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M13.5 17h3" fill="none" stroke="currentColor" strokeWidth="1.6" />
-    </svg>
-  ),
-};
 
 const CATEGORIES = [
   {
     id: "reports",
-    name: "Reports & Essays",
+    title: "Reports & Essays",
     description: "Help with writing assignments and Word documents.",
   },
   {
-    id: "ppt",
-    name: "Presentations & PPT",
+    id: "presentations",
+    title: "Presentations & PPT",
     description: "Slides, templates, and class presentations.",
   },
   {
     id: "group",
-    name: "Group Projects",
+    title: "Group Projects",
     description: "Case studies and team assignments.",
   },
   {
     id: "excel",
-    name: "Excel & Data",
+    title: "Excel & Data",
     description: "Sheets, tables, dashboards, simple calculations.",
   },
   {
-    id: "tech",
-    name: "Programming & Tech",
+    id: "programming",
+    title: "Programming & Tech",
     description: "Basic coding tasks and small tech work.",
   },
   {
     id: "other",
-    name: "Other Tasks",
+    title: "Other Tasks",
     description: "Anything else required for your course.",
   },
 ];
+
+function CategoryIcon({ id }) {
+  if (id === "reports") {
+    return (
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="6" y="4" width="12" height="16" rx="2" fill="none" stroke="currentColor" strokeWidth="1.6" />
+        <line x1="9" y1="9" x2="15" y2="9" stroke="currentColor" strokeWidth="1.6" />
+        <line x1="9" y1="12" x2="15" y2="12" stroke="currentColor" strokeWidth="1.6" />
+        <line x1="9" y1="15" x2="13" y2="15" stroke="currentColor" strokeWidth="1.6" />
+      </svg>
+    );
+  }
+  if (id === "presentations") {
+    return (
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="5" y="6" width="14" height="10" rx="2" fill="none" stroke="currentColor" strokeWidth="1.6" />
+        <path d="M9 10h6" stroke="currentColor" strokeWidth="1.6" />
+        <path d="M9 13h3" stroke="currentColor" strokeWidth="1.6" />
+        <line x1="9" y1="19" x2="15" y2="19" stroke="currentColor" strokeWidth="1.6" />
+        <line x1="12" y1="16" x2="12" y2="19" stroke="currentColor" strokeWidth="1.6" />
+      </svg>
+    );
+  }
+  if (id === "group") {
+    return (
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="8" cy="10" r="2" fill="none" stroke="currentColor" strokeWidth="1.6" />
+        <circle cx="16" cy="10" r="2" fill="none" stroke="currentColor" strokeWidth="1.6" />
+        <path d="M5.5 16c.5-1.7 1.8-3 3.5-3s3 1.3 3.5 3" fill="none" stroke="currentColor" strokeWidth="1.6" />
+        <path d="M13.5 16c.5-1.7 1.8-3 3.5-3s3 1.3 3.5 3" fill="none" stroke="currentColor" strokeWidth="1.6" />
+      </svg>
+    );
+  }
+  if (id === "excel") {
+    return (
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="5" y="5" width="14" height="14" rx="2" fill="none" stroke="currentColor" strokeWidth="1.6" />
+        <line x1="9" y1="5" x2="9" y2="19" stroke="currentColor" strokeWidth="1.6" />
+        <line x1="15" y1="5" x2="15" y2="19" stroke="currentColor" strokeWidth="1.6" />
+        <line x1="5" y1="11" x2="19" y2="11" stroke="currentColor" strokeWidth="1.6" />
+        <line x1="5" y1="15" x2="19" y2="15" stroke="currentColor" strokeWidth="1.6" />
+      </svg>
+    );
+  }
+  if (id === "programming") {
+    return (
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+        <polyline points="8 7 4 12 8 17" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        <polyline points="16 7 20 12 16 17" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+        <line x1="11" y1="6" x2="13" y2="18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      </svg>
+    );
+  }
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="5" y="7" width="14" height="10" rx="2" fill="none" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="9" cy="12" r="1.4" fill="none" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="15" cy="12" r="1.4" fill="none" stroke="currentColor" strokeWidth="1.6" />
+    </svg>
+  );
+}
 
 export default function Home() {
   return (
@@ -94,55 +101,65 @@ export default function Home() {
         <title>Workly – University projects, done for you.</title>
         <meta
           name="description"
-          content="Upload your rubrics, choose a creator, and get the full project delivered."
+          content="Upload your rubrics, choose a creator, and get your full university project delivered."
         />
       </Head>
-
-      <div className="home-root">
-        <header className="home-topbar">
-          <div className="home-topbar-left">
-            <button type="button" aria-label="Open menu" className="home-menu-btn">
+      <main className="home-root">
+        <div className="home-shell">
+          <header className="home-nav">
+            <button className="home-menu-btn" aria-label="Open menu">
               <span />
               <span />
             </button>
-            <span className="home-logo-text">Workly</span>
-          </div>
-          <nav className="home-topbar-right">
-            <Link href="/signup/creator" className="home-nav-link">
-              Become a creator
-            </Link>
-            <Link href="/login" className="home-nav-link">
-              Sign in
-            </Link>
-            <Link href="/signup" className="home-nav-cta">
-              Join
-            </Link>
-          </nav>
-        </header>
 
-        <main className="home-main">
+            <div className="home-logo">WORKLY</div>
+
+            <div className="home-nav-spacer" />
+
+            <nav className="home-nav-links">
+              <button type="button" className="home-nav-link">
+                Become a creator
+              </button>
+              <button type="button" className="home-nav-link">
+                Sign in
+              </button>
+              <button type="button" className="home-nav-cta">
+                Join
+              </button>
+            </nav>
+          </header>
+
           <section className="home-hero">
-            <h1>University projects, done for you.</h1>
-            <p>
-              Upload your rubrics, choose a creator, and get the full project delivered.
-            </p>
+            <div className="home-hero-copy">
+              <h1 className="home-hero-title">
+                University projects, done for you.
+              </h1>
+              <p className="home-hero-subtitle">
+                Upload your rubrics, choose a creator, and get the full project
+                delivered.
+              </p>
+            </div>
 
             <div className="home-search">
               <input
+                className="home-search-input"
                 type="text"
                 placeholder='Try "marketing group project"'
               />
-              <button type="button" aria-label="Search">
-                <span className="home-search-icon" />
+              <button className="home-search-btn" type="button">
+                <span className="home-search-icon" aria-hidden="true" />
+                <span className="home-search-text">Search</span>
               </button>
             </div>
           </section>
 
           <section className="home-categories">
-            <div className="home-categories-header">
-              <h2>Choose a category</h2>
-              <p>Select what you need help with.</p>
-            </div>
+            <header className="home-categories-header">
+              <h2 className="home-categories-title">Choose a category</h2>
+              <p className="home-categories-sub">
+                Select what you need help with.
+              </p>
+            </header>
 
             <div className="home-category-grid">
               {CATEGORIES.map((cat) => (
@@ -151,19 +168,19 @@ export default function Home() {
                   type="button"
                   className="home-category-card"
                 >
-                  <div className="home-category-icon">
-                    {ICONS[cat.id]}
+                  <div className="home-category-icon-wrap">
+                    <CategoryIcon id={cat.id} />
                   </div>
                   <div className="home-category-body">
-                    <div className="home-category-name">{cat.name}</div>
-                    <div className="home-category-desc">{cat.description}</div>
+                    <h3 className="home-category-title">{cat.title}</h3>
+                    <p className="home-category-desc">{cat.description}</p>
                   </div>
                 </button>
               ))}
             </div>
           </section>
-        </main>
-      </div>
+        </div>
+      </main>
     </>
   );
 }
