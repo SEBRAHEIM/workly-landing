@@ -144,12 +144,7 @@ export default function Home() {
               </button>
             </div>
           </section>
-      <div className="home-midlinks">
-        <a href="/help">Help</a>
-        <span>·</span>
-        <a href="/terms">Terms</a>
-      </div>
-      <div className="home-footer-brand">workly.day</div>
+
 
 
           <section className="home-categories">

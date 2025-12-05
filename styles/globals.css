@@ -518,33 +518,3 @@ a {
     font-size: 0.8rem;
   }
 }
-
-/* ==== Mid footer links (Help · Terms) ==== */
-.home-midlinks {
-  margin-top: 32px;
-  margin-bottom: 8px;
-  text-align: center;
-  font-size: 0.9rem;
-  color: #8f8a84;
-}
-
-.home-midlinks a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.home-midlinks a:hover {
-  text-decoration: underline;
-}
-
-.home-midlinks span {
-  margin: 0 6px;
-}
-
-/* brand name at bottom */
-.home-footer-brand {
-  text-align: center;
-  font-size: 0.8rem;
-  padding-bottom: 28px;
-  color: #8f8a84;
-}
