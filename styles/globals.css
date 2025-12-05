@@ -312,3 +312,67 @@ a {
     padding-inline: 40px;
   }
 }
+
+/* === Workly tweaks (nav + mobile categories) – Dec 5 === */
+
+/* 1) Better hamburger icon (desktop + mobile) */
+.home-menu-btn {
+  position: relative;
+}
+
+.home-menu-btn::before,
+.home-menu-btn::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--sand-5);
+}
+
+.home-menu-btn::before {
+  top: 11px;
+}
+
+.home-menu-btn::after {
+  bottom: 11px;
+}
+
+.home-menu-btn span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--sand-5);
+}
+
+/* 2) Make sure category text is neutral, never blue */
+.home-category-card {
+  color: var(--sand-5);
+  text-align: left;
+}
+
+.home-category-name {
+  color: var(--sand-5);
+}
+
+/* If categories ever use <a>, keep them neutral too */
+.home-category-card a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* 3) Mobile layout: nice 2-column grid like before */
+@media (max-width: 760px) {
+  .home-category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .home-category-card {
+    width: 100%;
+  }
+}
