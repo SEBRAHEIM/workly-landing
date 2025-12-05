@@ -389,3 +389,18 @@ a {
   height: 56px;
   border-radius: 18px !important;
 }
+
+/* === Force icon > title > description stacked vertically in cards === */
+.home-category-card {
+  display: flex;
+  flex-direction: column;   /* Icon, then title, then description */
+  align-items: flex-start;  /* Left-align everything */
+}
+
+/* Keep the icon as a rounded square and add space under it */
+.home-category-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px !important; /* شبه مربّع، مو كبسولة */
+  margin-bottom: 10px;
+}
