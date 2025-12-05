@@ -173,6 +173,11 @@ export default function Home() {
               ))}
             </div>
           </section>
+                  <footer className="home-footer-links">
+            <a href="/students" className="home-footer-link">For students</a>
+            <a href="/creators" className="home-footer-link">For creators</a>
+            <a href="/company" className="home-footer-link">Company</a>
+          </footer>
         </main>
 
         <footer className="home-footer">workly.day</footer>
