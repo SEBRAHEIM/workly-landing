@@ -404,3 +404,20 @@ a {
   border-radius: 18px !important; /* شبه مربّع، مو كبسولة */
   margin-bottom: 10px;
 }
+
+/* === Mobile-only: stack icon, title and description vertically === */
+@media (max-width: 768px) {
+  .home-category-card {
+    display: flex;
+    flex-direction: column;    /* Icon on top, then title, then description */
+    align-items: flex-start;   /* كل شيء يصير يسار */
+  }
+
+  .home-category-icon {
+    margin-bottom: 10px;       /* مسافة بسيطة تحت الأيقونة */
+  }
+
+  .home-category-body {
+    text-align: left;          /* عنوان + شرح بمحاذاة يسار */
+  }
+}
