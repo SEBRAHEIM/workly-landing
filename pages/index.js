@@ -180,7 +180,15 @@ export default function Home() {
             <a href="/creators" className="home-footer-link">For creators</a>
             <a href="/company" className="home-footer-link">Company</a>
           </footer>
-        </main>
+          <section className="home-pro-strip">
+          <h3>Workly PRO.</h3>
+          <p>
+            Coming soon. A curated service for complex, high-stakes university
+            projects with vetted creators and extra support.
+          </p>
+        </section>
+
+      </main>
 
         <footer className="home-footer">workly.day</footer>
       </div>
