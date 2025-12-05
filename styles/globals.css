@@ -421,3 +421,30 @@ a {
     text-align: left;          /* عنوان + شرح بمحاذاة يسار */
   }
 }
+
+/* === Mobile card fine-tuning (typography + size) === */
+@media (max-width: 768px) {
+  .home-category-grid {
+    gap: 18px;
+  }
+
+  .home-category-card {
+    padding: 16px 18px;
+    min-height: 160px; /* يخلي الكروت متقاربة في الارتفاع */
+  }
+
+  .home-category-icon {
+    margin-bottom: 10px;
+  }
+
+  .home-category-name {
+    font-size: 16px;      /* أصغر شوي من قبل */
+    line-height: 1.25;
+    margin-bottom: 4px;   /* يقلل المسافة قبل الوصف */
+  }
+
+  .home-category-desc {
+    font-size: 13px;      /* أخف شوي عشان ما يحس الكرت مزدحم */
+    line-height: 1.4;
+  }
+}
