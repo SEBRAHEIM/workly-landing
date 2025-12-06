@@ -1336,3 +1336,51 @@ a {
     animation: none;
   }
 }
+
+
+@media (max-width: 760px) {
+  .home-creators-copy {
+    margin-top: 32px;
+    padding: 0 20px 32px;
+  }
+
+  .home-creators-copy h2 {
+    margin: 0 0 16px;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    font-weight: 600;
+  }
+
+  .home-creators-copy ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px;
+  }
+
+  .home-creators-copy li {
+    font-size: 0.96rem;
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  .home-creators-copy li::before {
+    content: "•";
+    display: inline-block;
+    margin-right: 8px;
+  }
+
+  .home-creators-copy .home-cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 22px;
+    border-radius: 999px;
+    border: none;
+    font-size: 0.96rem;
+    font-weight: 500;
+    background: #111111;
+    color: #ffffff;
+    cursor: pointer;
+  }
+}
+
