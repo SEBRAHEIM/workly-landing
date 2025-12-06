@@ -1540,3 +1540,38 @@ a {
     display: none !important;
   }
 }
+
+@media (max-width: 760px) {
+  .home-topbar-right a:not(.home-nav-cta) {
+    display: none !important;
+  }
+
+  .home-topbar-right {
+    font-size: 0;
+  }
+
+  .home-topbar-right .home-nav-cta {
+    font-size: 0.9rem;
+  }
+}
+
+/* === Workly mobile nav: hide text links (Become a creator / Sign in) === */
+@media (max-width: 760px) {
+  /* أخفي كل الروابط النصية في يمين الناف (home-nav-link) */
+  .home-topbar-right .home-nav-link {
+    display: none !important;
+  }
+
+  /* تأكد إن الكونتينر نفسه ما يضغط على اللوجو */
+  .home-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* زر Join يبقى ظاهر بحجمه الطبيعي */
+  .home-topbar-right .home-nav-cta {
+    display: inline-flex;
+    font-size: 0.9rem;
+  }
+}
