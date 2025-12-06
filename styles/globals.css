@@ -1519,4 +1519,9 @@ a {
   .nav-hide-mobile {
     display: none !important;
   }
-}
+}\n\n/* Workly: hide text nav links on mobile */
+@media (max-width: 760px) {
+  .home-topbar-right .home-nav-link {
+    display: none !important;
+  }
+}\n
