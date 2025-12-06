@@ -1533,3 +1533,10 @@ a {
   }
   /* زر Join يبقى كما هو (className مختلف: home-nav-cta) */
 }
+
+/* === Landing nav: hide Become a creator + Sign in on phones === */
+@media (max-width: 760px) {
+  .landing-nav-right .landing-nav-link {
+    display: none !important;
+  }
+}
