@@ -1452,3 +1452,29 @@ a {
     font-weight: 500;
   }
 }
+
+/* === Separate benefits section from Workly PRO (mobile only) === */
+@media (max-width: 760px) {
+  .home-benefits {
+    margin-top: 52px;               /* مسافة واضحة تحت كرت Workly PRO */
+    padding: 0 20px 32px 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);  /* خط خفيف يفصل بينهم */
+  }
+
+  .home-benefits ul {
+    margin-top: 18px;
+  }
+
+  .home-benefits-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 22px;
+    border-radius: 999px;
+    border: none;
+    font-size: 0.96rem;
+    font-weight: 500;
+    background: #111111;
+    color: #ffffff;
+  }
+}
