@@ -166,8 +166,7 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Optional: mobile-only creators copy block that matches existing CSS */}
-          <section className="
+
           <section className="home-pro-banner">
             <div className="service-card pro-card">
               <div className="service-icon">✨</div>
@@ -177,7 +176,9 @@ export default function Home() {
             </div>
           </section>
 
-home-creators-copy">
+
+          {/* Optional: mobile-only creators copy block that matches existing CSS */}
+          <section className="home-creators-copy">
             <h2>Creators get focused, serious work only.</h2>
             <ul>
               <li>Students share real rubrics and grading criteria.</li>
