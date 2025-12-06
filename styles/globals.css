@@ -1915,16 +1915,16 @@ a {
   background-image:
     repeating-linear-gradient(
       90deg,
-      #7b1b1b 0px,
-      #7b1b1b 10px,
-      #15100f 10px,
-      #15100f 16px,
-      #f5efe4 16px,
-      #f5efe4 22px,
-      #15100f 22px,
-      #15100f 28px,
-      #7b1b1b 28px,
-      #7b1b1b 38px
+      var(--sand-5) 0px,
+      var(--sand-5) 10px,
+      var(--sand-4) 10px,
+      var(--sand-4) 16px,
+      var(--sand-2) 16px,
+      var(--sand-2) 22px,
+      var(--sand-4) 22px,
+      var(--sand-4) 28px,
+      var(--sand-3) 28px,
+      var(--sand-3) 38px
     );
   opacity: 0.8;
 }
