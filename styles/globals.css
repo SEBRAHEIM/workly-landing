@@ -1897,3 +1897,62 @@ a {
     height: 18px;
   }
 }
+
+/* === Sadu-inspired hero ticker stripe === */
+.home-ticker {
+  position: relative;
+  overflow: hidden;
+  border-radius: 999px;
+  padding-block: 5px;
+  background: transparent;
+}
+
+/* خلفية شريط سدو بسيط (أحمر / أسود / أبيض) */
+.home-ticker::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      #7b1b1b 0px,
+      #7b1b1b 10px,
+      #15100f 10px,
+      #15100f 16px,
+      #f5efe4 16px,
+      #f5efe4 22px,
+      #15100f 22px,
+      #15100f 28px,
+      #7b1b1b 28px,
+      #7b1b1b 38px
+    );
+  opacity: 0.8;
+}
+
+/* إطار خفيف حوالين الشريط */
+.home-ticker::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 999px;
+  border: 1px solid rgba(245, 239, 228, 0.9);
+}
+
+/* نخلي المحتوى فوق الخلفية */
+.home-ticker-row {
+  position: relative;
+}
+
+/* حبوب الأيقونات نفسها – تظل نظيفة فوق السدو */
+.home-ticker-icon-pill {
+  background: rgba(246, 245, 244, 0.96);
+  border-radius: 999px;
+  border: 1px solid rgba(20, 10, 5, 0.35);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
+}
+
+@media (max-width: 760px) {
+  .home-ticker {
+    margin-top: 16px;
+  }
+}
