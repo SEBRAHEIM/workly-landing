@@ -1525,3 +1525,11 @@ a {
     display: none !important;
   }
 }\n
+/* === Mobile-only: hide Sign in & Become a creator in top bar === */
+@media (max-width: 760px) {
+  /* أخفي كل الروابط العادية في اليمين (Become a creator + Sign in) */
+  .home-topbar-right .home-nav-link {
+    display: none;
+  }
+  /* زر Join يبقى كما هو (className مختلف: home-nav-cta) */
+}
