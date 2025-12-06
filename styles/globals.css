@@ -1426,3 +1426,29 @@ a {
     font-weight: 500;
   }
 }
+
+/* === Standalone Benefits Section (Mobile) === */
+@media (max-width: 760px) {
+  .home-benefits {
+    padding: 22px 18px;
+    margin-top: 26px;
+    font-size: 1rem;
+    color: #333;
+    list-style-type: disc;
+  }
+
+  .home-benefits ul {
+    padding-left: 22px;
+    margin-bottom: 20px;
+  }
+
+  .home-benefits-btn {
+    background: #111;
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 999px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+}

@@ -185,6 +185,18 @@ export default function Home() {
                 extra quality checks.
               </p>
 
+      {/* === Creators Benefits (Standalone Section) === */}
+      <section className="home-benefits">
+        <ul>
+          <li>Access top-talented creators.</li>
+          <li>Match easily with the right expert for your task.</li>
+          <li>Get high-quality work delivered fast and within budget.</li>
+          <li>Release payment only after you approve the result.</li>
+        </ul>
+        <button className="home-benefits-btn">Join now</button>
+      </section>
+
+
       <section className="home-creators-copy">
         <ul>
           <li>Access top-talented creators.</li>
