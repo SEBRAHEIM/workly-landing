@@ -178,66 +178,53 @@ export default function Home() {
 
 
           {/* Optional: mobile-only creators copy block that matches existing CSS */}
-          <section className="home-creators-copy">
+                    <section className="home-creators-copy">
             <h2>Make it all happen with creators</h2>
 
-            <div className="home-creators-points">
-              <div className="home-creators-row">
+            <div className="home-creators-list">
+              <div className="home-creators-item">
                 <div className="home-creators-icon">
-                  <svg
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                    focusable="false"
-                  >
-                    <rect x="4" y="4" width="5" height="5" rx="1" />
-                    <rect x="10" y="4" width="5" height="5" rx="1" />
-                    <rect x="4" y="10" width="5" height="5" rx="1" />
-                    <rect x="10" y="10" width="5" height="5" rx="1" />
+                  {/* icon: pool of creators */}
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="8" cy="9" r="3" fill="none" />
+                    <circle cx="16" cy="9" r="2.5" fill="none" />
+                    <path d="M4.5 18c0-2.2 1.9-4 4.5-4s4.5 1.8 4.5 4" fill="none" />
+                    <path d="M13.5 17.5c.5-1.4 1.7-2.5 3.1-2.5 1.9 0 3.4 1.5 3.4 3.3" fill="none" />
                   </svg>
                 </div>
                 <p>Access top-talented creators.</p>
               </div>
 
-              <div className="home-creators-row">
+              <div className="home-creators-item">
                 <div className="home-creators-icon">
-                  <svg
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                    focusable="false"
-                  >
+                  {/* icon: target / perfect match */}
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
                     <circle cx="12" cy="12" r="7" fill="none" />
-                    <polyline points="9.5,12.2 11.3,14 15,9.8" fill="none" />
-                    <path d="M7 7.5c1.2-1.4 2.9-2.3 5-2.3 3.9 0 7 3.1 7 7" fill="none" />
+                    <circle cx="12" cy="12" r="3.5" fill="none" />
+                    <path d="M15 9l3-3" fill="none" />
+                    <path d="M16 6h3v3" fill="none" />
                   </svg>
                 </div>
                 <p>Match easily with the right expert for your task.</p>
               </div>
 
-              <div className="home-creators-row">
+              <div className="home-creators-item">
                 <div className="home-creators-icon">
-                  <svg
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                    focusable="false"
-                  >
-                    <rect x="5" y="5" width="14" height="14" rx="3" ry="3" fill="none" />
-                    <polyline points="11 6 9 13 13 11 11 18" fill="none" />
+                  {/* icon: quality & on-budget */}
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="4" y="4" width="16" height="16" rx="3" ry="3" fill="none" />
+                    <path d="M9 12l2 2 4-5" fill="none" />
                   </svg>
                 </div>
                 <p>Get high-quality work delivered fast and within budget.</p>
               </div>
 
-              <div className="home-creators-row">
+              <div className="home-creators-item">
                 <div className="home-creators-icon">
-                  <svg
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                    focusable="false"
-                  >
-                    <rect x="4" y="7" width="10" height="8" rx="2" ry="2" fill="none" />
-                    <path d="M7 15v1.2c0 1.1.9 1.8 2 1.8h6l3 2v-7" fill="none" />
-                    <circle cx="16.5" cy="11" r="2" fill="none" />
-                    <path d="M16.5 9.5v3" fill="none" />
+                  {/* icon: protected payment / approval */}
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3l7 3v6c0 4.2-3 8-7 9-4-1-7-4.8-7-9V6z" fill="none" />
+                    <path d="M9.5 12.5l2 2 3-3.5" fill="none" />
                   </svg>
                 </div>
                 <p>Release payment only after you approve the result.</p>
