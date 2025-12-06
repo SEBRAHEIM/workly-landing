@@ -1308,3 +1308,31 @@ a {
     pointer-events: none;
   }
 }
+
+/* === Workly PRO media: static area, no animation (mobile only) === */
+@media (max-width: 760px) {
+  .home-pro-media {
+    width: 100%;
+    height: 200px;
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(255,255,255,0.20), transparent 55%),
+      linear-gradient(135deg, #050712, #101522),
+      url("/images/workly-pro-placeholder.jpg");
+    background-size: cover;
+    background-position: center;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.55);
+    isolation: isolate;
+  }
+
+  /* Kill any old keyboard / glow layers & animations */
+  .home-pro-media::before,
+  .home-pro-media::after {
+    content: none;
+    background: none;
+    box-shadow: none;
+    animation: none;
+  }
+}
