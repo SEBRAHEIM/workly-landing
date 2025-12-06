@@ -1862,3 +1862,38 @@ a {
     font-size: 0.86rem;
   }
 }
+
+/* === Hero ticker icon pills (icon-only) === */
+.home-ticker-icon-pill {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: rgba(246, 245, 244, 0.9);
+  border: 1px solid rgba(90, 84, 73, 0.32);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.home-ticker-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  fill: none;
+}
+
+/* موبايل: صغّر الأيقونة شوي */
+@media (max-width: 760px) {
+  .home-ticker-icon-pill {
+    width: 36px;
+    height: 36px;
+  }
+
+  .home-ticker-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+}
