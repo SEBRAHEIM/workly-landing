@@ -1715,3 +1715,83 @@ a {
   stroke: currentColor;
   stroke-width: 1.6;
 }
+
+
+/* Hero ticker stripe */
+.home-ticker {
+  margin-top: 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+  position: relative;
+  padding: 6px 0;
+}
+
+.home-ticker::before,
+.home-ticker::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 32px;
+  pointer-events: none;
+}
+
+.home-ticker::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(246, 245, 244, 1), rgba(246, 245, 244, 0));
+}
+
+.home-ticker::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(246, 245, 244, 1), rgba(246, 245, 244, 0));
+}
+
+.home-ticker-track {
+  display: flex;
+  width: max-content;
+  animation: homeTicker 22s linear infinite;
+}
+
+.home-ticker-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 32px;
+  white-space: nowrap;
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+}
+
+.home-ticker-item {
+  color: var(--sand-5);
+  font-weight: 500;
+}
+
+.home-ticker-dot {
+  opacity: 0.35;
+}
+
+@keyframes homeTicker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Mobile: شوي أقل margin */
+@media (max-width: 760px) {
+  .home-ticker {
+    margin-top: 14px;
+    padding: 5px 0;
+  }
+
+  .home-ticker-row {
+    padding: 0 20px;
+    gap: 14px;
+    font-size: 0.88rem;
+  }
+}

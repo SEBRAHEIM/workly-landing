@@ -125,6 +125,37 @@ export default function Home() {
                       <p>
             Pick a creator, upload your requirements, and get your complete project delivered with zero effort.
           </p>
+            
+            <div className="home-ticker">
+              <div className="home-ticker-track">
+                <div className="home-ticker-row">
+                  <span className="home-ticker-item">Reports</span>
+                  <span className="home-ticker-dot">•</span>
+                  <span className="home-ticker-item">PPTs</span>
+                  <span className="home-ticker-dot">•</span>
+                  <span className="home-ticker-item">Projects</span>
+                  <span className="home-ticker-dot">•</span>
+                  <span className="home-ticker-item">Dashboards</span>
+                  <span className="home-ticker-dot">•</span>
+                  <span className="home-ticker-item">Coding</span>
+                  <span className="home-ticker-dot">•</span>
+                  <span className="home-ticker-item">Essays</span>
+                </div>
+                <div className="home-ticker-row">
+                  <span className="home-ticker-item">Reports</span>
+                  <span className="home-ticker-dot">•</span>
+                  <span className="home-ticker-item">PPTs</span>
+                  <span className="home-ticker-dot">•</span>
+                  <span className="home-ticker-item">Projects</span>
+                  <span className="home-ticker-dot">•</span>
+                  <span className="home-ticker-item">Dashboards</span>
+                  <span className="home-ticker-dot">•</span>
+                  <span className="home-ticker-item">Coding</span>
+                  <span className="home-ticker-dot">•</span>
+                  <span className="home-ticker-item">Essays</span>
+                </div>
+              </div>
+            </div>
           </section>
 
           <section className="home-categories">
