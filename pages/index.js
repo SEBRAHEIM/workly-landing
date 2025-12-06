@@ -189,7 +189,20 @@ export default function Home() {
             Workly is not affiliated with any university. Use responsibly and
             always follow your institution&apos;s rules.
           </footer>
-        </main>
+        
+        <section className="home-pro-banner">
+          <div className="service-card pro-card">
+            <div className="service-icon">✨</div>
+            <h3>Workly PRO.</h3>
+            <p className="service-sub">Workly PRO — Coming Soon</p>
+            <p className="service-desc">
+              Priority tools. Faster workflow. A smoother, smarter experience designed
+              to help students and creators get more done with less effort.
+            </p>
+          </div>
+        </section>
+
+</main>
       </div>
     </>
   );

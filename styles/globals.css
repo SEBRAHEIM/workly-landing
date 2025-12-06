@@ -1637,3 +1637,20 @@ a {
   font-size: 32px;
   margin-bottom: 10px;
 }
+
+/* === Workly PRO banner layout === */
+.home-pro-banner {
+  margin-top: 26px;
+}
+
+.home-pro-banner .pro-card {
+  max-width: 640px;
+  margin: 0 auto 8px;
+}
+
+/* شوية padding على الموبايل */
+@media (max-width: 760px) {
+  .home-pro-banner {
+    padding: 0 20px 24px;
+  }
+}
