@@ -76,12 +76,6 @@ export default function Home() {
           </div>
 
                     <nav className="home-topbar-right">
-            <Link href="/signup/creator" className="home-nav-link">
-              Become a creator
-            </Link>
-            <Link href="/login" className="home-nav-link">
-              Sign in
-            </Link>
             <Link href="/signup" className="home-nav-cta">
               Join
             </Link>
