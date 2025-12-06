@@ -54,39 +54,6 @@ const ICONS = {
   ),
 };
 
-const CATEGORIES = [
-  {
-    id: "reports",
-    name: "Reports & Essays",
-    description: "Help with writing assignments and Word documents.",
-  },
-  {
-    id: "ppt",
-    name: "Presentations & PPT",
-    description: "Slides, templates, and class presentations.",
-  },
-  {
-    id: "group",
-    name: "Group Projects",
-    description: "Case studies and team assignments.",
-  },
-  {
-    id: "excel",
-    name: "Excel & Data",
-    description: "Sheets, tables, dashboards, simple calculations.",
-  },
-  {
-    id: "tech",
-    name: "Programming & Tech",
-    description: "Basic coding tasks and small tech work.",
-  },
-  {
-    id: "other",
-    name: "Other Tasks",
-    description: "Anything else required for your course.",
-  },
-];
-
 export default function Home() {
   return (
     <>
@@ -107,13 +74,16 @@ export default function Home() {
             </button>
             <span className="home-logo-text">Workly</span>
           </div>
+
           <nav className="home-topbar-right">
-            <Link href="/signup/creator" className="home-nav-link">
+            <Link href="/signup/creator" className="home-nav-link nav-hide-mobile">
               Become a creator
             </Link>
-            <Link href="/login" className="home-nav-link">
+
+            <Link href="/login" className="home-nav-link nav-hide-mobile">
               Sign in
             </Link>
+
             <Link href="/signup" className="home-nav-cta">
               Join
             </Link>
@@ -121,75 +91,3 @@ export default function Home() {
         </header>
 
         <main className="home-main">
-          <section className="home-hero">
-            <h1>University projects, done for you.</h1>
-            <p>
-              Pick a creator, upload your requirements, and get your complete project delivered with zero effort.
-            </p>
-
-            <div className="home-search">
-              <input
-                type="text"
-                placeholder='Try "marketing group project"'
-              />
-              <button type="button" aria-label="Search">
-                <span className="home-search-icon" />
-              </button>
-            </div>
-          </section>
-
-          <section className="home-categories">
-            <div className="home-categories-header">
-              <h2>Choose a category</h2>
-              <p>Select what you need help with.</p>
-            </div>
-
-            <div className="home-category-grid">
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat.id}
-                  type="button"
-                  className="home-category-card"
-                >
-                  <div className="home-category-icon">
-                    {ICONS[cat.id]}
-                  </div>
-                  <div className="home-category-body">
-                    <div className="home-category-name">{cat.name}</div>
-                    <div className="home-category-desc">{cat.description}</div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </section>
-
-          <section className="home-pro-strip">
-            <div className="home-pro-media" aria-hidden="true" />
-            <div className="home-pro-content">
-              <h3>Workly PRO.</h3>
-              <p>
-                Workly PRO — Coming Soon<br /><br />
-                Priority tools. Faster workflow.<br />
-                A smoother, smarter experience for everyone.
-              </p>
-            </div>
-          </section>
-
-          <section className="home-creators-copy">
-            <h2>Make it all happen with creators</h2>
-            <ul>
-              <li>Access top-talented creators.</li>
-              <li>Match easily with the right expert for your task.</li>
-              <li>Get high-quality work delivered fast and within budget.</li>
-              <li>Release payment only after you approve the result.</li>
-            </ul>
-          </section>
-        </main>
-
-        <footer className="home-footer">
-          <div className="home-footer-brand">workly.day</div>
-        </footer>
-      </div>
-    </>
-  );
-}
