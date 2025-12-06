@@ -75,15 +75,7 @@ export default function Home() {
             <span className="home-logo-text">Workly</span>
           </div>
 
-          <nav className="home-topbar-right">
-            <Link href="/signup/creator" className="home-nav-link nav-hide-mobile">
-              Become a creator
-            </Link>
-
-            <Link href="/login" className="home-nav-link nav-hide-mobile">
-              Sign in
-            </Link>
-
+                    <nav className="home-topbar-right">
             <Link href="/signup" className="home-nav-cta">
               Join
             </Link>
