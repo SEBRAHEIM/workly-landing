@@ -1478,3 +1478,38 @@ a {
     color: #ffffff;
   }
 }
+
+/* creators-mobile-only overrides */
+@media (min-width: 761px) {
+  .home-creators-copy {
+    display: none;
+  }
+}
+
+
+@media (max-width: 760px) {
+  .home-creators-copy {
+    display: block;
+    margin: 40px 20px 40px;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .home-creators-copy h2 {
+    font-size: 1.5rem;
+    line-height: 1.25;
+    margin-bottom: 14px;
+  }
+
+  .home-creators-copy ul {
+    padding-left: 1.2rem;
+    margin: 0 0 8px;
+  }
+
+  .home-creators-copy li {
+    margin-bottom: 6px;
+  }
+}
+
