@@ -184,6 +184,16 @@ export default function Home() {
                 vetted creators, with progress updates, priority support, and
                 extra quality checks.
               </p>
+
+      <section className="home-creators-copy">
+        <ul>
+          <li>Access top-talented creators.</li>
+          <li>Match easily with the right expert for your task.</li>
+          <li>Get high-quality work delivered fast and within budget.</li>
+          <li>Release payment only after you approve the result.</li>
+        </ul>
+        <button className="home-cta-secondary">Join now</button>
+      </section>
             </div>
           </section>
 
