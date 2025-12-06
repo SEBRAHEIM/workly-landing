@@ -1021,3 +1021,79 @@ a {
   }
 }
 
+/* === Workly PRO keyboard-style media override (mobile only) === */
+@media (max-width: 760px) {
+  .home-pro-media {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    border-radius: 18px;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 4% 0%, rgba(255, 255, 255, 0.24), rgba(7, 12, 26, 0.96) 52%, #050711 100%);
+    box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.65);
+    isolation: isolate;
+  }
+
+  /* ثابت: شبكة أزرار تشبه الكيبورد */
+  .home-pro-media::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    margin: 26px 32px;
+    border-radius: 16px;
+    background:
+      radial-gradient(circle, rgba(255, 255, 255, 0.10) 0, rgba(255, 255, 255, 0.10) 52%, transparent 55%)
+      0 0 / 32px 26px repeat;
+    opacity: 0.78;
+    filter: blur(0.3px);
+    pointer-events: none;
+  }
+
+  /* زر واحد مضيء يتحرك من key لثاني */
+  .home-pro-media::after {
+    content: "";
+    position: absolute;
+    width: 30px;
+    height: 24px;
+    border-radius: 999px;
+    top: 26px;   /* صف أول */
+    left: 32px;  /* أول زر */
+    background:
+      radial-gradient(circle, #f3feff 0, #c4f3ff 40%, rgba(120, 236, 255, 0.05) 75%);
+    box-shadow:
+      0 0 12px rgba(180, 245, 255, 0.7),
+      0 0 28px rgba(120, 230, 255, 0.5);
+    opacity: 0.98;
+    pointer-events: none;
+    animation: worklyKeyDance 3.2s steps(1, end) infinite;
+  }
+
+  /* يتحرك بين مفاتيح محددة بدون ما يمر فوق باقي الأزرار */
+  @keyframes worklyKeyDance {
+    0%, 8% {
+      transform: translate(0, 0);        /* صف 1 - زر 1 */
+    }
+    12%, 20% {
+      transform: translate(34px, 0);     /* صف 1 - زر 2 */
+    }
+    24%, 32% {
+      transform: translate(68px, 0);     /* صف 1 - زر 3 */
+    }
+    36%, 44% {
+      transform: translate(0, 30px);     /* صف 2 - زر 1 */
+    }
+    48%, 56% {
+      transform: translate(34px, 30px);  /* صف 2 - زر 2 */
+    }
+    60%, 68% {
+      transform: translate(68px, 30px);  /* صف 2 - زر 3 */
+    }
+    72%, 80% {
+      transform: translate(34px, 60px);  /* صف 3 - زر 2 */
+    }
+    84%, 100% {
+      transform: translate(102px, 30px); /* صف 2 - زر 4 (حركة عشوائية شوي) */
+    }
+  }
+}
