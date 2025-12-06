@@ -127,85 +127,10 @@ export default function Home() {
 
         {/* MAIN */}
         <main className="home-main">
-          <section className="home-hero">
-            <h1>University projects, done for you.</h1>
-            <p>
-              Pick a creator, upload your requirements, and get your complete
-              project delivered with zero effort.
-            </p>
-
-            <div className="home-search">
-              <input
-                type="text"
-                placeholder='Try "marketing group project"'
-              />
-              <button type="button" aria-label="Search">
-                <span className="home-search-icon" />
-              </button>
-            </div>
-          </section>
-
-
-
-          <section className="home-categories">
-            <div className="home-categories-header">
-              <h2>Choose a category</h2>
-              <p>Select what you need help with.</p>
-            </div>
-
-            <div className="home-category-grid">
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat.id}
-                  type="button"
-                  className="home-category-card"
-                >
-                  <div className="home-category-icon">
-                    {ICONS[cat.id]}
-                  </div>
-                  <div className="home-category-body">
-                    <div className="home-category-name">
-                      {cat.name}
-                    </div>
-                    <div className="home-category-desc">
-                      {cat.description}
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </section>
-          <section className="home-pro-strip">
-            <div className="home-pro-media" aria-hidden="true" />
-            <div className="home-pro-content">
-              <h3>Workly PRO.</h3>
-              <p>
-                Coming soon. Get help with big, complex university projects from
-                vetted creators, with progress updates, priority support, and
-                extra quality checks.
-              </p>
-
-      <section className="home-creators-copy">
-        <h2>Make it all happen with creators</h2>
-        <ul>
-          <li>Access top-talented creators.</li>
-          <li>Match easily with the right expert for your task.</li>
-          <li>Get high-quality work delivered fast and within budget.</li>
-          <li>Release payment only after you approve the result.</li>
-        </ul>
-        <button className="home-cta-secondary">Join now</button>
-      </section>
+          
 
       {/* === Creators Benefits (Standalone Section) === */}
-      <section className="home-benefits">
-        <ul>
-          <li>Access top-talented creators.</li>
-          <li>Match easily with the right expert for your task.</li>
-          <li>Get high-quality work delivered fast and within budget.</li>
-          <li>Release payment only after you approve the result.</li>
-        </ul>
-        <button className="home-benefits-btn">Join now</button>
-      </section>
+      
             </div>
           </section>
 
