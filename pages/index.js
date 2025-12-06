@@ -185,6 +185,17 @@ export default function Home() {
                 extra quality checks.
               </p>
 
+      <section className="home-creators-copy">
+        <h2>Make it all happen with creators</h2>
+        <ul>
+          <li>Access top-talented creators.</li>
+          <li>Match easily with the right expert for your task.</li>
+          <li>Get high-quality work delivered fast and within budget.</li>
+          <li>Release payment only after you approve the result.</li>
+        </ul>
+        <button className="home-cta-secondary">Join now</button>
+      </section>
+
       {/* === Creators Benefits (Standalone Section) === */}
       <section className="home-benefits">
         <ul>
@@ -194,17 +205,6 @@ export default function Home() {
           <li>Release payment only after you approve the result.</li>
         </ul>
         <button className="home-benefits-btn">Join now</button>
-      </section>
-
-
-      <section className="home-creators-copy">
-        <ul>
-          <li>Access top-talented creators.</li>
-          <li>Match easily with the right expert for your task.</li>
-          <li>Get high-quality work delivered fast and within budget.</li>
-          <li>Release payment only after you approve the result.</li>
-        </ul>
-        <button className="home-cta-secondary">Join now</button>
       </section>
             </div>
           </section>
