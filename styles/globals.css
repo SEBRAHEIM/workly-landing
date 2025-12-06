@@ -1597,3 +1597,9 @@ a {
     font-size: 0.9rem !important;   /* رجّع حجم زر Join */
   }
 }
+
+/* Center WORKLY vertically in the top bar */
+.home-logo-text {
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
