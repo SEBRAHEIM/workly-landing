@@ -1584,3 +1584,16 @@ a {
     display: none !important;
   }
 }
+
+/* === Nuclear fix: hide ANY text inside nav except the Join button (mobile only) === */
+@media (max-width: 760px) {
+  .home-topbar-right {
+    font-size: 0 !important;   /* اخفي النصوص بالكامل */
+    display: flex;
+    align-items: center;
+  }
+
+  .home-topbar-right .home-nav-cta {
+    font-size: 0.9rem !important;   /* رجّع حجم زر Join */
+  }
+}
