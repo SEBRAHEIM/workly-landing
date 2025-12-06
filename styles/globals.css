@@ -1575,3 +1575,12 @@ a {
     font-size: 0.9rem;
   }
 }
+
+/* === Workly mobile nav hard-kill: hide Become a creator / Sign in by href === */
+@media (max-width: 760px) {
+  /* أي رابط تسجيل دخول أو كرياتور داخل صفحة الهوم */
+  .home-root a[href*="creator"],
+  .home-root a[href*="login"] {
+    display: none !important;
+  }
+}
