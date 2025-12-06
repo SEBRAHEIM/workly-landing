@@ -1513,3 +1513,10 @@ a {
   }
 }
 
+
+/* Hide specific nav links on mobile */
+@media (max-width: 760px) {
+  .nav-hide-mobile {
+    display: none !important;
+  }
+}
