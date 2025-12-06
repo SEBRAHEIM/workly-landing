@@ -1654,3 +1654,11 @@ a {
     padding: 0 20px 24px;
   }
 }
+
+
+.home-footer-brand {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  opacity: .7;
+  text-align: center;
+}

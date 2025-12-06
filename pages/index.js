@@ -167,7 +167,17 @@ export default function Home() {
           </section>
 
           {/* Optional: mobile-only creators copy block that matches existing CSS */}
-          <section className="home-creators-copy">
+          <section className="
+          <section className="home-pro-banner">
+            <div className="service-card pro-card">
+              <div className="service-icon">✨</div>
+              <h3>Workly PRO.</h3>
+              <p className="service-sub">Workly PRO — Coming Soon</p>
+              <p className="service-desc">Priority tools. Faster workflow. A smoother, smarter experience designed to help students and creators get more done with less effort.</p>
+            </div>
+          </section>
+
+home-creators-copy">
             <h2>Creators get focused, serious work only.</h2>
             <ul>
               <li>Students share real rubrics and grading criteria.</li>
@@ -185,22 +195,14 @@ export default function Home() {
             </button>
           </section>
 
+          
           <footer className="home-footer">
-            Workly is not affiliated with any university. Use responsibly and
-            always follow your institution&apos;s rules.
+            <p>Workly is not affiliated with any university. Use responsibly and always follow your institution&apos;s rules.</p>
+            <p className="home-footer-brand">Workly</p>
           </footer>
+
         
-        <section className="home-pro-banner">
-          <div className="service-card pro-card">
-            <div className="service-icon">✨</div>
-            <h3>Workly PRO.</h3>
-            <p className="service-sub">Workly PRO — Coming Soon</p>
-            <p className="service-desc">
-              Priority tools. Faster workflow. A smoother, smarter experience designed
-              to help students and creators get more done with less effort.
-            </p>
-          </div>
-        </section>
+        
 
 </main>
       </div>
