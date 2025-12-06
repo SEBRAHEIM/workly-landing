@@ -54,6 +54,39 @@ const ICONS = {
   ),
 };
 
+const CATEGORIES = [
+  {
+    key: "reports",
+    title: "Reports & essays",
+    desc: "Structured reports, reflections, and written assignments.",
+  },
+  {
+    key: "ppt",
+    title: "Presentations & PPT",
+    desc: "Clean slides that match your rubric and grading criteria.",
+  },
+  {
+    key: "group",
+    title: "Group projects",
+    desc: "Semester projects where someone owns the heavy lifting.",
+  },
+  {
+    key: "excel",
+    title: "Excel & data sheets",
+    desc: "Spreadsheets, dashboards, and calculations done for you.",
+  },
+  {
+    key: "tech",
+    title: "Programming & tech",
+    desc: "Small web apps, code assignments, and automations.",
+  },
+  {
+    key: "other",
+    title: "Other coursework",
+    desc: "Anything that doesn’t fit — just describe what you need.",
+  },
+];
+
 export default function Home() {
   return (
     <>
@@ -68,14 +101,18 @@ export default function Home() {
       <div className="home-root">
         <header className="home-topbar">
           <div className="home-topbar-left">
-            <button type="button" aria-label="Open menu" className="home-menu-btn">
+            <button
+              type="button"
+              aria-label="Open menu"
+              className="home-menu-btn"
+            >
               <span />
               <span />
             </button>
-            <span className="home-logo-text">Workly</span>
+            <span className="home-logo-text">WORKLY</span>
           </div>
 
-                    <nav className="home-topbar-right">
+          <nav className="home-topbar-right">
             <Link href="/signup" className="home-nav-cta">
               Join
             </Link>
@@ -83,3 +120,77 @@ export default function Home() {
         </header>
 
         <main className="home-main">
+          <section className="home-hero">
+            <h1>Upload your rubric. Let creators handle the rest.</h1>
+            <p>
+              Workly connects university students with vetted creators who can
+              handle full assignments — from reports and PPTs to data sheets and
+              tech projects.
+            </p>
+
+            <div className="home-search">
+              <input
+                type="text"
+                placeholder="Describe your project or paste your rubric link…"
+                aria-label="Describe your project"
+              />
+              <button type="button" aria-label="Start your project">
+                <span className="home-search-icon" />
+              </button>
+            </div>
+          </section>
+
+          <section className="home-categories">
+            <div className="home-categories-header">
+              <h2>What can creators help you with?</h2>
+              <p>
+                Choose the type of work you need help with. You can always mix
+                multiple formats in a single project.
+              </p>
+            </div>
+
+            <div className="home-category-grid">
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat.key}
+                  type="button"
+                  className="home-category-card"
+                >
+                  <div className="home-category-icon">{ICONS[cat.key]}</div>
+                  <div className="home-category-body">
+                    <div className="home-category-name">{cat.title}</div>
+                    <div className="home-category-desc">{cat.desc}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </section>
+
+          {/* Optional: mobile-only creators copy block that matches existing CSS */}
+          <section className="home-creators-copy">
+            <h2>Creators get focused, serious work only.</h2>
+            <ul>
+              <li>Students share real rubrics and grading criteria.</li>
+              <li>You pick only projects you like and know how to deliver.</li>
+              <li>Workly keeps everything organized in one workspace.</li>
+            </ul>
+            <button
+              type="button"
+              className="home-cta-secondary"
+              onClick={() => {
+                window.location.href = "/signup?role=creator";
+              }}
+            >
+              Join as a creator
+            </button>
+          </section>
+
+          <footer className="home-footer">
+            Workly is not affiliated with any university. Use responsibly and
+            always follow your institution&apos;s rules.
+          </footer>
+        </main>
+      </div>
+    </>
+  );
+}
