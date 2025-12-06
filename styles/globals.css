@@ -1384,3 +1384,45 @@ a {
   }
 }
 
+
+/* === Workly PRO: creators benefit block (mobile only) === */
+@media (max-width: 760px) {
+  .home-creators-copy {
+    margin-top: 24px;
+    padding: 22px 20px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #1a1a1a;
+  }
+
+  .home-creators-copy h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  .home-creators-copy ul {
+    list-style: disc;
+    padding-left: 22px;
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .home-creators-copy li {
+    margin-bottom: 10px;
+  }
+
+  .home-creators-copy button.home-cta-secondary {
+    margin-top: 18px;
+    padding: 12px 26px;
+    border-radius: 999px;
+    background: #111111;
+    border: none;
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+}
