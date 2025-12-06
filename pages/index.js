@@ -121,23 +121,10 @@ export default function Home() {
 
         <main className="home-main">
           <section className="home-hero">
-            <h1>Upload your rubric. Let creators handle the rest.</h1>
-            <p>
-              Workly connects university students with vetted creators who can
-              handle full assignments — from reports and PPTs to data sheets and
-              tech projects.
-            </p>
-
-            <div className="home-search">
-              <input
-                type="text"
-                placeholder="Describe your project or paste your rubric link…"
-                aria-label="Describe your project"
-              />
-              <button type="button" aria-label="Start your project">
-                <span className="home-search-icon" />
-              </button>
-            </div>
+            <h1>University projects, done for you.</h1>
+                      <p>
+            Pick a creator, upload your requirements, and get your complete project delivered with zero effort.
+          </p>
           </section>
 
           <section className="home-categories">
