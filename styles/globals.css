@@ -1662,3 +1662,17 @@ a {
   opacity: .7;
   text-align: center;
 }
+
+/* === Creators section icon layout === */
+.creator-point {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+  font-size: 1rem;
+  color: var(--sand-5);
+}
+
+.creator-icon {
+  font-size: 1.3rem;
+}

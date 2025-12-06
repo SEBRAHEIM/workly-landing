@@ -178,23 +178,39 @@ export default function Home() {
 
 
           {/* Optional: mobile-only creators copy block that matches existing CSS */}
-          <section className="home-creators-copy">
-            <h2>Creators get focused, serious work only.</h2>
-            <ul>
-              <li>Students share real rubrics and grading criteria.</li>
-              <li>You pick only projects you like and know how to deliver.</li>
-              <li>Workly keeps everything organized in one workspace.</li>
-            </ul>
-            <button
-              type="button"
-              className="home-cta-secondary"
-              onClick={() => {
-                window.location.href = "/signup?role=creator";
-              }}
-            >
-              Join as a creator
-            </button>
-          </section>
+          
+<section className="home-creators-copy">
+  <h2>Make it all happen with creators</h2>
+
+  <div className="creator-point">
+    <span className="creator-icon">⭐</span>
+    <span>Access top-talented creators.</span>
+  </div>
+
+  <div className="creator-point">
+    <span className="creator-icon">🎯</span>
+    <span>Match easily with the right expert for your task.</span>
+  </div>
+
+  <div className="creator-point">
+    <span className="creator-icon">⚡</span>
+    <span>Get high-quality work delivered fast and within budget.</span>
+  </div>
+
+  <div className="creator-point">
+    <span className="creator-icon">💳</span>
+    <span>Release payment only after you approve the result.</span>
+  </div>
+
+  <button
+    type="button"
+    className="home-cta-secondary"
+    onClick={() => { window.location.href = "/signup?role=creator"; }}
+  >
+    Join as a creator
+  </button>
+</section>
+
 
           
           <footer className="home-footer">
