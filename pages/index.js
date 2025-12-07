@@ -198,31 +198,8 @@ export default function Home() {
         </div>
         </div>
       </section>
-          <section className="home-scenarios">
-            <p className="home-scenarios-kicker">كيف يساعدك Workly في مواقفك اليومية كطالب؟</p>
-            <div className="home-scenarios-grid">
-              <div className="home-scenario-card">
-                <h3 className="home-scenario-title">قرب التسليم… وما خلصت شيء؟</h3>
-                <p className="home-scenario-text">
-                  اختر مبدع، ارفع المتطلبات، وخله يجهز لك المشروع كامل بدل ما تضيع وقتك بين أكثر من ملف وملاحظة.
-                </p>
-              </div>
-              <div className="home-scenario-card">
-                <h3 className="home-scenario-title">العرض (PPT) مب مرتب؟</h3>
-                <p className="home-scenario-text">
-                  المبدع يحوّل النقاط والمتطلبات إلى عرض واضح، نظيف، ومناسب للدكاترة من أول سلايد لآخر سلايد.
-                </p>
-              </div>
-              <div className="home-scenario-card">
-                <h3 className="home-scenario-title">فيه كود أو داشبورد صعب؟</h3>
-                <p className="home-scenario-text">
-                  خلّ الجزء التقني على خبير. يشتغل لك على الشروط بالضبط عشان التسليم يكون مطابق للـ rubric.
-                </p>
-              </div>
-            </div>
-          </section>
 
-          <section className="home-categories">
+<section className="home-categories">
             <div className="home-categories-header">
               <h2>What can creators help you with?</h2>
               <p>
