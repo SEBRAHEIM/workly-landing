@@ -149,31 +149,100 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="home-categories">
-            <div className="home-categories-header">
-              <h2>Choose a category</h2>
-              <p>Select what you need help with.</p>
-            </div>
+                  {/* Categories search + grid */}
+        <section className="home-section home-section--categories">
+          <header className="home-section-header">
+            <h2 className="home-section-title">Choose a category</h2>
+            <p className="home-section-subtitle">
+              Select what you need help with.
+            </p>
+          </header>
 
-            <div className="home-category-grid">
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat.key}
-                  type="button"
-                  onClick={() => setSelectedCategory(cat.key)}
-                  className={`home-category-card${
-                    selectedCategory === cat.key ? " home-category-card--active" : ""
-                  }`}
-                >
-                  <div className="home-category-icon">{ICONS[cat.key]}</div>
-                  <div className="home-category-body">
-                    <div className="home-category-name">{cat.title}</div>
-                    <div className="home-category-desc">{cat.desc}</div>
-                  </div>
-                </button>
-              ))}
+          <div className="home-hero-search">
+            <label className="home-hero-search-label" htmlFor="hero-search">
+              <span className="sr-only">Describe your project</span>
+            </label>
+            <div className="home-hero-search-input-wrap">
+              <input
+                id="hero-search"
+                type="text"
+                className="home-hero-search-input"
+                placeholder='Try "marketing group project"'
+                autoComplete="off"
+              />
+              <button
+                type="button"
+                className="home-hero-search-button"
+                aria-label="Search creators"
+              >
+                <span className="home-hero-search-button-icon" />
+              </button>
             </div>
-          </section>
+          </div>
+
+          <div className="home-category-grid">
+            <button type="button" className="home-category-card">
+              <div className="home-category-icon home-category-icon--doc" />
+              <div className="home-category-text">
+                <div className="home-category-name">Reports & Essays</div>
+                <div className="home-category-desc">
+                  Help with writing assignments and Word documents.
+                </div>
+              </div>
+            </button>
+
+            <button type="button" className="home-category-card">
+              <div className="home-category-icon home-category-icon--slides" />
+              <div className="home-category-text">
+                <div className="home-category-name">Presentations & PPT</div>
+                <div className="home-category-desc">
+                  Slides, templates, and class presentations.
+                </div>
+              </div>
+            </button>
+
+            <button type="button" className="home-category-card">
+              <div className="home-category-icon home-category-icon--group" />
+              <div className="home-category-text">
+                <div className="home-category-name">Group Projects</div>
+                <div className="home-category-desc">
+                  Case studies and team assignments.
+                </div>
+              </div>
+            </button>
+
+            <button type="button" className="home-category-card">
+              <div className="home-category-icon home-category-icon--grid" />
+              <div className="home-category-text">
+                <div className="home-category-name">Excel & Data</div>
+                <div className="home-category-desc">
+                  Sheets, tables, dashboards, simple calculations.
+                </div>
+              </div>
+            </button>
+
+            <button type="button" className="home-category-card">
+              <div className="home-category-icon home-category-icon--code" />
+              <div className="home-category-text">
+                <div className="home-category-name">Programming & Tech</div>
+                <div className="home-category-desc">
+                  Basic coding tasks and small tech work.
+                </div>
+              </div>
+            </button>
+
+            <button type="button" className="home-category-card">
+              <div className="home-category-icon home-category-icon--other" />
+              <div className="home-category-text">
+                <div className="home-category-name">Other Tasks</div>
+                <div className="home-category-desc">
+                  Anything else required for your course.
+                </div>
+              </div>
+            </button>
+          </div>
+        </section>
+
 
           <section className="home-creators-copy">
             <h2>Make it all happen with creators</h2>
