@@ -1985,3 +1985,68 @@ a {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+
+/* === Student scenarios band under hero === */
+.home-scenarios {
+  margin-top: 26px;
+}
+
+.home-scenarios-kicker {
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(90, 84, 73, 0.82);
+}
+
+.home-scenarios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.home-scenario-card {
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  padding: 14px 16px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.04);
+}
+
+.home-scenario-title {
+  margin: 0 0 6px;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--sand-5);
+}
+
+.home-scenario-text {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(48, 38, 30, 0.9);
+}
+
+@media (max-width: 760px) {
+  .home-scenarios {
+    margin-top: 20px;
+  }
+
+  .home-scenarios-grid {
+    gap: 10px;
+  }
+
+  .home-scenario-card {
+    padding: 12px 13px;
+    border-radius: 16px;
+  }
+
+  .home-scenario-title {
+    font-size: 0.95rem;
+  }
+
+  .home-scenario-text {
+    font-size: 0.86rem;
+  }
+}

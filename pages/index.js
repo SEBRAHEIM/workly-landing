@@ -125,109 +125,6 @@ export default function Home() {
                       <p>
             Pick a creator, upload your requirements, and get your complete project delivered with zero effort.
           </p>
-          <section className="home-ticker">
-            <div className="home-ticker-inner">
-              <div className="home-ticker-row">
-                <div className="home-ticker-track">
-                  <div className="home-ticker-icon-pill">
-                    <svg className="home-ticker-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
-                      <rect x="5" y="4" width="14" height="16" rx="2" ry="2" />
-                      <line x1="8" y1="9" x2="16" y2="9" />
-                      <line x1="8" y1="13" x2="16" y2="13" />
-                      <line x1="8" y1="17" x2="13" y2="17" />
-                    </svg>
-                  </div>
-                  <div className="home-ticker-icon-pill">
-                    <svg className="home-ticker-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
-                      <rect x="4" y="5" width="16" height="12" rx="2" ry="2" />
-                      <line x1="4" y1="10" x2="20" y2="10" />
-                      <line x1="10" y1="5" x2="10" y2="17" />
-                      <path d="M7 8h3v3H7z" />
-                    </svg>
-                  </div>
-                  <div className="home-ticker-icon-pill">
-                    <svg className="home-ticker-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
-                      <rect x="4" y="4" width="16" height="16" rx="2" ry="2" />
-                      <path d="M8 16l3-3-3-3" />
-                      <path d="M13 16h3" />
-                    </svg>
-                  </div>
-                  <div className="home-ticker-icon-pill">
-                    <svg className="home-ticker-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
-                      <rect x="4" y="4" width="16" height="16" rx="2" ry="2" />
-                      <path d="M8 16v-6l4 3 4-3v6" />
-                    </svg>
-                  </div>
-                  <div className="home-ticker-icon-pill">
-                    <svg className="home-ticker-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
-                      <rect x="4" y="4" width="16" height="16" rx="2" ry="2" />
-                      <path d="M9 9h6" />
-                      <path d="M9 13h6" />
-                      <path d="M9 17h3" />
-                    </svg>
-                  </div>
-                  <div className="home-ticker-icon-pill">
-                    <svg className="home-ticker-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M6 5h11" />
-                      <path d="M6 9h11" />
-                      <path d="M6 13h7" />
-                      <path d="M6 17h5" />
-                      <path d="M4 4v16" />
-                    </svg>
-                  </div>
-                </div>
-
-                <div className="home-ticker-track home-ticker-track--alt">
-                  <div className="home-ticker-icon-pill">
-                    <svg className="home-ticker-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
-                      <rect x="5" y="4" width="14" height="16" rx="2" ry="2" />
-                      <line x1="8" y1="9" x2="16" y2="9" />
-                      <line x1="8" y1="13" x2="16" y2="13" />
-                      <line x1="8" y1="17" x2="13" y2="17" />
-                    </svg>
-                  </div>
-                  <div className="home-ticker-icon-pill">
-                    <svg className="home-ticker-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
-                      <rect x="4" y="5" width="16" height="12" rx="2" ry="2" />
-                      <line x1="4" y1="10" x2="20" y2="10" />
-                      <line x1="10" y1="5" x2="10" y2="17" />
-                      <path d="M7 8h3v3H7z" />
-                    </svg>
-                  </div>
-                  <div className="home-ticker-icon-pill">
-                    <svg className="home-ticker-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
-                      <rect x="4" y="4" width="16" height="16" rx="2" ry="2" />
-                      <path d="M8 16l3-3-3-3" />
-                      <path d="M13 16h3" />
-                    </svg>
-                  </div>
-                  <div className="home-ticker-icon-pill">
-                    <svg className="home-ticker-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
-                      <rect x="4" y="4" width="16" height="16" rx="2" ry="2" />
-                      <path d="M8 16v-6l4 3 4-3v6" />
-                    </svg>
-                  </div>
-                  <div className="home-ticker-icon-pill">
-                    <svg className="home-ticker-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
-                      <rect x="4" y="4" width="16" height="16" rx="2" ry="2" />
-                      <path d="M9 9h6" />
-                      <path d="M9 13h6" />
-                      <path d="M9 17h3" />
-                    </svg>
-                  </div>
-                  <div className="home-ticker-icon-pill">
-                    <svg className="home-ticker-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M6 5h11" />
-                      <path d="M6 9h11" />
-                      <path d="M6 13h7" />
-                      <path d="M6 17h5" />
-                      <path d="M4 4v16" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
             
             <div className="home-ticker">
               <div className="home-ticker-track">
@@ -301,6 +198,29 @@ export default function Home() {
         </div>
         </div>
       </section>
+          <section className="home-scenarios">
+            <p className="home-scenarios-kicker">كيف يساعدك Workly في مواقفك اليومية كطالب؟</p>
+            <div className="home-scenarios-grid">
+              <div className="home-scenario-card">
+                <h3 className="home-scenario-title">قرب التسليم… وما خلصت شيء؟</h3>
+                <p className="home-scenario-text">
+                  اختر مبدع، ارفع المتطلبات، وخله يجهز لك المشروع كامل بدل ما تضيع وقتك بين أكثر من ملف وملاحظة.
+                </p>
+              </div>
+              <div className="home-scenario-card">
+                <h3 className="home-scenario-title">العرض (PPT) مب مرتب؟</h3>
+                <p className="home-scenario-text">
+                  المبدع يحوّل النقاط والمتطلبات إلى عرض واضح، نظيف، ومناسب للدكاترة من أول سلايد لآخر سلايد.
+                </p>
+              </div>
+              <div className="home-scenario-card">
+                <h3 className="home-scenario-title">فيه كود أو داشبورد صعب؟</h3>
+                <p className="home-scenario-text">
+                  خلّ الجزء التقني على خبير. يشتغل لك على الشروط بالضبط عشان التسليم يكون مطابق للـ rubric.
+                </p>
+              </div>
+            </div>
+          </section>
 
           <section className="home-categories">
             <div className="home-categories-header">
