@@ -309,7 +309,6 @@ export default function Home() {
         </header>
 
         <main className="home-main">
-          {/* HERO */}
           <section className="home-hero">
             <h1>University projects, done for you.</h1>
             <p>
@@ -336,7 +335,6 @@ export default function Home() {
             </div>
           </section>
 
-          {/* CATEGORIES GRID */}
           <section className="home-section home-section--categories">
             <header className="home-section-header">
               <h2 className="home-section-title">Choose a category</h2>
@@ -358,22 +356,14 @@ export default function Home() {
                       "home-category-card" +
                       (isActive ? " home-category-card--active" : "")
                     }
-                    onClick={() =>
-                      setSelectedCategory(
-                        isActive ? null : cat.key
-                      )
-                    }
+                    onClick={() => setSelectedCategory(cat.key)}
                   >
                     <div className="home-category-icon">
                       {ICONS[iconKey]}
                     </div>
                     <div className="home-category-text">
-                      <div className="home-category-name">
-                        {cat.title}
-                      </div>
-                      <div className="home-category-desc">
-                        {cat.desc}
-                      </div>
+                      <div className="home-category-name">{cat.title}</div>
+                      <div className="home-category-desc">{cat.desc}</div>
                     </div>
                   </button>
                 );
@@ -381,7 +371,6 @@ export default function Home() {
             </div>
           </section>
 
-          {/* CREATOR BENEFITS */}
           <section className="home-creators-copy">
             <h2>Make it all happen with creators</h2>
 
@@ -392,10 +381,7 @@ export default function Home() {
                     <circle cx="8" cy="9" r="3" fill="none" />
                     <circle cx="16" cy="9" r="2.5" fill="none" />
                     <path d="M4.5 18c0-2.2 1.9-4 4.5-4s4.5 1.8 4.5 4" fill="none" />
-                    <path
-                      d="M13.5 17.5c0.5-1.4 1.7-2.5 3.1-2.5 1.9 0 3.4 1.5 3.4 3.3"
-                      fill="none"
-                    />
+                    <path d="M13.5 17.5c0.5-1.4 1.7-2.5 3.1-2.5 1.9 0 3.4 1.5 3.4 3.3" fill="none" />
                   </svg>
                 </div>
                 <p>Access top-talented creators.</p>
@@ -436,7 +422,6 @@ export default function Home() {
             </div>
           </section>
 
-          {/* PRO BANNER */}
           <section className="home-pro-banner">
             <div className="service-card pro-card">
               <div className="service-icon">✨</div>
@@ -450,7 +435,6 @@ export default function Home() {
             </div>
           </section>
 
-          {/* FOOTER */}
           <footer className="home-footer">
             Workly is not affiliated with any university. Use responsibly and
             always follow your institution&apos;s rules.
