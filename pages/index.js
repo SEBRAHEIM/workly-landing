@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 
@@ -71,7 +72,7 @@ const CATEGORIES = [
     desc: "Case studies and team assignments.",
   },
   {
-    key: "excel",
+    key: "data",
     title: "Excel & Data",
     desc: "Sheets, tables, dashboards, simple calculations.",
   },
@@ -88,6 +89,8 @@ const CATEGORIES = [
 ];
 
 export default function Home() {
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
   return (
     <>
       <Head>
@@ -157,7 +160,10 @@ export default function Home() {
                 <button
                   key={cat.key}
                   type="button"
-                  className="home-category-card"
+                  onClick={() => setSelectedCategory(cat.key)}
+                  className={`home-category-card${
+                    selectedCategory === cat.key ? " home-category-card--active" : ""
+                  }`}
                 >
                   <div className="home-category-icon">{ICONS[cat.key]}</div>
                   <div className="home-category-body">

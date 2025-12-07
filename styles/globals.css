@@ -1901,3 +1901,17 @@ a {
   overflow: hidden !important;
 }
 
+
+
+/* Selected category card state */
+.home-category-card--active {
+  border-color: rgba(64, 56, 40, 0.55);
+  box-shadow:
+    0 14px 30px rgba(15, 23, 42, 0.14),
+    0 0 0 1px rgba(64, 56, 40, 0.12);
+  transform: translateY(-1px);
+}
+
+.home-category-card--active .home-category-icon {
+  background: rgba(121, 104, 81, 0.16);
+}
