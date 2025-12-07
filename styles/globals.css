@@ -1,9 +1,9 @@
 :root {
-  --sand-1: #F6F5F4; /* Main clean background */
-  --sand-2: #D8CFC4; /* Soft warm neutral */
-  --sand-3: #B7A99A; /* Taupe accent, buttons */
-  --sand-4: #8A817C; /* Stone highlight, borders */
-  --sand-5: #5A5449; /* Text, strong contrast */
+  --sand-1: #F6F5F4; 
+  --sand-2: #D8CFC4; 
+  --sand-3: #B7A99A; 
+  --sand-4: #8A817C; 
+  --sand-5: #5A5449; 
 }
 
 *,
@@ -31,7 +31,7 @@ a {
   text-decoration: none;
 }
 
-/* ROOT LAYOUT */
+
 
 .home-root {
   min-height: 100vh;
@@ -46,7 +46,7 @@ a {
   padding: 32px 20px 40px;
 }
 
-/* NAVBAR */
+
 
 .home-topbar {
   position: sticky;
@@ -120,7 +120,7 @@ a {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* HERO */
+
 
 .home-hero {
   text-align: left;
@@ -141,7 +141,7 @@ a {
   opacity: 0.9;
 }
 
-/* SEARCH BAR */
+
 
 .home-search {
   display: flex;
@@ -200,7 +200,7 @@ a {
   bottom: -1px;
 }
 
-/* CATEGORIES */
+
 
 .home-categories {
   margin-top: 40px;
@@ -261,7 +261,7 @@ a {
 .home-category-name {
   font-weight: 600;
   font-size: 1rem;
-  color: var(--sand-5); /* force text NOT blue */
+  color: var(--sand-5); 
 }
 
 .home-category-desc {
@@ -269,7 +269,7 @@ a {
   opacity: 0.9;
 }
 
-/* FOOTER */
+
 
 .home-footer {
   margin-top: auto;
@@ -279,7 +279,7 @@ a {
   opacity: 0.6;
 }
 
-/* RESPONSIVE */
+
 
 .desktop-only {
   display: none;
@@ -313,9 +313,9 @@ a {
   }
 }
 
-/* === Workly tweaks (nav + mobile categories) – Dec 5 === */
 
-/* 1) Better hamburger icon (desktop + mobile) */
+
+
 .home-menu-btn {
   position: relative;
 }
@@ -348,7 +348,7 @@ a {
   background: var(--sand-5);
 }
 
-/* 2) Make sure category text is neutral, never blue */
+
 .home-category-card {
   color: var(--sand-5);
   text-align: left;
@@ -358,13 +358,13 @@ a {
   color: var(--sand-5);
 }
 
-/* If categories ever use <a>, keep them neutral too */
+
 .home-category-card a {
   color: inherit;
   text-decoration: none;
 }
 
-/* 3) Mobile layout: nice 2-column grid like before */
+
 @media (max-width: 760px) {
   .home-category-grid {
     display: grid;
@@ -383,46 +383,46 @@ a {
   border-radius: 20px;
 }
 
-/* Force icon background to be a rounded square, not a pill */
+
 .home-category-icon {
   width: 56px;
   height: 56px;
   border-radius: 18px !important;
 }
 
-/* === Force icon > title > description stacked vertically in cards === */
+
 .home-category-card {
   display: flex;
-  flex-direction: column;   /* Icon, then title, then description */
-  align-items: flex-start;  /* Left-align everything */
+  flex-direction: column;   
+  align-items: flex-start;  
 }
 
-/* Keep the icon as a rounded square and add space under it */
+
 .home-category-icon {
   width: 56px;
   height: 56px;
-  border-radius: 18px !important; /* شبه مربّع، مو كبسولة */
+  border-radius: 18px !important; 
   margin-bottom: 10px;
 }
 
-/* === Mobile-only: stack icon, title and description vertically === */
+
 @media (max-width: 768px) {
   .home-category-card {
     display: flex;
-    flex-direction: column;    /* Icon on top, then title, then description */
-    align-items: flex-start;   /* كل شيء يصير يسار */
+    flex-direction: column;    
+    align-items: flex-start;   
   }
 
   .home-category-icon {
-    margin-bottom: 10px;       /* مسافة بسيطة تحت الأيقونة */
+    margin-bottom: 10px;       
   }
 
   .home-category-body {
-    text-align: left;          /* عنوان + شرح بمحاذاة يسار */
+    text-align: left;          
   }
 }
 
-/* === Mobile card fine-tuning (typography + size) === */
+
 @media (max-width: 768px) {
   .home-category-grid {
     gap: 18px;
@@ -430,7 +430,7 @@ a {
 
   .home-category-card {
     padding: 16px 18px;
-    min-height: 160px; /* يخلي الكروت متقاربة في الارتفاع */
+    min-height: 160px; 
   }
 
   .home-category-icon {
@@ -438,13 +438,13 @@ a {
   }
 
   .home-category-name {
-    font-size: 16px;      /* أصغر شوي من قبل */
+    font-size: 16px;      
     line-height: 1.25;
-    margin-bottom: 4px;   /* يقلل المسافة قبل الوصف */
+    margin-bottom: 4px;   
   }
 
   .home-category-desc {
-    font-size: 13px;      /* أخف شوي عشان ما يحس الكرت مزدحم */
+    font-size: 13px;      
     line-height: 1.4;
   }
 }
@@ -476,7 +476,7 @@ a {
   }
 }
 
-/* Workly PRO – mobile-only promo strip */
+
 .home-pro-strip {
   display: none;
 }
@@ -622,7 +622,7 @@ a {
   }
 }
 
-/* === Workly PRO media – watery keyboard animation (mobile only override) === */
+
 @media (max-width: 760px) {
   .home-pro-media {
     position: relative;
@@ -719,7 +719,7 @@ a {
 }
 
 
-/* === Workly PRO keyboard-light animation override (mobile only) === */
+
 @media (max-width: 760px) {
   .home-pro-media::before {
     content: "";
@@ -801,7 +801,7 @@ a {
   }
 }
 
-/* === Workly PRO keyboard-style animation override (mobile only) === */
+
 @media (max-width: 760px) {
   .home-pro-media {
     position: relative;
@@ -883,7 +883,7 @@ a {
 }
 
 
-/* WORKLY_KEYBOARD_OVERRIDE */
+
 @media (max-width: 760px) {
   .home-pro-media {
     position: relative;
@@ -1021,7 +1021,7 @@ a {
   }
 }
 
-/* --- Workly PRO: keyboard-style media, mobile only --- */
+
 @media (max-width: 760px) {
   .home-pro-media {
     width: 100%;
@@ -1036,14 +1036,14 @@ a {
     isolation: isolate;
   }
 
-  /* Static keyboard grid (rectangular keys) */
+  
   .home-pro-media::before {
     content: "";
     position: absolute;
-    inset: 14% 8%;              /* grid inset from edges */
+    inset: 14% 8%;              
     border-radius: 14px;
     background:
-      /* vertical columns */
+      
       repeating-linear-gradient(
         to right,
         rgba(255,255,255,0.12) 0px,
@@ -1051,7 +1051,7 @@ a {
         rgba(0,0,0,0.72)        2px,
         rgba(0,0,0,0.72)       26px
       ),
-      /* horizontal rows */
+      
       repeating-linear-gradient(
         to bottom,
         rgba(255,255,255,0.10) 0px,
@@ -1063,11 +1063,11 @@ a {
     pointer-events: none;
   }
 
-  /* Single “pressed” key that moves between tiles */
+  
   .home-pro-media::after {
     content: "";
     position: absolute;
-    width: 18%;                  /* key size */
+    width: 18%;                  
     height: 22%;
     border-radius: 9px;
     background: radial-gradient(circle at 50% 40%, #e9fcff, #8de3ff 45%, transparent 70%);
@@ -1079,7 +1079,7 @@ a {
     animation: proKeyWalk 5.5s ease-in-out infinite;
   }
 
-  /* Only the key moves – keyboard stays fixed */
+  
   @keyframes proKeyWalk {
     0%   { transform: translate(10%, 12%); }
     18%  { transform: translate(34%, 12%); }
@@ -1095,7 +1095,7 @@ a {
   }
 }
 
-/* --- Workly PRO: keyboard-style media, mobile only (final override) --- */
+
 @media (max-width: 760px) {
   .home-pro-media {
     width: 100%;
@@ -1164,7 +1164,7 @@ a {
   }
 }
 
-/* --- Workly PRO: mini keyboard cluster (final-final override) --- */
+
 @media (max-width: 760px) {
   .home-pro-media {
     width: 100%;
@@ -1179,7 +1179,7 @@ a {
     isolation: isolate;
   }
 
-  /* لوحة مفاتيح صغيرة ثابتة على اليسار (أزرار مستطيلة) */
+  
   .home-pro-media::before {
     content: "";
     position: absolute;
@@ -1192,7 +1192,7 @@ a {
     box-shadow:
       0 0 24px rgba(0, 0, 0, 0.85),
       inset 0 0 18px rgba(0, 0, 0, 0.85);
-    /* pattern يشبه أزرار الكيبورد */
+    
     background-image: radial-gradient(
       ellipse at center,
       rgba(255,255,255,0.16) 0,
@@ -1205,7 +1205,7 @@ a {
     pointer-events: none;
   }
 
-  /* زر واحد مضيء يتحرك من key إلى key فقط */
+  
   .home-pro-media::after {
     content: "";
     position: absolute;
@@ -1225,24 +1225,24 @@ a {
     animation: proKeyTap 4.6s ease-in-out infinite;
   }
 
-  /* الحركة: قفز من زر لزر داخل الكيبورد المصغّر */
+  
   @keyframes proKeyTap {
-    /* صف أول - عمود 1 */
+    
     0%, 10%   { transform: translate(12%, 16%); }
 
-    /* صف أول - عمود 3 تقريباً */
+    
     20%, 30%  { transform: translate(35%, 16%); }
 
-    /* صف أول - عمود 5 تقريباً */
+    
     40%, 50%  { transform: translate(58%, 16%); }
 
-    /* صف ثاني - عمود 2 */
+    
     60%, 70%  { transform: translate(23%, 45%); }
 
-    /* صف ثاني - عمود 4 */
+    
     80%, 90%  { transform: translate(46%, 45%); }
 
-    /* يرجع لأول زر */
+    
     100%      { transform: translate(12%, 16%); }
   }
 }
@@ -1309,7 +1309,7 @@ a {
   }
 }
 
-/* === Workly PRO media: static area, no animation (mobile only) === */
+
 @media (max-width: 760px) {
   .home-pro-media {
     width: 100%;
@@ -1327,7 +1327,7 @@ a {
     isolation: isolate;
   }
 
-  /* Kill any old keyboard / glow layers & animations */
+  
   .home-pro-media::before,
   .home-pro-media::after {
     content: none;
@@ -1385,7 +1385,7 @@ a {
 }
 
 
-/* === Workly PRO: creators benefit block (mobile only) === */
+
 @media (max-width: 760px) {
   .home-creators-copy {
     margin-top: 24px;
@@ -1427,7 +1427,7 @@ a {
   }
 }
 
-/* === Standalone Benefits Section (Mobile) === */
+
 @media (max-width: 760px) {
   .home-benefits {
     padding: 22px 18px;
@@ -1453,12 +1453,12 @@ a {
   }
 }
 
-/* === Separate benefits section from Workly PRO (mobile only) === */
+
 @media (max-width: 760px) {
   .home-benefits {
-    margin-top: 52px;               /* مسافة واضحة تحت كرت Workly PRO */
+    margin-top: 52px;               
     padding: 0 20px 32px 20px;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);  /* خط خفيف يفصل بينهم */
+    border-top: 1px solid rgba(0, 0, 0, 0.05);  
   }
 
   .home-benefits ul {
@@ -1479,7 +1479,7 @@ a {
   }
 }
 
-/* creators-mobile-only overrides */
+
 @media (min-width: 761px) {
   .home-creators-copy {
     display: none;
@@ -1514,27 +1514,27 @@ a {
 }
 
 
-/* Hide specific nav links on mobile */
+
 @media (max-width: 760px) {
   .nav-hide-mobile {
     display: none !important;
   }
-}\n\n/* Workly: hide text nav links on mobile */
+}\n\n
 @media (max-width: 760px) {
   .home-topbar-right .home-nav-link {
     display: none !important;
   }
 }\n
-/* === Mobile-only: hide Sign in & Become a creator in top bar === */
+
 @media (max-width: 760px) {
-  /* أخفي كل الروابط العادية في اليمين (Become a creator + Sign in) */
+  
   .home-topbar-right .home-nav-link {
     display: none;
   }
-  /* زر Join يبقى كما هو (className مختلف: home-nav-cta) */
+  
 }
 
-/* === Landing nav: hide Become a creator + Sign in on phones === */
+
 @media (max-width: 760px) {
   .landing-nav-right .landing-nav-link {
     display: none !important;
@@ -1555,56 +1555,56 @@ a {
   }
 }
 
-/* === Workly mobile nav: hide text links (Become a creator / Sign in) === */
+
 @media (max-width: 760px) {
-  /* أخفي كل الروابط النصية في يمين الناف (home-nav-link) */
+  
   .home-topbar-right .home-nav-link {
     display: none !important;
   }
 
-  /* تأكد إن الكونتينر نفسه ما يضغط على اللوجو */
+  
   .home-topbar-right {
     display: flex;
     align-items: center;
     gap: 8px;
   }
 
-  /* زر Join يبقى ظاهر بحجمه الطبيعي */
+  
   .home-topbar-right .home-nav-cta {
     display: inline-flex;
     font-size: 0.9rem;
   }
 }
 
-/* === Workly mobile nav hard-kill: hide Become a creator / Sign in by href === */
+
 @media (max-width: 760px) {
-  /* أي رابط تسجيل دخول أو كرياتور داخل صفحة الهوم */
+  
   .home-root a[href*="creator"],
   .home-root a[href*="login"] {
     display: none !important;
   }
 }
 
-/* === Nuclear fix: hide ANY text inside nav except the Join button (mobile only) === */
+
 @media (max-width: 760px) {
   .home-topbar-right {
-    font-size: 0 !important;   /* اخفي النصوص بالكامل */
+    font-size: 0 !important;   
     display: flex;
     align-items: center;
   }
 
   .home-topbar-right .home-nav-cta {
-    font-size: 0.9rem !important;   /* رجّع حجم زر Join */
+    font-size: 0.9rem !important;   
   }
 }
 
-/* Center WORKLY vertically in the top bar */
+
 .home-logo-text {
   top: 50%;
   transform: translate(-50%, -50%);
 }
 
-/* === Workly PRO Card === */
+
 .pro-card {
   background: var(--sand-2);
   border-radius: 18px;
@@ -1638,7 +1638,7 @@ a {
   margin-bottom: 10px;
 }
 
-/* === Workly PRO banner layout === */
+
 .home-pro-banner {
   margin-top: 26px;
 }
@@ -1648,7 +1648,7 @@ a {
   margin: 0 auto 8px;
 }
 
-/* شوية padding على الموبايل */
+
 @media (max-width: 760px) {
   .home-pro-banner {
     padding: 0 20px 24px;
@@ -1663,7 +1663,7 @@ a {
   text-align: center;
 }
 
-/* === Creators section icon layout === */
+
 .creator-point {
   display: flex;
   align-items: center;
@@ -1678,7 +1678,7 @@ a {
 }
 
 
-/* Creators benefit list with icons (no bullets) */
+
 .home-creators-points {
   margin-top: 18px;
   display: flex;
@@ -1717,61 +1717,22 @@ a {
 }
 
 
-/* Hero ticker stripe */
-.home-ticker {
-  margin-top: 16px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-  overflow: hidden;
-  position: relative;
-  padding: 6px 0;
-}
 
-.home-ticker::before,
-.home-ticker::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 32px;
-  pointer-events: none;
-}
 
-.home-ticker::before {
-  left: 0;
-  background: linear-gradient(to right, rgba(246, 245, 244, 1), rgba(246, 245, 244, 0));
-}
 
-.home-ticker::after {
-  right: 0;
-  background: linear-gradient(to left, rgba(246, 245, 244, 1), rgba(246, 245, 244, 0));
-}
 
-.home-ticker-track {
-  display: flex;
-  width: max-content;
-  animation: homeTicker 22s linear infinite;
-}
 
-.home-ticker-row {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 0 32px;
-  white-space: nowrap;
-  font-size: 0.92rem;
-  letter-spacing: 0.02em;
-}
 
-.home-ticker-item {
-  color: var(--sand-5);
-  font-weight: 500;
-}
 
-.home-ticker-dot {
-  opacity: 0.35;
-}
+
+
+
+
+
+
+
+
+
 
 @keyframes homeTicker {
   0% {
@@ -1782,212 +1743,71 @@ a {
   }
 }
 
-/* Mobile: شوي أقل margin */
-@media (max-width: 760px) {
-  .home-ticker {
-    margin-top: 14px;
-    padding: 5px 0;
-  }
-
-  .home-ticker-row {
-    padding: 0 20px;
-    gap: 14px;
-    font-size: 0.88rem;
-  }
-}
-
-/* === Arabic majlis / khayma vibe for hero ticker === */
-.home-ticker {
-  position: relative;
-  overflow: hidden;
-  margin-top: 18px;
-  padding: 6px 0;
-  background:
-    /* خط رفيع غامق فوق وتحت يعطي إحساس حافة السدو */
-    linear-gradient(to bottom,
-      rgba(138, 129, 124, 0.4) 0,
-      rgba(138, 129, 124, 0.4) 1px,
-      transparent 1px,
-      transparent calc(100% - 1px),
-      rgba(138, 129, 124, 0.35) calc(100% - 1px),
-      rgba(138, 129, 124, 0.35) 100%
-    ),
-    /* تكرار خطوط أفقية خفيفة بألوان دافية */
-    repeating-linear-gradient(
-      90deg,
-      #b46a55 0,
-      #b46a55 3px,
-      #f6f5f4 3px,
-      #f6f5f4 11px,
-      #d8cfc4 11px,
-      #d8cfc4 14px,
-      #f6f5f4 14px,
-      #f6f5f4 22px
-    );
-  background-color: var(--sand-1);
-}
-
-/* الكبسولة اللي داخل الشريط تبقى ناعمة وفوق الباترن */
-.home-ticker-inner {
-  border-radius: 999px;
-  padding-inline: 14px;
-  background: rgba(246, 245, 244, 0.94);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
-}
-
-/* النصوص نفسها كبسولات صغيرة تمشي فوق الخلفية */
-.home-ticker-row {
-  gap: 18px;
-}
-
-.home-ticker-label {
-  padding: 4px 12px;
-  border-radius: 999px;
-  background: rgba(216, 207, 196, 0.7);
-  border: 1px solid rgba(90, 84, 73, 0.35);
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
-
-/* موبايل: شوية تنعيم بالحجم والمسافة */
-@media (max-width: 760px) {
-  .home-ticker {
-    margin-top: 16px;
-    padding: 6px 0;
-  }
-
-  .home-ticker-row {
-    padding: 0 18px;
-    gap: 16px;
-    font-size: 0.86rem;
-  }
-}
-
-/* === Hero ticker icon pills (icon-only) === */
-.home-ticker-icon-pill {
-  flex: 0 0 auto;
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
-  background: rgba(246, 245, 244, 0.9);
-  border: 1px solid rgba(90, 84, 73, 0.32);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-}
-
-.home-ticker-icon svg {
-  width: 20px;
-  height: 20px;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  fill: none;
-}
-
-/* موبايل: صغّر الأيقونة شوي */
-@media (max-width: 760px) {
-  .home-ticker-icon-pill {
-    width: 36px;
-    height: 36px;
-  }
-
-  .home-ticker-icon svg {
-    width: 18px;
-    height: 18px;
-  }
-}
-
-/* === Sadu-inspired hero ticker stripe === */
-.home-ticker {
-  position: relative;
-  overflow: hidden;
-  border-radius: 999px;
-  padding-block: 5px;
-  background: transparent;
-}
-
-/* خلفية شريط سدو بسيط (أحمر / أسود / أبيض) */
-.home-ticker::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    repeating-linear-gradient(
-      90deg,
-      var(--sand-5) 0px,
-      var(--sand-5) 10px,
-      var(--sand-4) 10px,
-      var(--sand-4) 16px,
-      var(--sand-2) 16px,
-      var(--sand-2) 22px,
-      var(--sand-4) 22px,
-      var(--sand-4) 28px,
-      var(--sand-3) 28px,
-      var(--sand-3) 38px
-    );
-  opacity: 0.8;
-}
-
-/* إطار خفيف حوالين الشريط */
-.home-ticker::after {
-  content: "";
-  position: absolute;
-  inset: 2px;
-  border-radius: 999px;
-  border: 1px solid rgba(245, 239, 228, 0.9);
-}
-
-/* نخلي المحتوى فوق الخلفية */
-.home-ticker-row {
-  position: relative;
-}
-
-/* حبوب الأيقونات نفسها – تظل نظيفة فوق السدو */
-.home-ticker-icon-pill {
-  background: rgba(246, 245, 244, 0.96);
-  border-radius: 999px;
-  border: 1px solid rgba(20, 10, 5, 0.35);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
-}
 
 @media (max-width: 760px) {
-  .home-ticker {
-    margin-top: 16px;
-  }
+  
+
+  
 }
 
 
-.home-ticker-row--icons {
-  gap: 18px;
-}
 
-.home-ticker-icon-pill {
-  position: relative;
-  z-index: 1;
-  min-width: 52px;
-  height: 52px;
-  border-radius: 999px;
-  background: rgba(246, 245, 244, 0.96);
-  border: 1px solid rgba(40, 30, 20, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
-}
 
-.home-ticker-icon-svg {
-  width: 22px;
-  height: 22px;
-  stroke: var(--sand-5);
-  stroke-width: 1.6;
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+
+
+
+
+
+
+
+
+
+@media (max-width: 760px) {
+  
+
+  
 }
 
 
-/* === Student scenarios band under hero === */
+
+
+
+
+
+@media (max-width: 760px) {
+  
+
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 760px) {
+  
+}
+
+
+
+
+
+
+
+
+
+
 .home-scenarios {
   margin-top: 26px;
 }
@@ -2052,35 +1872,17 @@ a {
 }
 
 
-/* Hard kill for old moving hero stripe */
-.home-ticker,
-.home-ticker-inner,
-.home-ticker-track,
-.home-ticker-row {
-  display: none !important;
-  height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border: 0 !important;
-}
 
 
 
-/* ==== Hard kill for the old moving hero band (mobile & desktop) ==== */
 
-/* لو كان عنده الكلاس القديم */
-.home-ticker,
-.home-ticker-inner,
-.home-ticker-track,
-.home-ticker-row {
-  display: none !important;
-  height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border: 0 !important;
-}
 
-/* ولو كان سكشن عادي بين الهيرو والكروت، نخفي ثاني سكشن داخل الـ main */
+
+
+
+
+
+
 .home-main > section:nth-of-type(2) {
   display: none !important;
   height: 0 !important;
@@ -2088,4 +1890,3 @@ a {
   margin: 0 !important;
   border: 0 !important;
 }
-
