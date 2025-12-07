@@ -57,7 +57,6 @@ const ICONS = {
 const CATEGORIES = [
   {
     key: "reports",
-    title: "Reports & essays",
     desc: "Structured reports, reflections, and written assignments.",
   },
   {
