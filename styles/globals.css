@@ -2050,3 +2050,17 @@ a {
     font-size: 0.86rem;
   }
 }
+
+
+/* Hard kill for old moving hero stripe */
+.home-ticker,
+.home-ticker-inner,
+.home-ticker-track,
+.home-ticker-row {
+  display: none !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+}
+
