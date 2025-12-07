@@ -2064,3 +2064,28 @@ a {
   border: 0 !important;
 }
 
+
+
+/* ==== Hard kill for the old moving hero band (mobile & desktop) ==== */
+
+/* لو كان عنده الكلاس القديم */
+.home-ticker,
+.home-ticker-inner,
+.home-ticker-track,
+.home-ticker-row {
+  display: none !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+}
+
+/* ولو كان سكشن عادي بين الهيرو والكروت، نخفي ثاني سكشن داخل الـ main */
+.home-main > section:nth-of-type(2) {
+  display: none !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+}
+
