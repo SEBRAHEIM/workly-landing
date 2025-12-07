@@ -57,6 +57,7 @@ const ICONS = {
 const CATEGORIES = [
   {
     key: "reports",
+    title: "Reports & essays",
     desc: "Structured reports, reflections, and written assignments.",
   },
   {
@@ -121,8 +122,11 @@ export default function Home() {
         <main className="home-main">
           <section className="home-hero">
             <h1>University projects, done for you.</h1>
-                      <p>
-            Pick a creator, upload your requirements, and get your complete project delivered with zero effort.
+            <p>
+              Pick a creator, upload your requirements, and get your complete
+              project delivered with zero effort.
+            </p>
+          </section>
 
           <section className="home-categories">
             <div className="home-categories-header">
@@ -150,25 +154,12 @@ export default function Home() {
             </div>
           </section>
 
-
-          <section className="home-pro-banner">
-            <div className="service-card pro-card">
-              <div className="service-icon">✨</div>
-              <h3>Workly PRO.</h3>
-              <p className="service-sub">Workly PRO — Coming Soon</p>
-              <p className="service-desc">Priority tools. Faster workflow. A smoother, smarter experience designed to help students and creators get more done with less effort.</p>
-            </div>
-          </section>
-
-
-          {/* Optional: mobile-only creators copy block that matches existing CSS */}
-                    <section className="home-creators-copy">
+          <section className="home-creators-copy">
             <h2>Make it all happen with creators</h2>
 
             <div className="home-creators-list">
               <div className="home-creators-item">
                 <div className="home-creators-icon">
-                  {/* icon: pool of creators */}
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <circle cx="8" cy="9" r="3" fill="none" />
                     <circle cx="16" cy="9" r="2.5" fill="none" />
@@ -181,7 +172,6 @@ export default function Home() {
 
               <div className="home-creators-item">
                 <div className="home-creators-icon">
-                  {/* icon: target / perfect match */}
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <circle cx="12" cy="12" r="7" fill="none" />
                     <circle cx="12" cy="12" r="3.5" fill="none" />
@@ -194,7 +184,6 @@ export default function Home() {
 
               <div className="home-creators-item">
                 <div className="home-creators-icon">
-                  {/* icon: quality & on-budget */}
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <rect x="4" y="4" width="16" height="16" rx="3" ry="3" fill="none" />
                     <path d="M9 12l2 2 4-5" fill="none" />
@@ -205,10 +194,11 @@ export default function Home() {
 
               <div className="home-creators-item">
                 <div className="home-creators-icon">
-                  {/* icon: protected payment / approval */}
                   <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 3l7 3v6c0 4.2-3 8-7 9-4-1-7-4.8-7-9V6z" fill="none" />
-                    <path d="M9.5 12.5l2 2 3-3.5" fill="none" />
+                    <rect x="4" y="6" width="16" height="12" rx="2" ry="2" fill="none" />
+                    <path d="M8 10h5" fill="none" />
+                    <path d="M8 13h3" fill="none" />
+                    <path d="M15 15l2 2 3-4" fill="none" />
                   </svg>
                 </div>
                 <p>Release payment only after you approve the result.</p>
@@ -226,18 +216,25 @@ export default function Home() {
             </button>
           </section>
 
+          <section className="home-pro-banner">
+            <div className="service-card pro-card">
+              <div className="service-icon">✨</div>
+              <h3>Workly PRO.</h3>
+              <p className="service-sub">Workly PRO — Coming Soon</p>
+              <p className="service-desc">
+                Priority tools. Faster workflow. A smoother, smarter experience
+                designed to help students and creators get more done with less
+                effort.
+              </p>
+            </div>
+          </section>
 
-
-          
           <footer className="home-footer">
-            <p>Workly is not affiliated with any university. Use responsibly and always follow your institution&apos;s rules.</p>
-            <p className="home-footer-brand">Workly</p>
+            Workly is not affiliated with any university. Use responsibly and
+            always follow your institution&apos;s rules.
+            <div className="home-footer-brand">Workly</div>
           </footer>
-
-        
-        
-
-</main>
+        </main>
       </div>
     </>
   );
