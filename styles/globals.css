@@ -1915,3 +1915,14 @@ a {
 .home-category-card--active .home-category-icon {
   background: rgba(121, 104, 81, 0.16);
 }
+
+
+/* Final kill-switch: hide legacy hero ticker stripe */
+.home-ticker {
+  display: none !important;
+  max-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+}
+
