@@ -306,6 +306,7 @@ export default function Home() {
         </header>
 
         <main className="home-main">
+          {/* 1) HERO */}
           <section className="home-hero">
             <h1>University projects, done for you.</h1>
             <p>
@@ -314,6 +315,7 @@ export default function Home() {
             </p>
           </section>
 
+          {/* 2) CATEGORIES GRID */}
           <section className="home-categories">
             <div className="home-categories-header">
               <h2>What can creators help you with?</h2>
@@ -340,6 +342,7 @@ export default function Home() {
             </div>
           </section>
 
+          {/* 3) MAKING IT HAPPEN WITH CREATORS */}
           <section className="home-creators-copy">
             <h2>Make it all happen with creators</h2>
 
@@ -350,7 +353,10 @@ export default function Home() {
                     <circle cx="8" cy="9" r="3" fill="none" />
                     <circle cx="16" cy="9" r="2.5" fill="none" />
                     <path d="M4.5 18c0-2.2 1.9-4 4.5-4s4.5 1.8 4.5 4" fill="none" />
-                    <path d="M13.5 17.5c.5-1.4 1.7-2.5 3.1-2.5 1.9 0 3.4 1.5 3.4 3.3" fill="none" />
+                    <path
+                      d="M13.5 17.5c.5-1.4 1.7-2.5 3.1-2.5 1.9 0 3.4 1.5 3.4 3.3"
+                      fill="none"
+                    />
                   </svg>
                 </div>
                 <p>Access top-talented creators.</p>
@@ -371,7 +377,15 @@ export default function Home() {
               <div className="home-creators-item">
                 <div className="home-creators-icon">
                   <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <rect x="4" y="4" width="16" height="16" rx="3" ry="3" fill="none" />
+                    <rect
+                      x="4"
+                      y="4"
+                      width="16"
+                      height="16"
+                      rx="3"
+                      ry="3"
+                      fill="none"
+                    />
                     <path d="M9 12l2 2 4-5" fill="none" />
                   </svg>
                 </div>
@@ -381,9 +395,17 @@ export default function Home() {
               <div className="home-creators-item">
                 <div className="home-creators-icon">
                   <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <rect x="4" y="5" width="16" height="14" rx="3" ry="3" fill="none" />
-                    <path d="M8 11h8" fill="none" />
-                    <path d="M8 14h5" fill="none" />
+                    <rect
+                      x="5"
+                      y="7"
+                      width="14"
+                      height="12"
+                      rx="2"
+                      ry="2"
+                      fill="none"
+                    />
+                    <path d="M5 11h14" fill="none" />
+                    <path d="M9 5h6" fill="none" />
                   </svg>
                 </div>
                 <p>Release payment only after you approve the result.</p>
@@ -391,6 +413,7 @@ export default function Home() {
             </div>
           </section>
 
+          {/* 4) WORKLY PRO BANNER */}
           <section className="home-pro-banner">
             <div className="service-card pro-card">
               <div className="service-icon">✨</div>
@@ -404,6 +427,7 @@ export default function Home() {
             </div>
           </section>
 
+          {/* 5) FOOTER */}
           <footer className="home-footer">
             Workly is not affiliated with any university. Use responsibly and
             always follow your institution&apos;s rules.
