@@ -154,7 +154,7 @@ export default function Home() {
           <header className="home-section-header">
             <h2 className="home-section-title">Choose a category</h2>
             <p className="home-section-subtitle">
-              Select what you need help with.
+              Select what you need help with today.
             </p>
           </header>
 
