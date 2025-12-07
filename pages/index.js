@@ -124,82 +124,8 @@ export default function Home() {
             <h1>University projects, done for you.</h1>
                       <p>
             Pick a creator, upload your requirements, and get your complete project delivered with zero effort.
-          </p>
-            
-            <div className="home-ticker">
-              <div className="home-ticker-track">
-                <div className="home-ticker-row">
-          <div className="home-ticker-icon-pill" aria-label="Reports">
-            <span className="home-ticker-icon">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <rect x="5" y="4" width="14" height="16" rx="2" ry="2" fill="none"/>
-                <line x1="8" y1="9" x2="16" y2="9" />
-                <line x1="8" y1="12" x2="14" y2="12" />
-                <line x1="8" y1="15" x2="13" y2="15" />
-              </svg>
-            </span>
-          </div>
 
-          <div className="home-ticker-icon-pill" aria-label="PPT slides">
-            <span className="home-ticker-icon">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <rect x="4" y="6" width="16" height="10" rx="2" ry="2" fill="none" />
-                <line x1="12" y1="16" x2="9" y2="20" />
-                <line x1="12" y1="16" x2="15" y2="20" />
-                <line x1="8" y1="9" x2="12" y2="9" />
-                <line x1="8" y1="12" x2="10.5" y2="12" />
-              </svg>
-            </span>
-          </div>
-
-          <div className="home-ticker-icon-pill" aria-label="Projects">
-            <span className="home-ticker-icon">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="7" cy="7" r="2.5" fill="none" />
-                <circle cx="17" cy="7" r="2.5" fill="none" />
-                <circle cx="12" cy="17" r="2.5" fill="none" />
-                <line x1="7" y1="9.5" x2="12" y2="14.5" />
-                <line x1="17" y1="9.5" x2="12" y2="14.5" />
-              </svg>
-            </span>
-          </div>
-
-          <div className="home-ticker-icon-pill" aria-label="Dashboards">
-            <span className="home-ticker-icon">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <rect x="4" y="5" width="16" height="14" rx="2" ry="2" fill="none" />
-                <rect x="7" y="8" width="4" height="4" fill="none" />
-                <rect x="13" y="8" width="4" height="2.5" fill="none" />
-                <rect x="13" y="12" width="4" height="3.5" fill="none" />
-              </svg>
-            </span>
-          </div>
-
-          <div className="home-ticker-icon-pill" aria-label="Coding">
-            <span className="home-ticker-icon">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <polyline points="8 7 4 12 8 17" fill="none" />
-                <polyline points="16 7 20 12 16 17" fill="none" />
-                <line x1="11" y1="6" x2="13" y2="18" />
-              </svg>
-            </span>
-          </div>
-
-          <div className="home-ticker-icon-pill" aria-label="Essays">
-            <span className="home-ticker-icon">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M6 4h9l3 3v13H6z" fill="none" />
-                <line x1="9" y1="11" x2="15" y2="11" />
-                <line x1="9" y1="14" x2="15" y2="14" />
-                <line x1="9" y1="17" x2="13" y2="17" />
-              </svg>
-            </span>
-          </div>
-        </div>
-        </div>
-      </section>
-
-<section className="home-categories">
+          <section className="home-categories">
             <div className="home-categories-header">
               <h2>What can creators help you with?</h2>
               <p>
