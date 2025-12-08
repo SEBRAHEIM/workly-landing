@@ -577,3 +577,39 @@ body {
   margin-right: auto;
   color: rgba(90, 84, 73, 0.7);
 }
+
+
+/* === Creators section — icon above text, softer icon background === */
+
+/* خَلّي الأيقونة فوق النص بدل ما تكون جنبها */
+.creators-section .creator-row {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* شكل أيقونة أنعم وأخف، بدون دائرة بيضة ثقيلة */
+.creators-section .creator-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle at top left,
+    rgba(246, 245, 244, 0.9),
+    rgba(216, 207, 196, 0.55)
+  );
+  box-shadow: 0 8px 20px rgba(90, 84, 73, 0.10);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sand-4);
+}
+
+/* الأيقونة نفسها تكون بخط ناعم بلون هادي */
+.creators-section .creator-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+}
+
