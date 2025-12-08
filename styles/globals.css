@@ -375,3 +375,50 @@ button {
 .home-category-icon {
   color: #c99663;
 }
+/* === Mobile category layout tidy === */
+@media (max-width: 760px) {
+  .home-category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 14px;
+  }
+
+  .home-category-card {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 16px 16px 14px;
+    border-radius: 22px;
+  }
+
+  .home-category-icon-wrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .home-category-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+  }
+
+  .home-category-title {
+    font-size: 15px;
+    line-height: 1.25;
+    color: #3b2a1c;
+  }
+
+  .home-category-desc {
+    font-size: 12.5px;
+    line-height: 1.35;
+    color: #6b5b4b;
+  }
+}
