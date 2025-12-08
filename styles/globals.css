@@ -659,3 +659,52 @@ body {
   margin-right: auto;
   color: rgba(90, 84, 73, 0.7);
 }
+
+
+/* === Creators section: vertical icon + text, softer icons === */
+
+.creators-section .creator-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.creators-section .creator-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.creators-section .creator-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--sand-4);
+  fill: none;
+}
+
+/* نص النقاط */
+.creators-section .creator-text {
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+
+/* === Footer disclaimer under workly.day === */
+.footer-disclaimer {
+  margin-top: 4px;
+  font-size: 11px;
+  line-height: 1.4;
+  text-align: center;
+  color: rgba(90, 84, 73, 0.75);
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
