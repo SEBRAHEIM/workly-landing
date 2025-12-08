@@ -440,3 +440,69 @@ button {
   box-shadow: none !important;
   border: none !important;
 }
+
+
+
+/* === Workly category cards – mobile polish === */
+
+.home-category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 18px 18px 20px;
+  border-radius: 24px;
+  background: var(--surface-primary, #ffffff);
+  box-shadow: 0 10px 30px rgba(23, 15, 7, 0.06);
+  border: none;
+}
+
+.category-card:focus {
+  outline: none;
+}
+
+.category-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 18px; /* مربّع ناعم مثل الصورة */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(140, 103, 70, 0.14);
+  color: #725137;
+  margin-bottom: 12px;
+}
+
+/* منع لون الأزرق لسفاري داخل سكشن الكاتيجوريز فقط */
+.home-category-grid a,
+.home-category-grid a:visited,
+.home-category-grid .category-title,
+.home-category-grid .category-card-title {
+  color: #3b2817;
+  text-decoration: none;
+}
+
+.home-category-grid .category-description {
+  color: rgba(59, 40, 23, 0.75);
+}
+
+@media (max-width: 480px) {
+  .home-category-grid {
+    gap: 14px;
+  }
+
+  .category-card {
+    padding: 16px 16px 18px;
+  }
+
+  .category-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+  }
+}
