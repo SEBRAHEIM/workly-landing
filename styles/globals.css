@@ -347,3 +347,43 @@ button {
     font-size: 0.9rem;
   }
 }
+/* === MOBILE-ONLY CATEGORY LAYOUT (PHONE) === */
+@media (max-width: 760px) {
+  .home-category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .home-category-card {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 18px 16px;
+    text-align: left;
+  }
+
+  .home-category-icon {
+    flex: 0 0 42px;
+    height: 42px;
+    margin: 0;
+    margin-right: 10px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .home-category-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .home-category-title {
+    margin: 0;
+  }
+
+  .home-category-body {
+    margin: 0;
+  }
+}
