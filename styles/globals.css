@@ -1015,3 +1015,26 @@ button.primary {
   }
 }
 
+/* Mobile category card vertical order: icon, title, description */
+@media (max-width: 768px) {
+  .category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .category-card-icon {
+    order: 1;
+    margin-bottom: 8px;
+  }
+
+  .category-card-title {
+    order: 2;
+    margin-bottom: 4px;
+  }
+
+  .category-card-text {
+    order: 3;
+  }
+}
+
