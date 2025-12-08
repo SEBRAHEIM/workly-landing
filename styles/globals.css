@@ -815,3 +815,43 @@ a,
     padding-inline: 16px;
   }
 }
+
+
+/* === Mobile: stack category icon, title, description vertically === */
+@media (max-width: 768px) {
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;   /* لا سنتر للأيقونة */
+    justify-content: flex-start;
+    padding: 12px 12px 14px;
+  }
+
+  .category-card-icon {
+    margin-bottom: 8px;        /* Icon */
+  }
+
+  .category-card-title {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 4px;        /* Title تحت الأيقونة مباشرة */
+    text-align: left;
+    width: 100%;
+  }
+
+  .category-card-text {
+    font-size: 13px;
+    line-height: 1.45;
+    text-align: left;          /* Description */
+    width: 100%;
+  }
+}
+
