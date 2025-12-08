@@ -651,3 +651,14 @@ button {
     line-height: 1.4;
   }
 }
+
+/* Center text under icons on mobile */
+@media (max-width: 760px) {
+  .home-category-card {
+    text-align: center;
+  }
+
+  .home-category-icon {
+    margin: 0 auto 10px; /* أيقونة في النص والنص تحتها */
+  }
+}
