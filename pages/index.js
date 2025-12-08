@@ -368,29 +368,55 @@ export default function Home() {
 
 
 <section className="home-section home-section-creators">
-            <h2 className="section-title">Make it all happen with creators</h2>
-            <ul className="benefits-list">
-              <li>Access top-talented creators.</li>
-              <li>Match easily with the right expert for your task.</li>
-              <li>Get high-quality work delivered fast and within budget.</li>
-              <li>Release payment only after you approve the result.</li>
-            </ul>
+            <section className="creators-section" id="creators">
+  <div className="creators-inner">
+    <h2 className="creators-heading">Make it all happen with creators</h2>
 
-            <div className="pro-card">
-              <div className="pro-badge">✨</div>
-              <h3 className="pro-title">Workly PRO.</h3>
-              <p className="pro-subtitle">Workly PRO — Coming Soon</p>
-              <p className="pro-body">
-                Priority tools. Faster workflow. A smoother, smarter experience designed
-                to help students and creators get more done with less effort.
-              </p>
-              <p className="pro-footnote">
-                Workly is not affiliated with any university. Use responsibly and always
-                follow your institution&apos;s rules.
-              </p>
-              <div className="pro-brand">Workly</div>
-            </div>
-          </section>
+    <div className="creators-list">
+      <div className="creator-row">
+        <div className="creator-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="9" r="3.2"></circle>
+            <path d="M6.2 18.5c.7-2.4 2.6-4 5.8-4s5.1 1.6 5.8 4" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"></path>
+          </svg>
+        </div>
+        <p className="creator-text">Access top-talented creators.</p>
+      </div>
+
+      <div className="creator-row">
+        <div className="creator-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="7.2" fill="none" strokeWidth="1.6"></circle>
+            <path d="M12 8v4l3 2" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"></path>
+          </svg>
+        </div>
+        <p className="creator-text">Match easily with the right expert for your task.</p>
+      </div>
+
+      <div className="creator-row">
+        <div className="creator-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="5.4" y="4.8" width="13.2" height="14.4" rx="2" ry="2" fill="none" strokeWidth="1.6"></rect>
+            <path d="M8.5 12.3l2 2.1 4-4.4" fill="none" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"></path>
+          </svg>
+        </div>
+        <p className="creator-text">Get high-quality work delivered fast and within budget.</p>
+      </div>
+
+      <div className="creator-row">
+        <div className="creator-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="4.8" y="5.8" width="14.4" height="12.4" rx="1.8" ry="1.8" fill="none" strokeWidth="1.6"></rect>
+            <path d="M8 9.2h8" fill="none" strokeWidth="1.6" strokeLinecap="round"></path>
+            <path d="M8 12.5h5.2" fill="none" strokeWidth="1.6" strokeLinecap="round"></path>
+          </svg>
+        </div>
+        <p className="creator-text">Release payment only after you approve the result.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
         </main>
       </div>
     </>
