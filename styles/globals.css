@@ -1038,3 +1038,299 @@ button.primary {
   }
 }
 
+
+/* === Salem mobile polish – categories, creators, colors === */
+
+/* خلفية هادئة بالـ gradient وألوان النظام */
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background: linear-gradient(
+    180deg,
+    var(--sand-1) 0%,
+    var(--sand-2) 40%,
+    var(--sand-3) 100%
+  );
+  color: var(--sand-5);
+}
+
+/* شريط أعلى الموقع */
+.top-nav,
+.nav-shell,
+.header-bar {
+  background: transparent;
+  color: var(--sand-5);
+}
+
+.logo-wordmark,
+.brand-wordmark,
+.nav-brand {
+  color: var(--sand-5);
+}
+
+.nav-join-button,
+.header-cta,
+.hero-cta-button {
+  background: var(--sand-3);
+  color: var(--sand-1);
+  border-radius: 999px;
+  border: none;
+}
+
+/* شريط البحث */
+.hero-search,
+.search-shell,
+.search-bar {
+  background: rgba(246, 245, 244, 0.98);
+  border-radius: 999px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.10);
+}
+
+.hero-search-input,
+.search-input {
+  background: transparent;
+  border: none;
+  color: var(--sand-5);
+}
+
+.hero-search-input::placeholder,
+.search-input::placeholder {
+  color: rgba(90, 84, 73, 0.60);
+}
+
+.hero-search-button,
+.search-button {
+  background: var(--sand-3);
+  color: var(--sand-1);
+  border-radius: 999px;
+}
+
+/* أيقونات عامة */
+.category-icon svg,
+.creator-icon svg,
+.hero-search-button svg,
+.search-button svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--sand-5);
+  stroke-width: 1.6;
+  fill: none;
+}
+
+/* أقسام عامة */
+.section-title,
+.categories-title,
+.creators-heading,
+h2.creators-heading {
+  color: var(--sand-5);
+}
+
+/* ====== كروت التصنيفات (Categories) – موبايل أولاً ====== */
+
+.categories-section {
+  padding: 40px 20px 32px;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* شكل الكرت نفسه */
+.category-card {
+  background: var(--sand-1);
+  border-radius: 24px;
+  padding: 18px 14px 20px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-height: 190px;
+}
+
+/* الأيقونة أعلى الكرت */
+.category-icon,
+.category-icon-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle at 30% 0%,
+    rgba(255, 255, 255, 0.95) 0%,
+    var(--sand-2) 70%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+/* لو الأيقونة داخل عنصر آخر */
+.category-card .category-icon svg,
+.category-card .category-icon-badge svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--sand-5);
+  stroke-width: 1.6;
+  fill: none;
+}
+
+/* العنوان تحت الأيقونة مباشرة */
+.category-card-title,
+.category-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  margin-bottom: 4px;
+  text-align: left;
+  color: var(--sand-5);
+}
+
+/* الوصف تحت العنوان */
+.category-card-text,
+.category-subtitle {
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: left;
+  color: rgba(90, 84, 73, 0.9);
+}
+
+/* نحافظ أن الترتيب دائماً: icon → title → text */
+.category-card > .category-icon,
+.category-card > .category-icon-badge {
+  order: 0;
+}
+
+.category-card > .category-card-title,
+.category-card > .category-title {
+  order: 1;
+}
+
+.category-card > .category-card-text,
+.category-card > .category-subtitle {
+  order: 2;
+}
+
+/* تساوي أحجام كل الكروت في الموبايل */
+@media (max-width: 768px) {
+  .categories-section {
+    padding-inline: 20px;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .category-card {
+    min-height: 190px;
+  }
+}
+
+/* شوية مساحة وتنفس على الشاشات الأكبر */
+@media (min-width: 769px) {
+  .categories-section {
+    padding: 56px 40px 40px;
+  }
+
+  .categories-grid {
+    max-width: 720px;
+    margin: 0 auto;
+    gap: 18px;
+  }
+
+  .category-card {
+    min-height: 200px;
+    padding: 20px 18px 22px;
+  }
+}
+
+/* ====== Make it all happen with creators – هادي ومرتب ====== */
+
+.creators-section {
+  padding: 32px 20px 56px;
+  color: var(--sand-5);
+}
+
+.creators-heading {
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.creators-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.creator-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* دائرة الأيقونة */
+.creator-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle at 30% 0%,
+    rgba(255, 255, 255, 0.96) 0%,
+    var(--sand-2) 70%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.creator-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--sand-4);
+  stroke-width: 1.7;
+  fill: none;
+}
+
+/* نص ال benefit */
+.creator-text {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--sand-5);
+}
+
+/* في الموبايل: بدون الكرت الأبيض، فقط النص فوق الخلفية الهادية */
+@media (max-width: 768px) {
+  .creators-section,
+  .creators-inner,
+  .creators-card {
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  .creators-section {
+    padding-inline: 20px;
+  }
+}
+
+/* في الشاشات الأكبر ممكن نخليها كرت بسيط لو فيه حاوية */
+@media (min-width: 769px) {
+  .creators-inner,
+  .creators-card {
+    background: var(--sand-1);
+    border-radius: 24px;
+    padding: 32px 32px 36px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+  }
+}
+
