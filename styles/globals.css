@@ -504,3 +504,60 @@ body {
     #e3d4c5 100%
   );
 }
+
+
+/* Creators: vertical icon layout, soft circles */
+.creators-section {
+  padding-top: 40px;
+  padding-bottom: 56px;
+}
+
+.creators-section .creators-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+}
+
+.creators-section .creator-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.creators-section .creator-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.04);
+}
+
+.creators-section .creator-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* نص السطر */
+.creators-section .creator-text {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* تأكد أنها تظل عمودية حتى على اللابتوب */
+@media (min-width: 768px) {
+  .creators-section .creators-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* شيل أي خلفية خاصة تحت "Choose a category" لو موجودة */
+.category-section .category-header {
+  background: transparent;
+  box-shadow: none;
+  padding-inline: 0;
+  padding-block: 0;
+}
