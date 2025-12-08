@@ -1334,3 +1334,60 @@ h2.creators-heading {
   }
 }
 
+
+/* === Fix categories surface & strict card order (mobile + desktop) === */
+
+/* إزالة أي خلفية/كرت أبيض خلف عنوان "Choose a category" */
+.categories-section,
+.categories-wrapper,
+.categories-container,
+.categories-shell,
+.categories-surface,
+.categories-panel {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* نخلي شبكة الكروت تتمدد بحيث كل الكروت نفس الارتفاع */
+.categories-grid {
+  align-items: stretch;
+}
+
+/* ترتيب داخل كل كرت: Icon -> Title -> Explanation */
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* الأيقونة أول شيء */
+.category-card .category-icon,
+.category-card .category-icon-badge {
+  order: 0;
+  margin-bottom: 8px;
+}
+
+/* العنوان تحت الأيقونة مباشرة */
+.category-card .category-card-title,
+.category-card .category-title {
+  order: 1;
+  margin-bottom: 4px;
+  text-align: left;
+}
+
+/* الوصف في الأخير */
+.category-card .category-card-text,
+.category-card .category-subtitle {
+  order: 2;
+  text-align: left;
+  word-break: break-word;
+}
+
+/* نطبّق نفس الترتيب حتى لو الأسماء مختلفة شوي */
+.categories-section .category-card > :is(.category-icon, .category-icon-badge),
+.categories-section .category-card > :is(.category-card-title, .category-title),
+.categories-section .category-card > :is(.category-card-text, .category-subtitle) {
+  width: 100%;
+}
+
