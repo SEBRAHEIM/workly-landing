@@ -662,3 +662,38 @@ button {
     margin: 0 auto 10px; /* أيقونة في النص والنص تحتها */
   }
 }
+
+/* === Mobile category cards (phone only) === */
+@media (max-width: 760px) {
+  .home-category-grid {
+    gap: 16px;
+  }
+
+  .home-category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    padding: 18px 14px 20px;
+    min-height: 170px;
+  }
+
+  .home-category-icon {
+    margin-bottom: 10px;
+    flex-shrink: 0;
+  }
+
+  .home-category-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 4px;
+  }
+
+  .home-category-description {
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0;
+    max-width: 220px;
+  }
+}
