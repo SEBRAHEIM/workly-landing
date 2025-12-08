@@ -435,3 +435,29 @@ button {
     text-align: left;
   }
 }
+/* === Mobile category cards: left-aligned icon + text === */
+@media (max-width: 768px) {
+  .category-card-grid {
+    column-gap: 14px;
+    row-gap: 16px;
+  }
+
+  .category-card {
+    padding: 18px 18px 20px;
+    align-items: flex-start;   /* كل محتوى الكرت لليسار */
+    text-align: left;
+  }
+
+  .category-card-icon {
+    align-self: flex-start;    /* الأيقونة نفس اتجاه النص */
+    margin-bottom: 10px;
+  }
+
+  .category-card-title {
+    text-align: left;
+  }
+
+  .category-card-description {
+    text-align: left;
+  }
+}
