@@ -252,7 +252,7 @@ button {
 /* Creators section */
 
 .creators-section {
-  padding: 40px 20px 56px;
+  padding: 40px 20px 52px;
 }
 
 .creators-inner {
@@ -261,29 +261,34 @@ button {
 }
 
 .creators-title {
-  margin-bottom: 20px;
+  margin-bottom: 28px;
+  font-size: 1.8rem;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--sand-5);
 }
 
 .creators-list {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 24px;
 }
 
 .creator-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
 }
 
-/* Softer, slightly bigger sand-colored icons */
 .creator-icon {
-  width: 52px;
-  height: 52px;
+  width: 44px;
+  height: 44px;
   border-radius: 999px;
-  background: rgba(216, 207, 196, 0.45);
-  box-shadow: 0 10px 24px rgba(90, 84, 73, 0.10);
-  display: inline-flex;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(90, 84, 73, 0.22);
+  box-shadow: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   color: var(--sand-4);
@@ -292,22 +297,26 @@ button {
 .creator-icon svg {
   width: 24px;
   height: 24px;
+  stroke: currentColor;
+  stroke-width: 1.4;
 }
 
 .creator-text {
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.55;
+  margin: 2px 0 0;
+  font-size: 1.02rem;
+  line-height: 1.7;
   color: var(--sand-5);
 }
 
 /* Footer */
 
 .site-footer {
-  padding: 16px 18px 20px;
-  font-size: 0.9rem;
+  padding: 14px 18px 20px;
+  font-size: 0.82rem;
   color: var(--sand-4);
   text-align: center;
+  border-top: 1px solid rgba(90, 84, 73, 0.16);
+  margin-top: 16px;
 }
 
 /* Larger screens */
