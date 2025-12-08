@@ -482,8 +482,7 @@ export default function Home() {
         <footer className="site-footer">
           <span>workly.day</span>
       <p className="footer-disclaimer">
-        Workly is a student-side helper concept and not affiliated with any university. 
-        Users are responsible for following their institution&apos;s academic integrity rules.
+        Workly is not affiliated with any university. Users are responsible for following their institution&apos;s academic rules.
       </p>
         </footer>
       </div>
