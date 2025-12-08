@@ -382,3 +382,109 @@ button {
 .creators-section .creator-icon svg * {
   stroke: var(--sand-5);
 }
+
+/* === Creators section – softer background & alignment like reference === */
+
+.creators-section {
+  /* أفتح من البني الحالي */
+  background: linear-gradient(
+    180deg,
+    var(--sand-1) 0%,
+    #eee5da 40%,
+    var(--sand-2) 100%
+  );
+  padding: 56px 24px 64px;
+}
+
+.creators-inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* العنوان: مثل الصورة، هادي ومحاذي لليسار */
+.creators-heading {
+  font-size: 1.9rem;
+  line-height: 1.2;
+  margin-bottom: 32px;
+  color: var(--sand-5);
+  text-align: left;
+}
+
+/* إلغاء أي كرت أبيض قديم */
+.creators-panel {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+/* سطر الأيقونة + النص */
+.creator-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 26px;
+}
+
+.creator-row:last-child {
+  margin-bottom: 0;
+}
+
+/* الأيقونة: دائرة ناعمة ومتساوية مثل المثال */
+.creators-section .creator-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.85);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.04);
+}
+
+/* الابعاد واللون داخل الـ SVG */
+.creators-section .creator-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--sand-5);
+  fill: none;
+  stroke-width: 1.6;
+}
+
+.creators-section .creator-icon svg * {
+  stroke: var(--sand-5);
+}
+
+/* نص السطر */
+.creator-text {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--sand-5);
+  text-align: left;
+}
+
+/* ضبط موبايل */
+@media (max-width: 760px) {
+  .creators-section {
+    padding: 40px 20px 52px;
+  }
+
+  .creators-heading {
+    font-size: 1.6rem;
+    margin-bottom: 28px;
+  }
+
+  .creator-row {
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+
+  .creators-section .creator-icon {
+    width: 52px;
+    height: 52px;
+  }
+
+  .creator-text {
+    font-size: 0.96rem;
+  }
+}
