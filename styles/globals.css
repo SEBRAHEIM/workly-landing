@@ -357,3 +357,28 @@ button {
     max-width: 960px;
   }
 }
+
+/* === Soft equal circles for creators icons === */
+.creators-section .creator-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: var(--sand-1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* SVG inside the circle: calm, clean strokes */
+.creators-section .creator-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--sand-5);
+  fill: none;
+  stroke-width: 1.6;
+}
+
+.creators-section .creator-icon svg * {
+  stroke: var(--sand-5);
+}
