@@ -1,17 +1,9 @@
 :root {
-  --bg-page: #f7ebdf;
-  --bg-card: #fbf4ec;
-  --bg-card-strong: #f1dfcd;
-  --accent: #d19b63;
-  --accent-soft: #f3dcc5;
-  --text-main: #4c3626;
-  --text-muted: #8a7461;
-  --text-strong: #2f2116;
-  --shadow-soft: 0 18px 35px rgba(125, 96, 69, 0.23);
-  --radius-card: 26px;
-  --radius-pill: 18px;
-  --font-main: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    "Helvetica Neue", Arial, sans-serif;
+  --sand-1: #F6F5F4; /* Main clean background */
+  --sand-2: #D8CFC4; /* Soft warm neutral */
+  --sand-3: #B7A99A; /* Taupe accent, buttons */
+  --sand-4: #8A817C; /* Stone highlight, borders */
+  --sand-5: #5A5449; /* Text, strong contrast */
 }
 
 *,
@@ -698,5 +690,128 @@ button {
     font-size: 13px;
     line-height: 1.45;
     text-align: left;
+  }
+}
+
+/* === Workly sand theme – global overrides === */
+
+/* خلفية رئيسية ناعمة على كامل الموقع */
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  background:
+    radial-gradient(circle at top, var(--sand-1) 0, var(--sand-2) 42%, var(--sand-3) 100%);
+  color: var(--sand-5);
+}
+
+/* حاوية الصفحة الأساسية */
+.home-root {
+  min-height: 100vh;
+  background: transparent;
+}
+
+/* الكروت / البوكسات بيضاء فوق الخلفية */
+.category-card,
+.home-category-card,
+.creator-card,
+.creators-grid > div,
+.service-card,
+.pro-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(138, 129, 124, 0.25);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
+}
+
+/* نص أساسي */
+.home-main,
+.home-section,
+.home-hero,
+.creators-section {
+  color: var(--sand-5);
+}
+
+/* عنوان الهيرو */
+.home-hero h1 {
+  color: var(--sand-5);
+}
+
+/* نصوص ثانوية */
+.home-hero p,
+.home-section-subtitle,
+.category-subtitle,
+.category-card-text,
+.creator-text,
+.service-desc,
+.home-footer {
+  color: rgba(90, 84, 73, 0.86);
+}
+
+/* الأكشن الأساسي – أزرار وبحث */
+.home-search-btn,
+.home-hero-search-button,
+.home-nav-cta,
+button.primary,
+button[type="submit"] {
+  background: linear-gradient(135deg, var(--sand-3), var(--sand-4));
+  color: #fff;
+  border-radius: 999px;
+  border: none;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+.home-search-btn:hover,
+.home-hero-search-button:hover,
+.home-nav-cta:hover,
+button.primary:hover,
+button[type="submit"]:hover {
+  background: linear-gradient(135deg, var(--sand-4), var(--sand-5));
+}
+
+/* الحقول */
+.home-search-input,
+.home-hero-search-input {
+  background: rgba(246, 245, 244, 0.98);
+  border-radius: 999px;
+  border: 1px solid rgba(138, 129, 124, 0.35);
+  color: var(--sand-5);
+}
+
+/* عناوين الأقسام */
+.home-section-title,
+.category-title,
+.creators-heading {
+  color: var(--sand-5);
+}
+
+/* الأيقونات داخل الكروت بنبرة دافئة */
+.category-icon,
+.category-card-icon,
+.creator-icon svg,
+.home-category-icon svg {
+  color: var(--sand-4);
+}
+
+/* الروابط */
+a,
+.home-logo-text {
+  color: var(--sand-5);
+}
+
+/* الفوتر */
+.home-footer {
+  border-top: 1px solid rgba(138, 129, 124, 0.25);
+  background: rgba(246, 245, 244, 0.9);
+}
+
+/* موبايل – نحافظ على الجريدينت لكن أخف شوية */
+@media (max-width: 768px) {
+  body {
+    background:
+      radial-gradient(circle at top, var(--sand-1) 0, var(--sand-2) 55%, var(--sand-3) 100%);
+  }
+
+  .home-main {
+    padding-inline: 16px;
   }
 }
