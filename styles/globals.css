@@ -855,3 +855,163 @@ a,
   }
 }
 
+/* === THEME OVERRIDES: navbar, search bar, icons, creators section === */
+
+/* Subtle warm gradient background using sand palette */
+body {
+  background: radial-gradient(circle at top left, var(--sand-1) 0%, #efe5d7 40%, #e0d2c2 100%);
+  color: var(--sand-5);
+}
+
+/* Top navigation: calm, light, elegant */
+header,
+.top-nav,
+.top-bar,
+.nav-shell {
+  background: var(--sand-1);
+  color: var(--sand-5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+}
+
+/* Logo / brand text */
+.logo-text,
+.brand-text,
+.site-title {
+  color: var(--sand-5);
+}
+
+/* Join button and primary CTA */
+.join-button,
+.primary-cta,
+button.primary {
+  background-color: var(--sand-3);
+  color: #fff;
+  border-radius: 999px;
+  border: none;
+}
+
+/* Hero search bar container */
+.hero-search,
+.search-shell,
+.search-bar {
+  background: #ffffff;
+  border-radius: 999px;
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.09),
+    0 0 0 1px rgba(0, 0, 0, 0.03);
+}
+
+/* Search input */
+.hero-search input,
+.search-shell input,
+.search-bar input {
+  background: transparent;
+  border: none;
+  color: var(--sand-5);
+}
+
+/* Search button */
+.hero-search button,
+.search-shell button,
+.search-bar button {
+  background: var(--sand-3);
+  color: #ffffff;
+  border-radius: 999px;
+  border: none;
+}
+
+/* Search icon inside the button */
+.hero-search button svg *,
+.search-shell button svg *,
+.search-bar button svg * {
+  stroke: #ffffff;
+  fill: none;
+}
+
+/* Category cards: icon + title + text calm colors */
+.category-card {
+  background: #fff;
+  color: var(--sand-5);
+}
+
+/* Icon container in category cards and creators section */
+.category-card-icon,
+.creator-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background-color: var(--sand-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* SVG strokes fill for category and creators icons */
+.category-card-icon svg *,
+.creator-icon svg * {
+  stroke: var(--sand-4);
+  fill: none;
+}
+
+/* Category titles and descriptions */
+.category-card-title {
+  color: var(--sand-5);
+}
+.category-card-text {
+  color: rgba(90, 84, 73, 0.9);
+}
+
+/* === "Make it all happen with creators" section === */
+
+.creators-section {
+  background: var(--sand-1);
+  color: #181818;
+  padding: 40px 20px 56px;
+}
+
+.creators-inner {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.creators-heading {
+  font-size: 1.8rem;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #181818;
+  margin-bottom: 24px;
+}
+
+.creators-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.creator-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.creator-text {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #222222;
+}
+
+/* Mobile fine-tuning */
+@media (max-width: 768px) {
+  .creators-section {
+    padding: 32px 20px 48px;
+  }
+
+  .creators-heading {
+    font-size: 1.6rem;
+  }
+
+  .creator-text {
+    font-size: 0.98rem;
+  }
+}
+
