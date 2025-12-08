@@ -412,3 +412,16 @@ a {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+/* === Mobile tweaks: category titles & icons === */
+@media (max-width: 760px) {
+  .home-category-card-title {
+    color: #3b3027; /* نفس لون النص البني الهادئ */
+  }
+
+  .home-category-dot svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+  }
+}
