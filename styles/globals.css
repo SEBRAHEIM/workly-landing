@@ -547,3 +547,22 @@ button {
     padding: 18px 16px 20px;
   }
 }
+
+
+/* === Fix mobile category cards text staying inside box === */
+@media (max-width: 767px) {
+  .category-card {
+    padding: 16px 12px 18px;
+  }
+
+  .category-card-heading h3 {
+    font-size: 0.9rem;
+    line-height: 1.25;
+    word-break: break-word; /* يخلي "Presentations & PPT" يلف داخل الكرت */
+  }
+
+  .category-card-desc {
+    font-size: 0.78rem;
+    line-height: 1.4;
+  }
+}
