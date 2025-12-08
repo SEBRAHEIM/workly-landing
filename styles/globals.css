@@ -596,3 +596,58 @@ button {
   }
 }
 
+
+/* === Mobile-only tweaks for category cards (phone only) === */
+@media (max-width: 760px) {
+  /* شبكتين في الصف للموبايل */
+  .home-category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .home-category-card {
+    padding: 18px 18px 20px;
+  }
+
+  /* شكل الأيقونة: مربع ناعم مو دائرة */
+  .home-category-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 16px !important; /* يلغى الدائرة القديمة */
+    background: rgba(177, 140, 102, 0.16); /* من نفس العائلة اللونية للموقع */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .home-category-icon svg,
+  .home-category-icon span {
+    font-size: 20px;
+  }
+
+  /* عنوان الكاتيجوري – لون هادي مو أزرق */
+  .home-category-card h3,
+  .home-category-card h3 a,
+  .home-category-title,
+  .home-category-title a {
+    color: #5b4635;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .home-category-card h3 a:visited,
+  .home-category-card h3 a:active,
+  .home-category-title a:visited,
+  .home-category-title a:active {
+    color: #5b4635;
+  }
+
+  /* نص الوصف تحت العنوان */
+  .home-category-card p,
+  .home-category-description {
+    color: rgba(90, 68, 50, 0.78);
+    font-size: 0.88rem;
+    line-height: 1.4;
+  }
+}
