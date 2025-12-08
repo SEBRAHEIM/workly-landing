@@ -422,3 +422,21 @@ button {
     color: #6b5b4b;
   }
 }
+/* === Fix icon shape: remove inner circle, keep single round bg === */
+.home-category-icon-wrap {
+  background: #d0c2b4 !important; /* beige tone you used */
+  border-radius: 999px !important;
+  width: 46px !important;
+  height: 46px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+.home-category-icon-wrap > * {
+  background: none !important; /* remove inner circle */
+  box-shadow: none !important;
+  border: none !important;
+}
