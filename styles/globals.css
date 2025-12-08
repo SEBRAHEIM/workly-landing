@@ -493,3 +493,14 @@ button {
 .creators-section {
   background: transparent;
 }
+
+
+/* Lighter global background gradient */
+body {
+  background: linear-gradient(
+    180deg,
+    #f8f5f1 0%,
+    #f0e6da 40%,
+    #e3d4c5 100%
+  );
+}
