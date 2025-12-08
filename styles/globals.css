@@ -1391,3 +1391,106 @@ h2.creators-heading {
   width: 100%;
 }
 
+
+
+/* === Dec 8 fixes: categories + creators mobile === */
+
+/* 1) Remove solid strip behind "Choose a category" on all devices */
+.category-section {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* لو فيه أي حاوية رأس للقسم استخدم نفس الشفافية */
+.category-section-header,
+.category-header,
+.category-header-inner,
+.category-header-bar {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* 2) Category cards: stack icon, title, description in this order */
+.category-grid {
+  align-items: stretch;
+}
+
+.category-card {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+/* أول عنصر هو الأيقونة، بعدها العنوان، بعدها الشرح */
+.category-card > * + * {
+  margin-top: 8px;
+}
+
+/* تأكيد ستايل العنوان والنص داخل الكرت */
+.category-card-title,
+.category-title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: left;
+}
+
+.category-card-text,
+.category-subtitle {
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: left;
+}
+
+/* ضمان أن كل الكروت نفس العرض داخل الشبكة */
+@supports (display: grid) {
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .category-card {
+    width: 100%;
+  }
+}
+
+/* 3) Mobile-only tweaks */
+@media (max-width: 768px) {
+  /* كروت الفئات على الموبايل تكون أعرض شوي ومتماثلة */
+  .category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 16px;
+    row-gap: 16px;
+  }
+
+  .category-card {
+    padding: 18px 14px;
+    min-height: 190px;
+  }
+
+  .category-card-title,
+  .category-title {
+    font-size: 14px;
+  }
+
+  .category-card-text,
+  .category-subtitle {
+    font-size: 12.5px;
+  }
+
+  /* 4) Make it all happen with creators: no white card on mobile */
+  .creators-section {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 32px 20px 40px;
+  }
+
+  .creators-panel {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+  }
+}
