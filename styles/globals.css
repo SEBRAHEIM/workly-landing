@@ -1,10 +1,12 @@
 :root {
-  --sand-1: #F6F5F4; /* Main clean background */
-  --sand-2: #D8CFC4; /* Soft warm neutral */
-  --sand-3: #B7A99A; /* Taupe accent, buttons */
-  --sand-4: #8A817C; /* Stone highlight, borders */
-  --sand-5: #5A5449; /* Text, strong contrast */
+  --sand-1: #f6f5f4; /* Main clean background */
+  --sand-2: #d8cfc4; /* Soft warm neutral */
+  --sand-3: #b7a99a; /* Taupe accent, buttons */
+  --sand-4: #8a817c; /* Stone highlight, borders */
+  --sand-5: #5a5449; /* Text, strong contrast */
 }
+
+/* Base reset */
 
 *,
 *::before,
@@ -14,11 +16,12 @@
 
 html,
 body {
-  padding: 0;
   margin: 0;
-  font-family: var(--font-main);
-  background: radial-gradient(circle at top left, #fdf3e7 0%, #f3e0cf 45%, #e8d2c1 100%);
-  color: var(--text-main);
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
+  background: linear-gradient(180deg, var(--sand-1) 0%, var(--sand-2) 40%, #b19f8e 100%);
+  color: var(--sand-5);
 }
 
 body {
@@ -26,543 +29,229 @@ body {
 }
 
 button {
-  font-family: inherit;
-  border: none;
-  background: none;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
+  font: inherit;
 }
 
-/* Layout */
+/* Page layout */
 
 .page-root {
   min-height: 100vh;
-  padding: 18px 16px 40px;
+  display: flex;
+  flex-direction: column;
 }
 
 .page-main {
-  max-width: 960px;
-  margin: 0 auto;
+  flex: 1;
 }
 
 /* Top nav */
 
 .top-nav {
-  max-width: 960px;
-  margin: 0 auto 18px;
-  padding: 10px 18px;
-  border-radius: 999px;
-  background: rgba(252, 244, 235, 0.96);
-  box-shadow: 0 12px 30px rgba(140, 110, 80, 0.18);
+  position: sticky;
+  top: 0;
+  z-index: 20;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 12px 18px;
+  background: rgba(246, 245, 244, 0.94);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(138, 129, 124, 0.08);
 }
 
-.nav-menu-button {
-  width: 42px;
-  height: 42px;
+.nav-menu-toggle {
+  width: 34px;
+  height: 34px;
   border-radius: 999px;
-  background: #f4e4d3;
+  border: none;
+  padding: 0;
+  background: rgba(216, 207, 196, 0.75);
   display: inline-flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 4px;
 }
 
-.nav-menu-button span {
-  width: 18px;
+.nav-menu-toggle span {
+  width: 16px;
   height: 2px;
   border-radius: 999px;
-  background: #8b6b4d;
+  background: var(--sand-5);
 }
 
 .nav-logo {
-  letter-spacing: 0.28em;
-  font-size: 0.78rem;
+  letter-spacing: 0.24em;
+  font-size: 0.8rem;
   text-transform: uppercase;
-  color: #b39577;
+  color: var(--sand-5);
 }
 
 .nav-cta {
-  padding: 10px 26px;
+  padding: 7px 18px;
   border-radius: 999px;
-  background: #d39a61;
-  color: white;
-  font-weight: 600;
-  font-size: 0.9rem;
-  box-shadow: 0 10px 22px rgba(171, 121, 65, 0.38);
+  border: none;
+  background: var(--sand-3);
+  color: #fdfdfd;
+  font-size: 0.86rem;
+  font-weight: 500;
+  box-shadow: 0 10px 24px rgba(90, 84, 73, 0.25);
 }
 
 /* Hero */
 
-.hero-card {
-  margin: 20px auto 26px;
-  padding: 24px 22px 26px;
-  border-radius: 34px;
-  background: linear-gradient(140deg, #fdf6ee 0%, #fbf0e4 40%, #f4e3d4 100%);
-  box-shadow: var(--shadow-soft);
+.hero {
+  padding: 32px 18px 28px;
+}
+
+.hero-inner {
+  max-width: 640px;
+  margin: 0 auto;
 }
 
 .hero-title {
+  font-size: 2rem;
+  line-height: 1.15;
   margin: 0 0 10px;
-  font-size: 1.7rem;
-  line-height: 1.22;
-  color: var(--text-strong);
+  color: var(--sand-5);
 }
 
-.hero-text {
-  margin: 0 0 18px;
-  color: var(--text-muted);
+.hero-subtitle {
+  margin: 0 0 22px;
   font-size: 0.98rem;
   line-height: 1.5;
+  color: var(--sand-4);
 }
 
 .hero-search {
-  margin-top: 4px;
-  background: white;
-  border-radius: 999px;
-  padding: 4px 4px 4px 18px;
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 14px 32px rgba(190, 140, 90, 0.28);
+  padding: 4px;
+  border-radius: 999px;
+  background: radial-gradient(circle at top left, #fefefe 0%, #f3efea 40%, #ede4da 100%);
+  box-shadow: 0 16px 40px rgba(90, 84, 73, 0.18);
 }
 
 .hero-search-input {
-  border: none;
-  outline: none;
   flex: 1;
+  border-radius: 999px;
+  border: none;
+  padding: 10px 14px 10px 16px;
   font-size: 0.95rem;
-  color: var(--text-main);
   background: transparent;
+  color: var(--sand-5);
 }
 
 .hero-search-input::placeholder {
-  color: #c3aa93;
+  color: rgba(138, 129, 124, 0.9);
+}
+
+.hero-search-input:focus {
+  outline: none;
 }
 
 .hero-search-button {
+  flex-shrink: 0;
   width: 42px;
   height: 42px;
   border-radius: 999px;
-  background: #d59a60;
-  display: flex;
+  border: none;
+  background: var(--sand-3);
+  color: #fdfdfd;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
-  color: white;
 }
 
-/* Sections */
-
-.home-section {
-  margin: 12px auto 28px;
+.hero-search-button svg {
+  width: 18px;
+  height: 18px;
 }
+
+/* Sections shared */
 
 .section-title {
-  margin: 0 0 6px;
-  font-size: 1.25rem;
-  color: var(--text-strong);
+  margin: 0;
+  font-size: 1.4rem;
+  line-height: 1.25;
+  color: var(--sand-5);
 }
 
 .section-subtitle {
-  margin: 0 0 18px;
-  color: var(--text-muted);
+  margin: 4px 0 0;
   font-size: 0.95rem;
+  color: var(--sand-4);
 }
 
-/* Category grid */
+/* Categories */
 
-.home-category-grid {
+.category-section {
+  padding: 20px 18px 32px;
+}
+
+.category-header {
+  max-width: 640px;
+  margin: 0 auto 16px;
+}
+
+.category-grid {
+  max-width: 720px;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px 14px;
+  gap: 14px;
 }
 
-.home-category-card {
-  background: #fbf4ec;
-  border-radius: var(--radius-card);
-  padding: 16px 16px 18px;
-  box-shadow: 0 13px 26px rgba(171, 134, 102, 0.15);
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  text-align: left;
-  color: var(--text-main);
-}
-
-.home-category-card:focus-visible {
-  outline: 2px solid #d39a61;
-  outline-offset: 2px;
-}
-
-.home-category-icon {
-  flex: 0 0 44px;
-  height: 44px;
-  border-radius: 15px;
-  background: #f3dcc5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;            /* important: NOT centered */
-}
-
-.icon-glyph {
-  font-size: 1.1rem;
-}
-
-.home-category-text {
+.category-card {
+  border: none;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  padding: 18px 16px 18px;
+  border-radius: 22px;
+  background: #fbfaf8;
+  box-shadow: 0 12px 32px rgba(90, 84, 73, 0.12);
   text-align: left;
+  cursor: pointer;
+  min-height: 148px;
 }
 
-.home-category-title {
+.category-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  background: rgba(216, 207, 196, 0.8);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sand-4);
+  margin-bottom: 10px;
+}
+
+.category-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.category-card-title {
   margin: 0 0 6px;
-  font-size: 0.96rem;
+  font-size: 0.98rem;
   font-weight: 600;
-  color: var(--text-strong);
+  color: var(--sand-5);
 }
 
-.home-category-body {
+.category-card-text {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 0.86rem;
   line-height: 1.5;
-  color: var(--text-muted);
+  color: var(--sand-4);
 }
 
 /* Creators section */
 
-.home-section-creators {
-  margin-top: 10px;
-}
-
-.benefits-list {
-  list-style: none;
-  padding: 0;
-  margin: 10px 0 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  color: var(--text-main);
-  font-size: 0.93rem;
-}
-
-.benefits-list li::before {
-  content: "•";
-  margin-right: 6px;
-  color: #d39a61;
-}
-
-/* Pro card */
-
-.pro-card {
-  margin-top: 6px;
-  padding: 18px 18px 20px;
-  border-radius: 28px;
-  background: #f1dfcd;
-  box-shadow: 0 16px 32px rgba(135, 100, 67, 0.25);
-}
-
-.pro-badge {
-  width: 30px;
-  height: 30px;
-  border-radius: 999px;
-  background: #e6c9a6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 6px;
-}
-
-.pro-title {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
-}
-
-.pro-subtitle {
-  margin: 2px 0 8px;
-  font-size: 0.9rem;
-  color: var(--text-main);
-}
-
-.pro-body {
-  margin: 0 0 10px;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  color: var(--text-main);
-}
-
-.pro-footnote {
-  margin: 0 0 6px;
-  font-size: 0.78rem;
-  color: var(--text-muted);
-}
-
-.pro-brand {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-main);
-}
-
-/* Desktop tweaks */
-
-@media (min-width: 840px) {
-  .page-root {
-    padding: 24px 32px 52px;
-  }
-
-  .hero-card {
-    margin-top: 26px;
-    padding: 32px 34px 30px;
-  }
-
-  .hero-title {
-    font-size: 2rem;
-  }
-
-  .home-category-card {
-    padding: 18px 18px 20px;
-    gap: 12px;
-  }
-
-  .home-category-title {
-    font-size: 1rem;
-  }
-
-  .home-category-body {
-    font-size: 0.9rem;
-  }
-}
-/* === MOBILE-ONLY CATEGORY LAYOUT (PHONE) === */
-@media (max-width: 760px) {
-  .home-category-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-  }
-
-  .home-category-card {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    padding: 18px 16px;
-    text-align: left;
-  }
-
-  .home-category-icon {
-    flex: 0 0 42px;
-    height: 42px;
-    margin: 0;
-    margin-right: 10px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .home-category-copy {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .home-category-title {
-    margin: 0;
-  }
-
-  .home-category-body {
-    margin: 0;
-  }
-}
-/* ====== PERFECT MOBILE CATEGORY LAYOUT ====== */
-@media (max-width: 760px) {
-
-  /* 2 columns equal size */
-  .home-category-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-
-  /* Card equal size + left aligned layout */
-  .home-category-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start; 
-    height: 165px;  /* FIXED equal height on all cards */
-    padding: 18px 16px;
-    text-align: left;
-    border-radius: 18px;
-  }
-
-  /* Icon top-left NOT centered */
-  .home-category-icon {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 10px;
-  }
-
-  /* Title directly under icon */
-  .home-category-title {
-    margin: 0;
-    margin-bottom: 4px;
-    font-weight: 600;
-    text-align: left;
-  }
-
-  /* Description aligned left */
-  .home-category-body {
-    margin: 0;
-    line-height: 1.3;
-    text-align: left;
-  }
-}
-/* === Mobile category cards: left-aligned icon + text === */
-@media (max-width: 768px) {
-  .category-card-grid {
-    column-gap: 14px;
-    row-gap: 16px;
-  }
-
-  .category-card {
-    padding: 18px 18px 20px;
-    align-items: flex-start;   /* كل محتوى الكرت لليسار */
-    text-align: left;
-  }
-
-  .category-card-icon {
-    align-self: flex-start;    /* الأيقونة نفس اتجاه النص */
-    margin-bottom: 10px;
-  }
-
-  .category-card-title {
-    text-align: left;
-  }
-
-  .category-card-description {
-    text-align: left;
-  }
-}
-
-
-/* === Mobile-first category grid refresh (icons left, equal cards) === */
-.category-section {
-  padding: 32px 20px 40px;
-}
-
-.category-section-inner {
-  max-width: 960px;
-  margin: 0 auto;
-}
-
-.category-header h2 {
-  font-size: 1.35rem;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-
-.category-header p {
-  font-size: 0.9rem;
-  color: var(--text-muted, #8f7c6a);
-}
-
-.category-grid {
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.category-card {
-  background: rgba(255, 255, 255, 0.96);
-  border-radius: 22px;
-  padding: 16px 14px 18px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
-  display: flex;
-  flex-direction: column;
-}
-
-.category-card-top {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin-bottom: 4px;
-}
-
-.category-icon-pill {
-  width: 40px;
-  height: 40px;
-  border-radius: 14px;
-  background: rgba(228, 200, 170, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.category-card-heading h3 {
-  font-size: 0.95rem;
-  line-height: 1.3;
-  margin: 0;
-  font-weight: 600;
-  color: #4b3321;
-}
-
-.category-card-desc {
-  margin: 4px 0 0;
-  font-size: 0.8rem;
-  line-height: 1.45;
-  color: #8e7561;
-}
-
-@media (min-width: 768px) {
-  .category-section {
-    padding-inline: 64px;
-  }
-
-  .category-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 18px;
-  }
-
-  .category-card {
-    padding: 18px 16px 20px;
-  }
-}
-
-
-/* === Fix mobile category cards text staying inside box === */
-@media (max-width: 767px) {
-  .category-card {
-    padding: 16px 12px 18px;
-  }
-
-  .category-card-heading h3 {
-    font-size: 0.9rem;
-    line-height: 1.25;
-    word-break: break-word; /* يخلي "Presentations & PPT" يلف داخل الكرت */
-  }
-
-  .category-card-desc {
-    font-size: 0.78rem;
-    line-height: 1.4;
-  }
-}
-
-/* === Make it all happen with creators – mobile-first layout === */
-
 .creators-section {
-  padding: 40px 20px 56px;
+  padding: 26px 18px 40px;
 }
 
 .creators-inner {
@@ -570,705 +259,14 @@ button {
   margin: 0 auto;
 }
 
-.creators-heading {
-  font-size: 1.6rem;
-  line-height: 1.3;
-  font-weight: 700;
-  color: #3b2615;
-  margin: 0 0 16px;
+.creators-title {
+  margin-bottom: 20px;
 }
 
 .creators-list {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  margin-top: 8px;
-}
-
-.creator-row {
-  display: flex;
-  align-items: center;
   gap: 16px;
-}
-
-.creator-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.creator-icon svg {
-  width: 22px;
-  height: 22px;
-  stroke: #c99a6b;
-  color: #c99a6b;
-}
-
-.creator-text {
-  margin: 0;
-  font-size: 0.98rem;
-  line-height: 1.5;
-  color: #4a351f;
-}
-
-/* شوي مسافة إضافية تحت السكشن قبل كرت Workly PRO */
-.creators-section + section {
-  margin-top: 8px;
-}
-
-/* تكبير بسيط على الشاشات الأكبر */
-@media (min-width: 768px) {
-  .creators-section {
-    padding: 56px 40px 72px;
-  }
-
-  .creators-heading {
-    font-size: 1.8rem;
-  }
-
-  .creator-text {
-    font-size: 1rem;
-  }
-}
-
-/* ==== MOBILE: equal category cards & tidy text ==== */
-@media (max-width: 768px) {
-  /* الشبكة: عمودين متساويين */
-  .category-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 14px;
-    row-gap: 16px;
-    align-items: stretch;
-  }
-
-  /* الكرت الأبيض نفسه للجميع وواسع شوي */
-  .category-card {
-    box-sizing: border-box;
-    width: 100%;
-    min-height: 190px;        /* نفس الارتفاع لكل الكروت */
-    padding: 18px 16px 18px;
-    border-radius: 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;   /* كل شيء يبدأ من اليسار */
-    justify-content: flex-start;
-  }
-
-  /* الآيكون: مربع غير متمركز في النص بالكامل، بس فوق اليسار */
-  .category-card-icon,
-  .category-icon-pill {
-    width: 44px;
-    height: 44px;
-    border-radius: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 12px;
-    flex-shrink: 0;
-  }
-
-  /* عنوان الكرت */
-  .category-card-title,
-  .category-title {
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.3;
-    margin-bottom: 4px;
-    text-align: left;
-  }
-
-  /* وصف الكرت */
-  .category-card-text,
-  .category-subtitle {
-    font-size: 13px;
-    line-height: 1.45;
-    text-align: left;
-  }
-}
-
-/* === Workly sand theme – global overrides === */
-
-/* خلفية رئيسية ناعمة على كامل الموقع */
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-  background:
-    radial-gradient(circle at top, var(--sand-1) 0, var(--sand-2) 42%, var(--sand-3) 100%);
-  color: var(--sand-5);
-}
-
-/* حاوية الصفحة الأساسية */
-.home-root {
-  min-height: 100vh;
-  background: transparent;
-}
-
-/* الكروت / البوكسات بيضاء فوق الخلفية */
-.category-card,
-.home-category-card,
-.creator-card,
-.creators-grid > div,
-.service-card,
-.pro-card {
-  background-color: #ffffff;
-  border-radius: 16px;
-  border: 1px solid rgba(138, 129, 124, 0.25);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
-}
-
-/* نص أساسي */
-.home-main,
-.home-section,
-.home-hero,
-.creators-section {
-  color: var(--sand-5);
-}
-
-/* عنوان الهيرو */
-.home-hero h1 {
-  color: var(--sand-5);
-}
-
-/* نصوص ثانوية */
-.home-hero p,
-.home-section-subtitle,
-.category-subtitle,
-.category-card-text,
-.creator-text,
-.service-desc,
-.home-footer {
-  color: rgba(90, 84, 73, 0.86);
-}
-
-/* الأكشن الأساسي – أزرار وبحث */
-.home-search-btn,
-.home-hero-search-button,
-.home-nav-cta,
-button.primary,
-button[type="submit"] {
-  background: linear-gradient(135deg, var(--sand-3), var(--sand-4));
-  color: #fff;
-  border-radius: 999px;
-  border: none;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
-}
-
-.home-search-btn:hover,
-.home-hero-search-button:hover,
-.home-nav-cta:hover,
-button.primary:hover,
-button[type="submit"]:hover {
-  background: linear-gradient(135deg, var(--sand-4), var(--sand-5));
-}
-
-/* الحقول */
-.home-search-input,
-.home-hero-search-input {
-  background: rgba(246, 245, 244, 0.98);
-  border-radius: 999px;
-  border: 1px solid rgba(138, 129, 124, 0.35);
-  color: var(--sand-5);
-}
-
-/* عناوين الأقسام */
-.home-section-title,
-.category-title,
-.creators-heading {
-  color: var(--sand-5);
-}
-
-/* الأيقونات داخل الكروت بنبرة دافئة */
-.category-icon,
-.category-card-icon,
-.creator-icon svg,
-.home-category-icon svg {
-  color: var(--sand-4);
-}
-
-/* الروابط */
-a,
-.home-logo-text {
-  color: var(--sand-5);
-}
-
-/* الفوتر */
-.home-footer {
-  border-top: 1px solid rgba(138, 129, 124, 0.25);
-  background: rgba(246, 245, 244, 0.9);
-}
-
-/* موبايل – نحافظ على الجريدينت لكن أخف شوية */
-@media (max-width: 768px) {
-  body {
-    background:
-      radial-gradient(circle at top, var(--sand-1) 0, var(--sand-2) 55%, var(--sand-3) 100%);
-  }
-
-  .home-main {
-    padding-inline: 16px;
-  }
-}
-
-
-/* === Mobile: stack category icon, title, description vertically === */
-@media (max-width: 768px) {
-  .category-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    align-items: stretch;
-  }
-
-  .category-card {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;   /* لا سنتر للأيقونة */
-    justify-content: flex-start;
-    padding: 12px 12px 14px;
-  }
-
-  .category-card-icon {
-    margin-bottom: 8px;        /* Icon */
-  }
-
-  .category-card-title {
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.3;
-    margin-bottom: 4px;        /* Title تحت الأيقونة مباشرة */
-    text-align: left;
-    width: 100%;
-  }
-
-  .category-card-text {
-    font-size: 13px;
-    line-height: 1.45;
-    text-align: left;          /* Description */
-    width: 100%;
-  }
-}
-
-/* === THEME OVERRIDES: navbar, search bar, icons, creators section === */
-
-/* Subtle warm gradient background using sand palette */
-body {
-  background: radial-gradient(circle at top left, var(--sand-1) 0%, #efe5d7 40%, #e0d2c2 100%);
-  color: var(--sand-5);
-}
-
-/* Top navigation: calm, light, elegant */
-header,
-.top-nav,
-.top-bar,
-.nav-shell {
-  background: var(--sand-1);
-  color: var(--sand-5);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
-}
-
-/* Logo / brand text */
-.logo-text,
-.brand-text,
-.site-title {
-  color: var(--sand-5);
-}
-
-/* Join button and primary CTA */
-.join-button,
-.primary-cta,
-button.primary {
-  background-color: var(--sand-3);
-  color: #fff;
-  border-radius: 999px;
-  border: none;
-}
-
-/* Hero search bar container */
-.hero-search,
-.search-shell,
-.search-bar {
-  background: #ffffff;
-  border-radius: 999px;
-  box-shadow:
-    0 18px 45px rgba(0, 0, 0, 0.09),
-    0 0 0 1px rgba(0, 0, 0, 0.03);
-}
-
-/* Search input */
-.hero-search input,
-.search-shell input,
-.search-bar input {
-  background: transparent;
-  border: none;
-  color: var(--sand-5);
-}
-
-/* Search button */
-.hero-search button,
-.search-shell button,
-.search-bar button {
-  background: var(--sand-3);
-  color: #ffffff;
-  border-radius: 999px;
-  border: none;
-}
-
-/* Search icon inside the button */
-.hero-search button svg *,
-.search-shell button svg *,
-.search-bar button svg * {
-  stroke: #ffffff;
-  fill: none;
-}
-
-/* Category cards: icon + title + text calm colors */
-.category-card {
-  background: #fff;
-  color: var(--sand-5);
-}
-
-/* Icon container in category cards and creators section */
-.category-card-icon,
-.creator-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 999px;
-  background-color: var(--sand-2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* SVG strokes fill for category and creators icons */
-.category-card-icon svg *,
-.creator-icon svg * {
-  stroke: var(--sand-4);
-  fill: none;
-}
-
-/* Category titles and descriptions */
-.category-card-title {
-  color: var(--sand-5);
-}
-.category-card-text {
-  color: rgba(90, 84, 73, 0.9);
-}
-
-/* === "Make it all happen with creators" section === */
-
-.creators-section {
-  background: var(--sand-1);
-  color: #181818;
-  padding: 40px 20px 56px;
-}
-
-.creators-inner {
-  max-width: 640px;
-  margin: 0 auto;
-}
-
-.creators-heading {
-  font-size: 1.8rem;
-  line-height: 1.2;
-  font-weight: 700;
-  color: #181818;
-  margin-bottom: 24px;
-}
-
-.creators-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.creator-row {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.creator-text {
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #222222;
-}
-
-/* Mobile fine-tuning */
-@media (max-width: 768px) {
-  .creators-section {
-    padding: 32px 20px 48px;
-  }
-
-  .creators-heading {
-    font-size: 1.6rem;
-  }
-
-  .creator-text {
-    font-size: 0.98rem;
-  }
-}
-
-/* Mobile category card vertical order: icon, title, description */
-@media (max-width: 768px) {
-  .category-card {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .category-card-icon {
-    order: 1;
-    margin-bottom: 8px;
-  }
-
-  .category-card-title {
-    order: 2;
-    margin-bottom: 4px;
-  }
-
-  .category-card-text {
-    order: 3;
-  }
-}
-
-
-/* === Salem mobile polish – categories, creators, colors === */
-
-/* خلفية هادئة بالـ gradient وألوان النظام */
-html,
-body {
-  min-height: 100%;
-}
-
-body {
-  background: linear-gradient(
-    180deg,
-    var(--sand-1) 0%,
-    var(--sand-2) 40%,
-    var(--sand-3) 100%
-  );
-  color: var(--sand-5);
-}
-
-/* شريط أعلى الموقع */
-.top-nav,
-.nav-shell,
-.header-bar {
-  background: transparent;
-  color: var(--sand-5);
-}
-
-.logo-wordmark,
-.brand-wordmark,
-.nav-brand {
-  color: var(--sand-5);
-}
-
-.nav-join-button,
-.header-cta,
-.hero-cta-button {
-  background: var(--sand-3);
-  color: var(--sand-1);
-  border-radius: 999px;
-  border: none;
-}
-
-/* شريط البحث */
-.hero-search,
-.search-shell,
-.search-bar {
-  background: rgba(246, 245, 244, 0.98);
-  border-radius: 999px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.10);
-}
-
-.hero-search-input,
-.search-input {
-  background: transparent;
-  border: none;
-  color: var(--sand-5);
-}
-
-.hero-search-input::placeholder,
-.search-input::placeholder {
-  color: rgba(90, 84, 73, 0.60);
-}
-
-.hero-search-button,
-.search-button {
-  background: var(--sand-3);
-  color: var(--sand-1);
-  border-radius: 999px;
-}
-
-/* أيقونات عامة */
-.category-icon svg,
-.creator-icon svg,
-.hero-search-button svg,
-.search-button svg {
-  width: 20px;
-  height: 20px;
-  stroke: var(--sand-5);
-  stroke-width: 1.6;
-  fill: none;
-}
-
-/* أقسام عامة */
-.section-title,
-.categories-title,
-.creators-heading,
-h2.creators-heading {
-  color: var(--sand-5);
-}
-
-/* ====== كروت التصنيفات (Categories) – موبايل أولاً ====== */
-
-.categories-section {
-  padding: 40px 20px 32px;
-}
-
-.categories-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-
-/* شكل الكرت نفسه */
-.category-card {
-  background: var(--sand-1);
-  border-radius: 24px;
-  padding: 18px 14px 20px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  min-height: 190px;
-}
-
-/* الأيقونة أعلى الكرت */
-.category-icon,
-.category-icon-badge {
-  width: 40px;
-  height: 40px;
-  border-radius: 999px;
-  background: radial-gradient(
-    circle at 30% 0%,
-    rgba(255, 255, 255, 0.95) 0%,
-    var(--sand-2) 70%
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 10px;
-  flex-shrink: 0;
-}
-
-/* لو الأيقونة داخل عنصر آخر */
-.category-card .category-icon svg,
-.category-card .category-icon-badge svg {
-  width: 20px;
-  height: 20px;
-  stroke: var(--sand-5);
-  stroke-width: 1.6;
-  fill: none;
-}
-
-/* العنوان تحت الأيقونة مباشرة */
-.category-card-title,
-.category-title {
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.35;
-  margin-bottom: 4px;
-  text-align: left;
-  color: var(--sand-5);
-}
-
-/* الوصف تحت العنوان */
-.category-card-text,
-.category-subtitle {
-  font-size: 13px;
-  line-height: 1.5;
-  text-align: left;
-  color: rgba(90, 84, 73, 0.9);
-}
-
-/* نحافظ أن الترتيب دائماً: icon → title → text */
-.category-card > .category-icon,
-.category-card > .category-icon-badge {
-  order: 0;
-}
-
-.category-card > .category-card-title,
-.category-card > .category-title {
-  order: 1;
-}
-
-.category-card > .category-card-text,
-.category-card > .category-subtitle {
-  order: 2;
-}
-
-/* تساوي أحجام كل الكروت في الموبايل */
-@media (max-width: 768px) {
-  .categories-section {
-    padding-inline: 20px;
-  }
-
-  .categories-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-  }
-
-  .category-card {
-    min-height: 190px;
-  }
-}
-
-/* شوية مساحة وتنفس على الشاشات الأكبر */
-@media (min-width: 769px) {
-  .categories-section {
-    padding: 56px 40px 40px;
-  }
-
-  .categories-grid {
-    max-width: 720px;
-    margin: 0 auto;
-    gap: 18px;
-  }
-
-  .category-card {
-    min-height: 200px;
-    padding: 20px 18px 22px;
-  }
-}
-
-/* ====== Make it all happen with creators – هادي ومرتب ====== */
-
-.creators-section {
-  padding: 32px 20px 56px;
-  color: var(--sand-5);
-}
-
-.creators-heading {
-  font-size: 24px;
-  line-height: 1.2;
-  font-weight: 700;
-  margin-bottom: 24px;
-}
-
-.creators-list {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
 }
 
 .creator-row {
@@ -1277,220 +275,85 @@ h2.creators-heading {
   gap: 14px;
 }
 
-/* دائرة الأيقونة */
 .creator-icon {
   width: 44px;
   height: 44px;
   border-radius: 999px;
-  background: radial-gradient(
-    circle at 30% 0%,
-    rgba(255, 255, 255, 0.96) 0%,
-    var(--sand-2) 70%
-  );
-  display: flex;
+  background: rgba(246, 245, 244, 0.95);
+  box-shadow: 0 10px 26px rgba(90, 84, 73, 0.12);
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  color: var(--sand-4);
 }
 
 .creator-icon svg {
   width: 22px;
   height: 22px;
-  stroke: var(--sand-4);
-  stroke-width: 1.7;
-  fill: none;
 }
 
-/* نص ال benefit */
 .creator-text {
-  font-size: 15px;
+  margin: 0;
+  font-size: 0.95rem;
   line-height: 1.5;
   color: var(--sand-5);
 }
 
-/* في الموبايل: بدون الكرت الأبيض، فقط النص فوق الخلفية الهادية */
-@media (max-width: 768px) {
-  .creators-section,
-  .creators-inner,
-  .creators-card {
-    background: transparent !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
+/* Footer */
+
+.site-footer {
+  padding: 16px 18px 20px;
+  font-size: 0.9rem;
+  color: var(--sand-4);
+  text-align: center;
+}
+
+/* Larger screens */
+
+@media (min-width: 768px) {
+  .top-nav {
+    padding-inline: 40px;
+  }
+
+  .hero {
+    padding: 42px 40px 32px;
+  }
+
+  .hero-title {
+    font-size: 2.6rem;
+  }
+
+  .hero-inner {
+    max-width: 720px;
+  }
+
+  .category-section {
+    padding: 24px 40px 40px;
+  }
+
+  .category-grid {
+    gap: 18px;
   }
 
   .creators-section {
-    padding-inline: 20px;
+    padding: 32px 40px 56px;
   }
-}
 
-/* في الشاشات الأكبر ممكن نخليها كرت بسيط لو فيه حاوية */
-@media (min-width: 769px) {
-  .creators-inner,
-  .creators-card {
-    background: var(--sand-1);
+  .creators-inner {
+    background: #fdfcfb;
     border-radius: 24px;
-    padding: 32px 32px 36px;
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+    padding: 32px 32px 38px;
+    box-shadow: 0 18px 46px rgba(90, 84, 73, 0.18);
   }
 }
 
-
-/* === Fix categories surface & strict card order (mobile + desktop) === */
-
-/* إزالة أي خلفية/كرت أبيض خلف عنوان "Choose a category" */
-.categories-section,
-.categories-wrapper,
-.categories-container,
-.categories-shell,
-.categories-surface,
-.categories-panel {
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-
-/* نخلي شبكة الكروت تتمدد بحيث كل الكروت نفس الارتفاع */
-.categories-grid {
-  align-items: stretch;
-}
-
-/* ترتيب داخل كل كرت: Icon -> Title -> Explanation */
-.category-card {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-/* الأيقونة أول شيء */
-.category-card .category-icon,
-.category-card .category-icon-badge {
-  order: 0;
-  margin-bottom: 8px;
-}
-
-/* العنوان تحت الأيقونة مباشرة */
-.category-card .category-card-title,
-.category-card .category-title {
-  order: 1;
-  margin-bottom: 4px;
-  text-align: left;
-}
-
-/* الوصف في الأخير */
-.category-card .category-card-text,
-.category-card .category-subtitle {
-  order: 2;
-  text-align: left;
-  word-break: break-word;
-}
-
-/* نطبّق نفس الترتيب حتى لو الأسماء مختلفة شوي */
-.categories-section .category-card > :is(.category-icon, .category-icon-badge),
-.categories-section .category-card > :is(.category-card-title, .category-title),
-.categories-section .category-card > :is(.category-card-text, .category-subtitle) {
-  width: 100%;
-}
-
-
-
-/* === Dec 8 fixes: categories + creators mobile === */
-
-/* 1) Remove solid strip behind "Choose a category" on all devices */
-.category-section {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-/* لو فيه أي حاوية رأس للقسم استخدم نفس الشفافية */
-.category-section-header,
-.category-header,
-.category-header-inner,
-.category-header-bar {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-/* 2) Category cards: stack icon, title, description in this order */
-.category-grid {
-  align-items: stretch;
-}
-
-.category-card {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
-  justify-content: flex-start;
-  height: 100%;
-}
-
-/* أول عنصر هو الأيقونة، بعدها العنوان، بعدها الشرح */
-.category-card > * + * {
-  margin-top: 8px;
-}
-
-/* تأكيد ستايل العنوان والنص داخل الكرت */
-.category-card-title,
-.category-title {
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.35;
-  text-align: left;
-}
-
-.category-card-text,
-.category-subtitle {
-  font-size: 13px;
-  line-height: 1.45;
-  text-align: left;
-}
-
-/* ضمان أن كل الكروت نفس العرض داخل الشبكة */
-@supports (display: grid) {
-  .category-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+@media (min-width: 1024px) {
+  .page-root {
+    align-items: center;
   }
-  .category-card {
+
+  .page-main {
     width: 100%;
-  }
-}
-
-/* 3) Mobile-only tweaks */
-@media (max-width: 768px) {
-  /* كروت الفئات على الموبايل تكون أعرض شوي ومتماثلة */
-  .category-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 16px;
-    row-gap: 16px;
-  }
-
-  .category-card {
-    padding: 18px 14px;
-    min-height: 190px;
-  }
-
-  .category-card-title,
-  .category-title {
-    font-size: 14px;
-  }
-
-  .category-card-text,
-  .category-subtitle {
-    font-size: 12.5px;
-  }
-
-  /* 4) Make it all happen with creators: no white card on mobile */
-  .creators-section {
-    background: transparent !important;
-    box-shadow: none !important;
-    padding: 32px 20px 40px;
-  }
-
-  .creators-panel {
-    background: transparent !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    border-radius: 0 !important;
+    max-width: 960px;
   }
 }

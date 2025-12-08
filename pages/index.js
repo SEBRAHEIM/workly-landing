@@ -1,251 +1,279 @@
 import Head from "next/head";
 
-
-function CategoryIcon({ kind }) {
-  const stroke = "#9D7B55";
-  const strokeWidth = 1.7;
-  const size = 24;
-
-  switch (kind) {
-    case "reports":
-      return (
-        <svg
-          width={size}
-          height={size}
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+export default function Home() {
+  const categories = [
+    {
+      title: "Reports & Essays",
+      description: "Help with writing assignments and Word documents.",
+      icon: (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
           <rect
             x="5"
-            y="4"
+            y="3.5"
             width="14"
-            height="16"
-            rx="2.2"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
+            height="17"
+            rx="2"
+            ry="2"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
           />
           <line
             x1="8"
-            y1="10"
+            y1="8"
             x2="16"
-            y2="10"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
+            y2="8"
+            stroke="currentColor"
+            strokeWidth="1.6"
             strokeLinecap="round"
           />
           <line
             x1="8"
-            y1="13"
+            y1="11"
             x2="14"
-            y2="13"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
+            y2="11"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+          <line
+            x1="8"
+            y1="14"
+            x2="13"
+            y2="14"
+            stroke="currentColor"
+            strokeWidth="1.6"
             strokeLinecap="round"
           />
         </svg>
-      );
-    case "presentations":
-      return (
-        <svg
-          width={size}
-          height={size}
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+      ),
+    },
+    {
+      title: "Presentations & PPT",
+      description: "Slides, templates, and class presentations.",
+      icon: (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
           <rect
             x="4"
             y="5"
             width="16"
             height="11"
-            rx="1.8"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
+            rx="2"
+            ry="2"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
           />
-          <line
-            x1="8"
-            y1="9"
-            x2="12"
-            y2="9"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
-            strokeLinecap="round"
-          />
-          <line
-            x1="8"
-            y1="12"
-            x2="10.5"
-            y2="12"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
-            strokeLinecap="round"
-          />
-          <line
-            x1="10"
-            y1="18"
-            x2="14"
-            y2="18"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
-            strokeLinecap="round"
-          />
-        </svg>
-      );
-    case "group":
-      return (
-        <svg
-          width={size}
-          height={size}
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle
-            cx="9"
-            cy="10"
-            r="2.4"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
-          />
-          <circle
-            cx="15"
-            cy="11"
-            r="2"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
-          />
-          <path
-            d="M5.5 17.5C6.3 15.4 7.7 14.3 9 14.3C10.3 14.3 11.7 15.4 12.5 17.5"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
-            strokeLinecap="round"
-          />
-          <path
-            d="M13.2 16.9C13.7 15.8 14.5 15.1 15.4 15.1C16.3 15.1 17.1 15.7 17.6 16.9"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
-            strokeLinecap="round"
-          />
-        </svg>
-      );
-    case "excel":
-      return (
-        <svg
-          width={size}
-          height={size}
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
           <rect
-            x="5"
-            y="5"
-            width="14"
-            height="14"
-            rx="2.2"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
+            x="8"
+            y="8"
+            width="6"
+            height="3"
+            rx="0.8"
+            ry="0.8"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
           />
-          <path
-            d="M9 5.5V19"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
+          <line
+            x1="12"
+            y1="16"
+            x2="12"
+            y2="20"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
           />
-          <path
-            d="M15 5.5V19"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
-          />
-          <path
-            d="M5.5 11H19"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
-          />
-          <path
-            d="M5.5 15H19"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
+          <line
+            x1="9"
+            y1="20"
+            x2="15"
+            y2="20"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
           />
         </svg>
-      );
-    case "code":
-      return (
-        <svg
-          width={size}
-          height={size}
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+      ),
+    },
+    {
+      title: "Group Projects",
+      description: "Case studies and team assignments.",
+      icon: (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle
+            cx="8"
+            cy="9"
+            r="2.3"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
+          <circle
+            cx="15.5"
+            cy="9"
+            r="2.3"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
+          <path
+            d="M4.5 16c0-2.1 1.6-3.8 3.5-3.8s3.5 1.7 3.5 3.8"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+          <path
+            d="M11.8 16c0-2.1 1.6-3.8 3.7-3.8 2.1 0 3.7 1.7 3.7 3.8"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+        </svg>
+      ),
+    },
+    {
+      title: "Excel & Data",
+      description: "Sheets, tables, dashboards, simple calculations.",
+      icon: (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
           <rect
             x="4"
-            y="5"
+            y="4"
             width="16"
-            height="12"
-            rx="2.2"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
+            height="16"
+            rx="2"
+            ry="2"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
           />
-          <path
-            d="M10 10L8.2 11.8L10 13.6"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          <line
+            x1="9"
+            y1="4"
+            x2="9"
+            y2="20"
+            stroke="currentColor"
+            strokeWidth="1.6"
           />
-          <path
-            d="M14 10L15.8 11.8L14 13.6"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          <line
+            x1="15"
+            y1="4"
+            x2="15"
+            y2="20"
+            stroke="currentColor"
+            strokeWidth="1.6"
           />
-        </svg>
-      );
-    case "other":
-    default:
-      return (
-        <svg
-          width={size}
-          height={size}
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8 6.5L8.8 8.7L11 9.5L8.8 10.3L8 12.5L7.2 10.3L5 9.5L7.2 8.7L8 6.5Z"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          <line
+            x1="4"
+            y1="9"
+            x2="20"
+            y2="9"
+            stroke="currentColor"
+            strokeWidth="1.6"
           />
-          <path
-            d="M15.5 12.5L16.1 14.1L17.7 14.7L16.1 15.3L15.5 16.9L14.9 15.3L13.3 14.7L14.9 14.1L15.5 12.5Z"
-            stroke={stroke}
-            strokeWidth={strokeWidth}
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          <line
+            x1="4"
+            y1="15"
+            x2="20"
+            y2="15"
+            stroke="currentColor"
+            strokeWidth="1.6"
           />
         </svg>
-      );
-  }
-}
+      ),
+    },
+    {
+      title: "Programming & Tech",
+      description: "Basic coding tasks and small tech work.",
+      icon: (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect
+            x="3.5"
+            y="5"
+            width="17"
+            height="13"
+            rx="2"
+            ry="2"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
+          <polyline
+            points="9,9 7,12 9,15"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <polyline
+            points="15,9 17,12 15,15"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <line
+            x1="10.5"
+            y1="17.5"
+            x2="13.5"
+            y2="17.5"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+        </svg>
+      ),
+    },
+    {
+      title: "Other Tasks",
+      description: "Anything else required for your course.",
+      icon: (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle
+            cx="12"
+            cy="7.5"
+            r="2.3"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
+          <path
+            d="M7 15.5c0-2.1 2.2-3.8 5-3.8s5 1.7 5 3.8"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+          <path
+            d="M7 19h10"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+        </svg>
+      ),
+    },
+  ];
 
-export default function Home() {
   return (
     <>
       <Head>
-        <title>Workly – University projects, done for you</title>
+        <title>Workly – University projects, done for you.</title>
         <meta
           name="description"
-          content="Upload your rubrics, choose a creator, and get your full university project delivered."
+          content="Pick a creator, upload your requirements, and get your complete university project delivered with zero effort."
         />
       </Head>
 
       <div className="page-root">
         <header className="top-nav">
-          <button className="nav-menu-button" aria-label="Open menu">
+          <button className="nav-menu-toggle" aria-label="Open menu">
             <span />
             <span />
           </button>
@@ -254,171 +282,206 @@ export default function Home() {
         </header>
 
         <main className="page-main">
-          <section className="hero-card">
-            <h1 className="hero-title">University projects, done for you.</h1>
-            <p className="hero-text">
-              Upload your rubrics, choose a creator, and get the full project delivered.
-            </p>
-            <div className="hero-search">
-              <input
-                className="hero-search-input"
-                placeholder='Try "marketing group project"'
-              />
-              <button className="hero-search-button" aria-label="Search">
-                🔍
-              </button>
+          <section className="hero">
+            <div className="hero-inner">
+              <h1 className="hero-title">University projects, done for you.</h1>
+              <p className="hero-subtitle">
+                Pick a creator, upload your requirements, and get your complete
+                project delivered with zero effort.
+              </p>
+
+              <form
+                className="hero-search"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                }}
+              >
+                <input
+                  className="hero-search-input"
+                  type="text"
+                  placeholder='Try "marketing group project"'
+                />
+                <button className="hero-search-button" type="submit">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle
+                      cx="11"
+                      cy="11"
+                      r="5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                    />
+                    <line
+                      x1="15"
+                      y1="15"
+                      x2="20"
+                      y2="20"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </button>
+              </form>
             </div>
           </section>
 
-          
-<section className="category-section">
-  <div className="category-section-inner">
-    <header className="category-header">
-      <h2>Choose a category</h2>
-      <p>Select what you need help with.</p>
-    </header>
+          <section className="category-section" aria-labelledby="category-heading">
+            <div className="category-header">
+              <h2 id="category-heading" className="section-title">
+                Choose a category
+              </h2>
+              <p className="section-subtitle">Select what you need help with.</p>
+            </div>
 
-    <div className="category-grid">
-      <article className="category-card">
-        <div className="category-card-top">
-          <div className="category-icon-pill">
-            <CategoryIcon kind="reports" />
-          </div>
-          <div className="category-card-heading">
-            <h3>Reports &amp; Essays</h3>
-          </div>
-        </div>
-        <p className="category-card-desc">
-          Help with writing assignments and Word documents.
-        </p>
-      </article>
+            <div className="category-grid">
+              {categories.map((cat) => (
+                <button
+                  key={cat.title}
+                  type="button"
+                  className="category-card"
+                >
+                  <div className="category-icon">{cat.icon}</div>
+                  <h3 className="category-card-title">{cat.title}</h3>
+                  <p className="category-card-text">{cat.description}</p>
+                </button>
+              ))}
+            </div>
+          </section>
 
-      <article className="category-card">
-        <div className="category-card-top">
-          <div className="category-icon-pill">
-            <CategoryIcon kind="presentations" />
-          </div>
-          <div className="category-card-heading">
-            <h3>Presentations &amp; PPT</h3>
-          </div>
-        </div>
-        <p className="category-card-desc">
-          Slides, templates, and class presentations.
-        </p>
-      </article>
+          <section className="creators-section" aria-labelledby="creators-heading">
+            <div className="creators-inner">
+              <h2 id="creators-heading" className="section-title creators-title">
+                Make it all happen with creators
+              </h2>
 
-      <article className="category-card">
-        <div className="category-card-top">
-          <div className="category-icon-pill">
-            <CategoryIcon kind="group" />
-          </div>
-          <div className="category-card-heading">
-            <h3>Group Projects</h3>
-          </div>
-        </div>
-        <p className="category-card-desc">
-          Case studies and team assignments.
-        </p>
-      </article>
+              <div className="creators-list">
+                <div className="creator-row">
+                  <div className="creator-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <circle
+                        cx="12"
+                        cy="9"
+                        r="2.4"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                      />
+                      <path
+                        d="M7 17c0-2.3 2.1-4 5-4s5 1.7 5 4"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </div>
+                  <p className="creator-text">
+                    Access top-talented creators.
+                  </p>
+                </div>
 
-      <article className="category-card">
-        <div className="category-card-top">
-          <div className="category-icon-pill">
-            <CategoryIcon kind="excel" />
-          </div>
-          <div className="category-card-heading">
-            <h3>Excel &amp; Data</h3>
-          </div>
-        </div>
-        <p className="category-card-desc">
-          Sheets, tables, dashboards, simple calculations.
-        </p>
-      </article>
+                <div className="creator-row">
+                  <div className="creator-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="6"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                      />
+                      <path
+                        d="M12 9v3l2 1.5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <p className="creator-text">
+                    Match easily with the right expert for your task.
+                  </p>
+                </div>
 
-      <article className="category-card">
-        <div className="category-card-top">
-          <div className="category-icon-pill">
-            <CategoryIcon kind="code" />
-          </div>
-          <div className="category-card-heading">
-            <h3>Programming &amp; Tech</h3>
-          </div>
-        </div>
-        <p className="category-card-desc">
-          Basic coding tasks and small tech work.
-        </p>
-      </article>
+                <div className="creator-row">
+                  <div className="creator-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <rect
+                        x="5"
+                        y="5"
+                        width="14"
+                        height="14"
+                        rx="3"
+                        ry="3"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                      />
+                      <polyline
+                        points="8,12 11,14.5 16,9.5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <p className="creator-text">
+                    Get high-quality work delivered fast and within budget.
+                  </p>
+                </div>
 
-      <article className="category-card">
-        <div className="category-card-top">
-          <div className="category-icon-pill">
-            <CategoryIcon kind="other" />
-          </div>
-          <div className="category-card-heading">
-            <h3>Other Tasks</h3>
-          </div>
-        </div>
-        <p className="category-card-desc">
-          Anything else required for your course.
-        </p>
-      </article>
-    </div>
-  </div>
-</section>
+                <div className="creator-row">
+                  <div className="creator-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <rect
+                        x="6"
+                        y="7"
+                        width="12"
+                        height="10"
+                        rx="1.8"
+                        ry="1.8"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                      />
+                      <line
+                        x1="9"
+                        y1="11"
+                        x2="15"
+                        y2="11"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                      />
+                      <line
+                        x1="9"
+                        y1="14"
+                        x2="13"
+                        y2="14"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </div>
+                  <p className="creator-text">
+                    Release payment only after you approve the result.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
 
-
-<section className="home-section home-section-creators">
-            <section className="creators-section" id="creators">
-  <div className="creators-inner">
-    <h2 className="creators-heading">Make it all happen with creators</h2>
-
-    <div className="creators-list">
-      <div className="creator-row">
-        <div className="creator-icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="9" r="3.2"></circle>
-            <path d="M6.2 18.5c.7-2.4 2.6-4 5.8-4s5.1 1.6 5.8 4" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"></path>
-          </svg>
-        </div>
-        <p className="creator-text">Access top-talented creators.</p>
-      </div>
-
-      <div className="creator-row">
-        <div className="creator-icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="7.2" fill="none" strokeWidth="1.6"></circle>
-            <path d="M12 8v4l3 2" fill="none" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"></path>
-          </svg>
-        </div>
-        <p className="creator-text">Match easily with the right expert for your task.</p>
-      </div>
-
-      <div className="creator-row">
-        <div className="creator-icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="5.4" y="4.8" width="13.2" height="14.4" rx="2" ry="2" fill="none" strokeWidth="1.6"></rect>
-            <path d="M8.5 12.3l2 2.1 4-4.4" fill="none" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"></path>
-          </svg>
-        </div>
-        <p className="creator-text">Get high-quality work delivered fast and within budget.</p>
-      </div>
-
-      <div className="creator-row">
-        <div className="creator-icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="4.8" y="5.8" width="14.4" height="12.4" rx="1.8" ry="1.8" fill="none" strokeWidth="1.6"></rect>
-            <path d="M8 9.2h8" fill="none" strokeWidth="1.6" strokeLinecap="round"></path>
-            <path d="M8 12.5h5.2" fill="none" strokeWidth="1.6" strokeLinecap="round"></path>
-          </svg>
-        </div>
-        <p className="creator-text">Release payment only after you approve the result.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-        </section>
-</main>
+        <footer className="site-footer">
+          <span>workly.day</span>
+        </footer>
       </div>
     </>
   );
