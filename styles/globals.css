@@ -561,3 +561,15 @@ body {
   padding-inline: 0;
   padding-block: 0;
 }
+
+
+.footer-disclaimer {
+  margin-top: 4px;
+  font-size: 11px;
+  line-height: 1.4;
+  text-align: center;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  color: rgba(90, 84, 73, 0.7);
+}
