@@ -353,3 +353,25 @@ button {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+/* === Workly mobile fine-tune (keep original colors) === */
+
+/* عناوين الكاتيجري نفس لون العناوين الأساسي، بدون أزرق */
+.home-category-title {
+  color: #3b2a1c !important;
+}
+
+/* لو كان داخله رابط، يرث نفس اللون وما يكون أزرق */
+.home-category-title a {
+  color: inherit !important;
+  text-decoration: none;
+}
+
+/* وصف الكاتيجري بدرجة بني ناعمة */
+.home-category-desc {
+  color: #6b5b4b;
+}
+
+/* لون الأيقونة فقط، الخلفية تظل من تصميمك */
+.home-category-icon {
+  color: #c99663;
+}
