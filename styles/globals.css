@@ -488,3 +488,8 @@ button {
     font-size: 0.96rem;
   }
 }
+
+/* === Override: remove custom gradient background from creators section === */
+.creators-section {
+  background: transparent;
+}
