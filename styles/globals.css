@@ -622,3 +622,51 @@ body {
   fill: none;
 }
 
+
+/* === Global background: lighter sand gradient === */
+body {
+  background: linear-gradient(
+    180deg,
+    #faf6f1 0%,
+    #f4ebe0 45%,
+    #ecdfd0 100%
+  );
+  color: var(--sand-5);
+}
+
+
+/* === Creators icons – Option A: thin outline, no bubble === */
+.creators-section .creator-row {
+  align-items: center;
+  gap: 18px;
+}
+
+.creators-section .creator-icon {
+  width: auto;
+  height: auto;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sand-4);
+}
+
+.creators-section .creator-icon svg {
+  width: 28px;
+  height: 28px;
+  stroke-width: 1.4;
+}
+
+.creators-section .creator-icon svg * {
+  stroke: var(--sand-4);
+  fill: none;
+}
+
+.creators-section .creator-text {
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+
