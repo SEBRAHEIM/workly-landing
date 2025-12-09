@@ -475,7 +475,13 @@ export default function Home() {
                   </p>
                 </div>
               </div>
-            </div>
+            
+              <div className="creators-cta">
+                <button type="button" className="creators-join-btn">
+                  Join now
+                </button>
+              </div>
+</div>
           </section>
         </main>
 

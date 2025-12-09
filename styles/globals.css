@@ -716,3 +716,38 @@ body {
   line-height: 1.6;
 }
 
+
+/* Creators CTA button under benefits list */
+.creators-cta {
+  margin-top: 28px;
+}
+
+.creators-join-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 24px;
+  border-radius: 999px;
+  border: none;
+  background: var(--sand-5);
+  color: #ffffff;
+  font-size: 0.96rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+}
+
+.creators-join-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+/* شوي تكبير على الشاشات الأكبر */
+@media (min-width: 768px) {
+  .creators-join-btn {
+    padding: 11px 28px;
+    font-size: 1rem;
+  }
+}
+
