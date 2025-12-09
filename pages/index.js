@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function Home() {
@@ -7,7 +8,8 @@ export default function Home() {
   const categories = [
     {
       title: "Reports & Essays",
-      description: "Help with writing assignments and Word documents.",
+      href: "/categories/reports-essays",
+    description: "Help with writing assignments and Word documents.",
       icon: (
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <rect
@@ -53,7 +55,8 @@ export default function Home() {
     },
     {
       title: "Presentations & PPT",
-      description: "Slides, templates, and class presentations.",
+      href: "/categories/presentations-ppt",
+    description: "Slides, templates, and class presentations.",
       icon: (
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <rect
@@ -101,7 +104,8 @@ export default function Home() {
     },
     {
       title: "Group Projects",
-      description: "Case studies and team assignments.",
+      href: "/categories/group-projects",
+    description: "Case studies and team assignments.",
       icon: (
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <circle
@@ -139,7 +143,8 @@ export default function Home() {
     },
     {
       title: "Excel & Data",
-      description: "Sheets, tables, dashboards, simple calculations.",
+      href: "/categories/excel-data",
+    description: "Sheets, tables, dashboards, simple calculations.",
       icon: (
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <rect
@@ -190,7 +195,8 @@ export default function Home() {
     },
     {
       title: "Programming & Tech",
-      description: "Basic coding tasks and small tech work.",
+      href: "/categories/programming-tech",
+    description: "Basic coding tasks and small tech work.",
       icon: (
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <rect
@@ -339,15 +345,15 @@ export default function Home() {
 
             <div className="category-grid">
               {categories.map((cat) => (
-                <button
+                <Link
                   key={cat.title}
-                  type="button"
+                  href={cat.href || "#"}
                   className="category-card"
                 >
                   <div className="category-icon">{cat.icon}</div>
                   <h3 className="category-card-title">{cat.title}</h3>
                   <p className="category-card-text">{cat.description}</p>
-                </button>
+                </Link>
               ))}
             </div>
           </section>
