@@ -1,6 +1,9 @@
 import Head from "next/head";
+import { useState } from "react";
 
 export default function Home() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const categories = [
     {
       title: "Reports & Essays",
@@ -490,6 +493,50 @@ export default function Home() {
       <p className="footer-disclaimer">
         Workly is not affiliated with any university. Users are responsible for following their institution&apos;s academic rules.
       </p>
+        
+        <div
+          className={isMobileMenuOpen ? "mobile-menu-overlay is-open" : "mobile-menu-overlay"}
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          <div className="mobile-menu" onClick={(e) => e.stopPropagation()}>
+            <div className="mobile-menu-header">
+              <span className="mobile-menu-logo">WORKLY</span>
+              <button
+                type="button"
+                className="mobile-menu-close"
+                aria-label="Close menu"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <nav className="mobile-menu-section">
+              <h3 className="mobile-menu-section-title">Account</h3>
+              <ul className="mobile-menu-list">
+                <li><a href="#" className="mobile-menu-link">Join Workly</a></li>
+                <li><a href="#" className="mobile-menu-link">Sign in</a></li>
+              </ul>
+            </nav>
+
+            <nav className="mobile-menu-section">
+              <h3 className="mobile-menu-section-title">For students</h3>
+              <ul className="mobile-menu-list">
+                <li><a href="#category-heading" className="mobile-menu-link">Browse categories</a></li>
+                <li><a href="#creators-heading" className="mobile-menu-link">How Workly works</a></li>
+              </ul>
+            </nav>
+
+            <nav className="mobile-menu-section">
+              <h3 className="mobile-menu-section-title">General</h3>
+              <ul className="mobile-menu-list">
+                <li><a href="#" className="mobile-menu-link">About Workly</a></li>
+                <li><a href="#" className="mobile-menu-link">Support</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+
         </footer>
       </div>
     </>
