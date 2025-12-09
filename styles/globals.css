@@ -635,10 +635,11 @@ body {
 }
 
 
+
 /* === Creators icons – Option A: thin outline, no bubble === */
 .creators-section .creator-row {
   align-items: center;
-  gap: 18px;
+  gap: 20px;
 }
 
 .creators-section .creator-icon {
@@ -655,9 +656,9 @@ body {
 }
 
 .creators-section .creator-icon svg {
-  width: 28px;
-  height: 28px;
-  stroke-width: 1.4;
+  width: 36px;
+  height: 36px;
+  stroke-width: 1.5;
 }
 
 .creators-section .creator-icon svg * {
@@ -669,4 +670,6 @@ body {
   font-size: 1.02rem;
   line-height: 1.5;
 }
+
+
 
