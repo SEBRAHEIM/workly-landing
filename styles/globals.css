@@ -839,7 +839,7 @@ body {
   .mobile-menu-overlay {
     display: none !important;
   }
-}\n\n/* Mobile menu polish: cleaner layout, section dividers, softer typography */
+}\n\n\n\n/* Mobile menu polish: cleaner layout, section dividers, softer typography */
 
 .mobile-menu-overlay {
   position: fixed;
