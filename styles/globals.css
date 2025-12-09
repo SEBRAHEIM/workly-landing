@@ -1035,3 +1035,20 @@ body {
   text-decoration: none;
   color: var(--sand-4);
 }
+
+
+/* Category cards as clean links */
+.category-card {
+  text-decoration: none;
+  color: inherit;
+}
+
+.category-card:visited {
+  color: inherit;
+}
+
+.category-card-title,
+.category-card-text {
+  text-decoration: none;
+}
+
