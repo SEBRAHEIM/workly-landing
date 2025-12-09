@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
+import Navbar from "../components/Navbar";
 
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -282,14 +282,8 @@ description: "Anything else required for your course.",
       </Head>
 
       <div className="page-root">
-        <header className="top-nav">
-          <button className="nav-menu-toggle" aria-label="Open menu" onClick={() => setIsMobileMenuOpen(true)}>
-            <span />
-            <span />
-          </button>
-          <div className="nav-logo">WORKLY</div>
-          <button className="nav-cta">Join</button>
-        </header>
+              <Navbar />
+
 
         <main className="page-main">
           <section className="hero">
