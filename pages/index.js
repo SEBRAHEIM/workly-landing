@@ -276,7 +276,7 @@ export default function Home() {
 
       <div className="page-root">
         <header className="top-nav">
-          <button className="nav-menu-toggle" aria-label="Open menu">
+          <button className="nav-menu-toggle" aria-label="Open menu" onClick={() => setIsMobileMenuOpen(true)}>
             <span />
             <span />
           </button>
