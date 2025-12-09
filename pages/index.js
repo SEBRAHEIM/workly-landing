@@ -240,7 +240,8 @@ export default function Home() {
     },
     {
       title: "Other Tasks",
-      description: "Anything else required for your course.",
+            href: "/categories/other-uni-tasks",
+description: "Anything else required for your course.",
       icon: (
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <circle
