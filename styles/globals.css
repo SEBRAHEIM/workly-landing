@@ -673,7 +673,7 @@ body {
 
 
 /* === Creators final alignment override === */
-/* Creators section: left-aligned icon + text, bigger circular icons */
+/* Creators section: clean left-aligned rows, bigger SVG icons, no white frame */
 .creators-section {
   text-align: left;
 }
@@ -681,38 +681,38 @@ body {
 .creators-section .creators-list {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 24px;
 }
 
 .creators-section .creator-row {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;  /* أيقونة + نص على نفس الخط */
   gap: 18px;
 }
 
 .creators-section .creator-icon {
-  width: 54px;
-  height: 54px;
+  width: 32px;
+  height: 32px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 12px 30px rgba(90, 84, 73, 0.18);
+  background: transparent;          /* لا دائرة ولا فريم أبيض */
+  box-shadow: none;                 /* بدون ظل */
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  margin-top: 4px;  /* يخلي الأيكون قريب من أول سطر في النص */
+  margin-top: 0;
 }
 
 .creators-section .creator-icon svg {
-  width: 26px;
-  height: 26px;
-  stroke-width: 1.7;
+  width: 28px;      /* تكبير الأيقونة نفسها */
+  height: 28px;
+  stroke-width: 1.8;
 }
 
 .creators-section .creator-text {
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.02rem;
   line-height: 1.6;
 }
 
