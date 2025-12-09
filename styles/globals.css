@@ -672,4 +672,47 @@ body {
 }
 
 
+/* === Creators final alignment override === */
+/* Creators section: left-aligned icon + text, bigger circular icons */
+.creators-section {
+  text-align: left;
+}
+
+.creators-section .creators-list {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.creators-section .creator-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.creators-section .creator-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 30px rgba(90, 84, 73, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 4px;  /* يخلي الأيكون قريب من أول سطر في النص */
+}
+
+.creators-section .creator-icon svg {
+  width: 26px;
+  height: 26px;
+  stroke-width: 1.7;
+}
+
+.creators-section .creator-text {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
 
