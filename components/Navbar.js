@@ -1,11 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 
-export default function Navbar({ loggedIn = false, userName }) {
-  const [menuOpen, setMenuOpen] = useState(false);
+function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const openMenu = () => setMenuOpen(true);
-  const closeMenu = () => setMenuOpen(false);
+  const openMenu = () => setIsMenuOpen(true);
+  const closeMenu = () => setIsMenuOpen(false);
 
   return (
     <>
@@ -13,8 +13,8 @@ export default function Navbar({ loggedIn = false, userName }) {
         <button
           type="button"
           className="menu-button"
-          onClick={openMenu}
           aria-label="Open menu"
+          onClick={openMenu}
         >
           <span className="menu-button-lines">
             <span className="menu-button-line" />
@@ -23,21 +23,21 @@ export default function Navbar({ loggedIn = false, userName }) {
           </span>
         </button>
 
-        <div className="top-nav-logo">WORKLY</div>
+        <div className="brand-center">WORKLY</div>
 
-        {!loggedIn ? (
-          <Link href="/join" className="top-nav-cta">
-            Join
-          </Link>
-        ) : (
-          <div className="top-nav-placeholder" />
-        )}
+        <Link href="/join" className="join-button">
+          Join
+        </Link>
       </header>
 
-      {menuOpen && (
-        {isMenuOpen && (
-<div className="mobile-menu-overlay" onClick={closeMenu}>
-          <nav
+      {isMenuOpen && (
+        <div
+          className="mobile-menu-overlay"
+          role="dialog"
+          aria-modal="true"
+          onClick={closeMenu}
+        >
+          <div
             className="mobile-menu-panel"
             onClick={(e) => e.stopPropagation()}
           >
@@ -46,147 +46,87 @@ export default function Navbar({ loggedIn = false, userName }) {
               <button
                 type="button"
                 className="mobile-menu-close"
-                onClick={closeMenu}
                 aria-label="Close menu"
+                onClick={closeMenu}
               >
                 ×
               </button>
             </div>
 
-            {!loggedIn ? (
-              <>
-                <div className="mobile-menu-section">
-                  <div className="mobile-menu-section-label">Account</div>
-                  <ul className="mobile-menu-list">
-                    <li className="mobile-menu-item">
-                      <Link
-                        href="/join"
-                        className="mobile-menu-link"
-                        onClick={closeMenu}
-                      >
-                        Join Workly
-                      </Link>
-                    </li>
-                    <li className="mobile-menu-item">
-                      <Link
-                        href="/signin"
-                        className="mobile-menu-link secondary"
-                        onClick={closeMenu}
-                      >
-                        Sign in
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
+            <nav className="mobile-menu-nav">
+              <section className="mobile-menu-section">
+                <div className="mobile-menu-section-label">Account</div>
+                <ul className="mobile-menu-list">
+                  <li className="mobile-menu-item">
+                    <Link href="/join" className="mobile-menu-link">
+                      Join Workly
+                    </Link>
+                  </li>
+                  <li className="mobile-menu-item">
+                    <Link
+                      href="/signin"
+                      className="mobile-menu-link secondary"
+                    >
+                      Sign in
+                    </Link>
+                  </li>
+                </ul>
+              </section>
 
-                <div className="mobile-menu-section">
-                  <div className="mobile-menu-section-label">For students</div>
-                  <ul className="mobile-menu-list">
-                    <li className="mobile-menu-item">
-                      <a
-                        href="#categories"
-                        className="mobile-menu-link secondary"
-                        onClick={closeMenu}
-                      >
-                        Browse categories
-                      </a>
-                    </li>
-                    <li className="mobile-menu-item">
-                      <a
-                        href="#how-workly-works"
-                        className="mobile-menu-link secondary"
-                        onClick={closeMenu}
-                      >
-                        How Workly works
-                      </a>
-                    </li>
-                  </ul>
-                </div>
+              <hr className="mobile-menu-divider" />
 
-                <div className="mobile-menu-section">
-                  <div className="mobile-menu-section-label">General</div>
-                  <ul className="mobile-menu-list">
-                    <li className="mobile-menu-item">
-                      <Link
-                        href="/about"
-                        className="mobile-menu-link secondary"
-                        onClick={closeMenu}
-                      >
-                        About Workly
-                      </Link>
-                    </li>
-                    <li className="mobile-menu-item">
-                      <Link
-                        href="/support"
-                        className="mobile-menu-link secondary"
-                        onClick={closeMenu}
-                      >
-                        Support
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="mobile-menu-section">
-                  <div className="mobile-menu-section-label">Account</div>
-                  <ul className="mobile-menu-list">
-                    <li className="mobile-menu-item">
-                      <div className="mobile-menu-link secondary">
-                        {userName || "Student"}
-                      </div>
-                    </li>
-                    <li className="mobile-menu-item">
-                      <Link
-                        href="/dashboard"
-                        className="mobile-menu-link"
-                        onClick={closeMenu}
-                      >
-                        Dashboard
-                      </Link>
-                    </li>
-                    <li className="mobile-menu-item">
-                      <Link
-                        href="/orders"
-                        className="mobile-menu-link secondary"
-                        onClick={closeMenu}
-                      >
-                        Orders
-                      </Link>
-                    </li>
-                    <li className="mobile-menu-item">
-                      <Link
-                        href="/logout"
-                        className="mobile-menu-link secondary"
-                        onClick={closeMenu}
-                      >
-                        Log out
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
+              <section className="mobile-menu-section">
+                <div className="mobile-menu-section-label">For students</div>
+                <ul className="mobile-menu-list">
+                  <li className="mobile-menu-item">
+                    <Link
+                      href="/#categories"
+                      className="mobile-menu-link"
+                      onClick={closeMenu}
+                    >
+                      Browse categories
+                    </Link>
+                  </li>
+                  <li className="mobile-menu-item">
+                    <Link
+                      href="/how-workly-works"
+                      className="mobile-menu-link secondary"
+                    >
+                      How Workly works
+                    </Link>
+                  </li>
+                </ul>
+              </section>
 
-                <div className="mobile-menu-section">
-                  <div className="mobile-menu-section-label">Explore</div>
-                  <ul className="mobile-menu-list">
-                    <li className="mobile-menu-item">
-                      <a
-                        href="#categories"
-                        className="mobile-menu-link secondary"
-                        onClick={closeMenu}
-                      >
-                        Browse categories
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </>
-            )}
-          </nav>
+              <hr className="mobile-menu-divider" />
+
+              <section className="mobile-menu-section">
+                <div className="mobile-menu-section-label">General</div>
+                <ul className="mobile-menu-list">
+                  <li className="mobile-menu-item">
+                    <Link
+                      href="/about"
+                      className="mobile-menu-link secondary"
+                    >
+                      About Workly
+                    </Link>
+                  </li>
+                  <li className="mobile-menu-item">
+                    <Link
+                      href="/support"
+                      className="mobile-menu-link secondary"
+                    >
+                      Support
+                    </Link>
+                  </li>
+                </ul>
+              </section>
+            </nav>
+          </div>
         </div>
-    )}
       )}
     </>
   );
 }
+
+export default Navbar;
