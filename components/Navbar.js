@@ -9,7 +9,6 @@ export default function Navbar({ loggedIn = false, userName }) {
 
   return (
     <>
-      {/* Top navbar (same for home & category pages) */}
       <header className="top-nav">
         <button
           type="button"
@@ -35,7 +34,6 @@ export default function Navbar({ loggedIn = false, userName }) {
         )}
       </header>
 
-      {/* Mobile slide-out menu – يظهر فقط إذا menuOpen = true */}
       {menuOpen && (
         <div className="mobile-menu-overlay" onClick={closeMenu}>
           <nav
