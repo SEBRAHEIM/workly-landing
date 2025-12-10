@@ -4,6 +4,7 @@ import Link from "next/link";
 
 export default function OtherUniTasksPage() {
   return (
+    <div className="category-page">
     <>
       <Head>
         <title>Other uni tasks – Workly</title>
@@ -42,6 +43,7 @@ export default function OtherUniTasksPage() {
           </Link>
         </section>
       </main>
+    </div>
     </>
   );
 }

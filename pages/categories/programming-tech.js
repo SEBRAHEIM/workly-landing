@@ -4,6 +4,7 @@ import Link from "next/link";
 
 export default function ProgrammingTechPage() {
   return (
+    <div className="category-page">
     <>
       <Head>
         <title>Programming & Tech – Workly</title>
@@ -42,6 +43,7 @@ export default function ProgrammingTechPage() {
           </Link>
         </section>
       </main>
+    </div>
     </>
   );
 }

@@ -4,6 +4,7 @@ import Link from "next/link";
 
 export default function ExcelDataPage() {
   return (
+    <div className="category-page">
     <>
       <Head>
         <title>Excel & Data – Workly</title>
@@ -42,6 +43,7 @@ export default function ExcelDataPage() {
           </Link>
         </section>
       </main>
+    </div>
     </>
   );
 }

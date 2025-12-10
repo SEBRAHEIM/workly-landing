@@ -4,6 +4,7 @@ import Link from "next/link";
 
 export default function ReportsEssaysPage() {
   return (
+    <div className="category-page">
     <>
       <Head>
         <title>Reports & Essays – Workly</title>
@@ -42,6 +43,7 @@ export default function ReportsEssaysPage() {
           </Link>
         </section>
       </main>
+    </div>
     </>
   );
 }

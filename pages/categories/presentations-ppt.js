@@ -4,6 +4,7 @@ import Link from "next/link";
 
 export default function PresentationsPptPage() {
   return (
+    <div className="category-page">
     <>
       <Head>
         <title>Presentations & PPT – Workly</title>
@@ -42,6 +43,7 @@ export default function PresentationsPptPage() {
           </Link>
         </section>
       </main>
+    </div>
     </>
   );
 }

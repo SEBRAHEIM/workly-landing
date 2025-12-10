@@ -1340,3 +1340,10 @@ body {
   margin-top: 8px;
 }
 
+/* === Category page navbar spacing === */
+/* === Category page navbar spacing === */
+.category-page .top-nav {
+  margin-top: 0;
+  padding-top: 12px;
+}
+
