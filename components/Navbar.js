@@ -1,104 +1,192 @@
-import Link from "next/link";
 import { useState } from "react";
+import Link from "next/link";
 
-export default function Navbar({ user }) {
-  const [open, setOpen] = useState(false);
-  const isLoggedIn = Boolean(user);
+export default function Navbar({ loggedIn = false, userName }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const openMenu = () => setMenuOpen(true);
+  const closeMenu = () => setMenuOpen(false);
 
   return (
     <>
-      <header className="workly-nav">
+      {/* Top navbar (same for home & category pages) */}
+      <header className="top-nav">
         <button
           type="button"
-          className="workly-nav-hamburger"
+          className="menu-button"
+          onClick={openMenu}
           aria-label="Open menu"
-          onClick={() => setOpen(true)}
         >
-          <span className="workly-nav-hamburger-line" />
-          <span className="workly-nav-hamburger-line" />
-          <span className="workly-nav-hamburger-line" />
+          <span className="menu-button-lines">
+            <span className="menu-button-line" />
+            <span className="menu-button-line" />
+            <span className="menu-button-line" />
+          </span>
         </button>
 
-        <div className="workly-nav-logo">WORKLY</div>
+        <div className="top-nav-logo">WORKLY</div>
 
-        {!isLoggedIn && (
-          <Link href="/join" className="workly-nav-join">
+        {!loggedIn ? (
+          <Link href="/join" className="top-nav-cta">
             Join
           </Link>
+        ) : (
+          <div className="top-nav-placeholder" />
         )}
       </header>
 
-      <div
-        className="workly-menu-overlay"
-        data-open={open ? "true" : "false"}
-        onClick={() => setOpen(false)}
-      >
-        <div
-          className="workly-menu-panel"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="workly-menu-header">
-            <div className="workly-menu-title">
-              {isLoggedIn ? user : "WORKLY"}
+      {/* Mobile slide-out menu – يظهر فقط إذا menuOpen = true */}
+      {menuOpen && (
+        <div className="mobile-menu-overlay" onClick={closeMenu}>
+          <nav
+            className="mobile-menu-panel"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mobile-menu-header">
+              <div className="mobile-menu-title">WORKLY</div>
+              <button
+                type="button"
+                className="mobile-menu-close"
+                onClick={closeMenu}
+                aria-label="Close menu"
+              >
+                ×
+              </button>
             </div>
-            <button
-              type="button"
-              className="workly-menu-close"
-              aria-label="Close menu"
-              onClick={() => setOpen(false)}
-            >
-              ×
-            </button>
-          </div>
 
-          {!isLoggedIn && (
-            <div className="workly-menu-section">
-              <div className="workly-menu-section-label">Account</div>
-              <Link href="/join" className="workly-menu-link">
-                Join Workly
-              </Link>
-              <Link href="/signin" className="workly-menu-link">
-                Sign in
-              </Link>
-            </div>
-          )}
+            {!loggedIn ? (
+              <>
+                <div className="mobile-menu-section">
+                  <div className="mobile-menu-section-label">Account</div>
+                  <ul className="mobile-menu-list">
+                    <li className="mobile-menu-item">
+                      <Link
+                        href="/join"
+                        className="mobile-menu-link"
+                        onClick={closeMenu}
+                      >
+                        Join Workly
+                      </Link>
+                    </li>
+                    <li className="mobile-menu-item">
+                      <Link
+                        href="/signin"
+                        className="mobile-menu-link secondary"
+                        onClick={closeMenu}
+                      >
+                        Sign in
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
 
-          {isLoggedIn && (
-            <div className="workly-menu-section">
-              <div className="workly-menu-section-label">Account</div>
-              <Link href="/" className="workly-menu-link">
-                Home
-              </Link>
-              <Link href="/orders" className="workly-menu-link">
-                My projects
-              </Link>
-              <Link href="/profile" className="workly-menu-link">
-                My profile
-              </Link>
-            </div>
-          )}
+                <div className="mobile-menu-section">
+                  <div className="mobile-menu-section-label">For students</div>
+                  <ul className="mobile-menu-list">
+                    <li className="mobile-menu-item">
+                      <a
+                        href="#categories"
+                        className="mobile-menu-link secondary"
+                        onClick={closeMenu}
+                      >
+                        Browse categories
+                      </a>
+                    </li>
+                    <li className="mobile-menu-item">
+                      <a
+                        href="#how-workly-works"
+                        className="mobile-menu-link secondary"
+                        onClick={closeMenu}
+                      >
+                        How Workly works
+                      </a>
+                    </li>
+                  </ul>
+                </div>
 
-          <div className="workly-menu-section">
-            <div className="workly-menu-section-label">For students</div>
-            <Link href="/#categories" className="workly-menu-link">
-              Browse categories
-            </Link>
-            <Link href="/#how-workly-works" className="workly-menu-link">
-              How Workly works
-            </Link>
-          </div>
+                <div className="mobile-menu-section">
+                  <div className="mobile-menu-section-label">General</div>
+                  <ul className="mobile-menu-list">
+                    <li className="mobile-menu-item">
+                      <Link
+                        href="/about"
+                        className="mobile-menu-link secondary"
+                        onClick={closeMenu}
+                      >
+                        About Workly
+                      </Link>
+                    </li>
+                    <li className="mobile-menu-item">
+                      <Link
+                        href="/support"
+                        className="mobile-menu-link secondary"
+                        onClick={closeMenu}
+                      >
+                        Support
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="mobile-menu-section">
+                  <div className="mobile-menu-section-label">Account</div>
+                  <ul className="mobile-menu-list">
+                    <li className="mobile-menu-item">
+                      <div className="mobile-menu-link secondary">
+                        {userName || "Student"}
+                      </div>
+                    </li>
+                    <li className="mobile-menu-item">
+                      <Link
+                        href="/dashboard"
+                        className="mobile-menu-link"
+                        onClick={closeMenu}
+                      >
+                        Dashboard
+                      </Link>
+                    </li>
+                    <li className="mobile-menu-item">
+                      <Link
+                        href="/orders"
+                        className="mobile-menu-link secondary"
+                        onClick={closeMenu}
+                      >
+                        Orders
+                      </Link>
+                    </li>
+                    <li className="mobile-menu-item">
+                      <Link
+                        href="/logout"
+                        className="mobile-menu-link secondary"
+                        onClick={closeMenu}
+                      >
+                        Log out
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
 
-          <div className="workly-menu-section">
-            <div className="workly-menu-section-label">General</div>
-            <Link href="/about" className="workly-menu-link">
-              About Workly
-            </Link>
-            <Link href="/support" className="workly-menu-link">
-              Support
-            </Link>
-          </div>
+                <div className="mobile-menu-section">
+                  <div className="mobile-menu-section-label">Explore</div>
+                  <ul className="mobile-menu-list">
+                    <li className="mobile-menu-item">
+                      <a
+                        href="#categories"
+                        className="mobile-menu-link secondary"
+                        onClick={closeMenu}
+                      >
+                        Browse categories
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </>
+            )}
+          </nav>
         </div>
-      </div>
+      )}
     </>
   );
 }
