@@ -1334,3 +1334,9 @@ body {
   transform: translateY(1px);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
 }
+
+/* Category pages navbar offset */
+.category-page .top-nav {
+  margin-top: 8px;
+}
+
