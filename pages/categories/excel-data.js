@@ -14,6 +14,7 @@ export default function ExcelDataPage() {
       </Head>
 
       <main className="category-detail">
+      <Navbar />
         <section className="category-detail-hero">
           <h1>Excel &amp; Data</h1>
           <p>

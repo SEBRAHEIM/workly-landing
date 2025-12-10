@@ -14,6 +14,7 @@ export default function GroupProjectsPage() {
       </Head>
 
       <main className="category-detail">
+      <Navbar />
         <section className="category-detail-hero">
           <h1>Group Projects</h1>
           <p>

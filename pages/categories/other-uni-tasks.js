@@ -14,6 +14,7 @@ export default function OtherUniTasksPage() {
       </Head>
 
       <main className="category-detail">
+      <Navbar />
         <section className="category-detail-hero">
           <h1>Other uni tasks</h1>
           <p>

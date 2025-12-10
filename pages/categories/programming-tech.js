@@ -14,6 +14,7 @@ export default function ProgrammingTechPage() {
       </Head>
 
       <main className="category-detail">
+      <Navbar />
         <section className="category-detail-hero">
           <h1>Programming &amp; Tech</h1>
           <p>

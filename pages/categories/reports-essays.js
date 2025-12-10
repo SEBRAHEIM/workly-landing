@@ -14,6 +14,7 @@ export default function ReportsEssaysPage() {
       </Head>
 
       <main className="category-detail">
+      <Navbar />
         <section className="category-detail-hero">
           <h1>Reports &amp; Essays</h1>
           <p>

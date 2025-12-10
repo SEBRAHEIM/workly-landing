@@ -14,6 +14,7 @@ export default function PresentationsPptPage() {
       </Head>
 
       <main className="category-detail">
+      <Navbar />
         <section className="category-detail-hero">
           <h1>Presentations &amp; PPT</h1>
           <p>
