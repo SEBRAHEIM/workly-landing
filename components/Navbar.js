@@ -35,7 +35,8 @@ export default function Navbar({ loggedIn = false, userName }) {
       </header>
 
       {menuOpen && (
-        <div className="mobile-menu-overlay" onClick={closeMenu}>
+        {isMenuOpen && (
+<div className="mobile-menu-overlay" onClick={closeMenu}>
           <nav
             className="mobile-menu-panel"
             onClick={(e) => e.stopPropagation()}
@@ -184,6 +185,7 @@ export default function Navbar({ loggedIn = false, userName }) {
             )}
           </nav>
         </div>
+    )}
       )}
     </>
   );
