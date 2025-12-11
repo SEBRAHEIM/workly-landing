@@ -1441,3 +1441,15 @@ body {
     font-size: 1.25rem;
   }
 }
+
+/* Category hero size tweak */
+.category-page .category-hero {
+  padding: 18px 16px 10px;
+}
+
+.category-page .category-hero-card {
+  max-width: 640px;
+  margin: 0 auto 20px;
+  padding: 18px 18px 20px;
+}
+
