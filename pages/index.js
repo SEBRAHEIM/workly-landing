@@ -299,8 +299,7 @@ description: "Anything else required for your course.",
         done for you.
       </h1>
       <p className="home-hero-sub-v3">
-        Share your assignment brief once, match with a creator, and get
-        clean, ready-to-submit work without the all-nighters.
+        Tell us what you need and get matched instantly.
       </p>
       <button className="home-hero-cta-v3">Begin now</button>
     </div>
