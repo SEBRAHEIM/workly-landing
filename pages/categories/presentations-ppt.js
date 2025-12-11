@@ -2,41 +2,46 @@ import Head from "next/head";
 import Link from "next/link";
 import Navbar from "../../components/Navbar";
 
-export default function PresentationsPptPage() {
+export default function PresentationsPPTPage() {
   return (
-    <div className="category-page">
+    <>
       <Head>
         <title>Presentations & PPT | Workly</title>
         <meta
           name="description"
-          content="Support with class presentations, slides, and visual storytelling."
+          content="Help with class presentations, pitch decks, and visual communication."
         />
       </Head>
 
-      <Navbar />
+      <div className="category-page">
+        <Navbar />
 
-      <main className="category-main">
-        <section className="category-hero">
-          <div className="category-hero-card">
-            <p className="category-pill">Category</p>
-            <h1 className="category-hero-title">Presentations &amp; PPT</h1>
-            <p className="category-hero-subtitle">
-              Help turning your ideas and notes into clear, beautiful slides.
+        <main className="category-detail-main" aria-labelledby="category-title">
+          <section className="category-detail-hero">
+            <div className="category-detail-pill">
+              <span className="category-detail-label">Category</span>
+              <h1 id="category-title" className="category-detail-title">
+                Presentations & PPT
+              </h1>
+            </div>
+          </section>
+
+          <section className="category-detail-body">
+            <h2 className="category-detail-subtitle">
+              Connect with your favorite creator
+            </h2>
+            <p className="category-detail-note">
+              Later, this section will help you connect with your favorite
+              creator for this type of task – especially for slides, pitch
+              decks, and clear visual explanations of your ideas.
             </p>
-          </div>
-        </section>
 
-        <section className="category-creators-section">
-          <h2 className="category-creators-heading">Most popular creators</h2>
-          <p className="category-creators-caption">
-            Here you&apos;ll later see creators who specialize in presentations,
-            pitch decks, and visual communication.
-          </p>
-        </section>
-
-        
-
-      </main>
-    </div>
+            <Link href="/" className="category-detail-back">
+              ← Back to Workly home
+            </Link>
+          </section>
+        </main>
+      </div>
+    </>
   );
 }
