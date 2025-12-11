@@ -298,9 +298,7 @@ description: "Anything else required for your course.",
         <br />
         done for you.
       </h1>
-      <p className="home-hero-sub-v3">
-        Tell us what you need and get matched instantly.
-      </p>
+      
       <button className="home-hero-cta-v3">Begin now</button>
     </div>
   </section>
