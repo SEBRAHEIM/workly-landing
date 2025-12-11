@@ -1371,16 +1371,18 @@ body {
 }
 
 .category-hero-card {
-  border-radius: 22px;
-  padding: 18px 18px 20px;
-  background: linear-gradient(
-    135deg,
-    #f5eee4 0%,
-    #e6d6c5 40%,
-    #d3c2af 100%
-  );
-  box-shadow: 0 16px 38px rgba(90, 84, 73, 0.16);
-  color: #3a3025;
+  max-width: 640px;
+  margin: 0 auto 20px;
+  padding: 20px 18px 22px;
+  border-radius: 26px;
+  background: radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.92), rgba(234, 222, 205, 0.98)),
+              linear-gradient(135deg, #f3e6d4 0%, #e0ceb5 45%, #d3c0a4 100%);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.10),
+    0 0 0 1px rgba(255, 255, 255, 0.70) inset;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .category-pill {
