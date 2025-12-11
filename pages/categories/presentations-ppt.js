@@ -2,35 +2,31 @@ import Head from "next/head";
 import Link from "next/link";
 import Navbar from "../../components/Navbar";
 
-export default function PresentationsPPTPage() {
+export default function PresentationsPptPage() {
   return (
     <>
       <Head>
         <title>Presentations & PPT | Workly</title>
-        <meta
-          name="description"
-          content="Help with class presentations, pitch decks, and visual communication."
-        />
       </Head>
 
       <div className="category-page">
         <Navbar />
 
-        <main className="category-detail-main" aria-labelledby="category-title">
-          <section className="category-detail-hero">
-            <div className="category-detail-pill">
-              <span className="category-detail-label">Category</span>
-              <h1 id="category-title" className="category-detail-title">
-                Presentations & PPT
-              </h1>
+        <main className="category-main">
+          <section className="category-hero">
+            <div className="category-card">
+              <div className="category-pill">Category</div>
+              <h1>Presentations &amp; PPT</h1>
+              <p>
+                Clean, clear, and well-designed slides for your classes, group
+                presentations, and project defenses.
+              </p>
             </div>
           </section>
 
           <section className="category-detail-body">
-            <h2 className="category-detail-subtitle">
-              Connect with your favorite creator
-            </h2>
-            <p className="category-detail-note">
+            <h2>Connect with your favorite creator</h2>
+            <p>
               Later, this section will help you connect with your favorite
               creator for this type of task – especially for slides, pitch
               decks, and clear visual explanations of your ideas.
