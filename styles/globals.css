@@ -2045,3 +2045,16 @@ body {
   filter: brightness(0.95);
 }
 
+
+/* WORKLY hero CTA color override */
+section.home-hero-v3 button,
+section.home-hero-v3 .home-hero-button {
+  background: #4F4336;
+  color: #ffffff;
+}
+
+section.home-hero-v3 button:hover,
+section.home-hero-v3 .home-hero-button:hover {
+  background: #44382C;
+}
+
