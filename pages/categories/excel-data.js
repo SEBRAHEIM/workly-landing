@@ -34,24 +34,8 @@ export default function ExcelDataPage() {
           </p>
         </section>
 
-        <section className="category-detail-body">
-          <h2>Common tasks in this category</h2>
-          <ul>
-            <li>Formatting and cleaning tables</li>
-            <li>Basic formulas and calculations</li>
-            <li>Charts and simple dashboards</li>
-            <li>Transferring data from Word/PDF into Excel</li>
-          </ul>
+        
 
-          <p className="category-detail-note">
-            Later on, Workly creators will be able to build full Excel files
-            based on your rubric and template.
-          </p>
-
-          <Link href="/" className="category-detail-back">
-            ← Back to Workly home
-          </Link>
-        </section>
       </main>
     </div>
   );

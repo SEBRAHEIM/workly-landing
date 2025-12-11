@@ -34,24 +34,8 @@ export default function OtherUniTasksPage() {
           </p>
         </section>
 
-        <section className="category-detail-body">
-          <h2>Examples of other tasks</h2>
-          <ul>
-            <li>Small forms or templates your professor gave you</li>
-            <li>Checklists, tables, or mixed formats</li>
-            <li>Light research and organization</li>
-            <li>Preparing files before final submission</li>
-          </ul>
+        
 
-          <p className="category-detail-note">
-            Workly is designed to stay flexible, so students can get help with
-            the real tasks they receive, not just perfect categories.
-          </p>
-
-          <Link href="/" className="category-detail-back">
-            ← Back to Workly home
-          </Link>
-        </section>
       </main>
     </div>
   );

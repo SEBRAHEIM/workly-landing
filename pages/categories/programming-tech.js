@@ -34,24 +34,8 @@ export default function ProgrammingTechPage() {
           </p>
         </section>
 
-        <section className="category-detail-body">
-          <h2>Common tasks in this category</h2>
-          <ul>
-            <li>Intro-level programming exercises</li>
-            <li>Small scripts or functions</li>
-            <li>Debugging simple errors</li>
-            <li>Explaining how a piece of code works</li>
-          </ul>
+        
 
-          <p className="category-detail-note">
-            Workly will connect you with creators who understand both the code
-            and the assignment requirements.
-          </p>
-
-          <Link href="/" className="category-detail-back">
-            ← Back to Workly home
-          </Link>
-        </section>
       </main>
     </div>
   );

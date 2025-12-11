@@ -34,24 +34,8 @@ export default function PresentationsPptPage() {
           </p>
         </section>
 
-        <section className="category-detail-body">
-          <h2>Common tasks in this category</h2>
-          <ul>
-            <li>PowerPoint or Google Slides decks</li>
-            <li>Class presentation design and content</li>
-            <li>Speaker notes and talking points</li>
-            <li>Redesigning messy slides into something clear</li>
-          </ul>
+        
 
-          <p className="category-detail-note">
-            In the full Workly experience, you&apos;ll be able to send your
-            rubric and brief, and a creator will build your slides for you.
-          </p>
-
-          <Link href="/" className="category-detail-back">
-            ← Back to Workly home
-          </Link>
-        </section>
       </main>
     </div>
   );

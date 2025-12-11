@@ -34,24 +34,8 @@ export default function ReportsEssaysPage() {
           </p>
         </section>
 
-        <section className="category-detail-body">
-          <h2>Common tasks in this category</h2>
-          <ul>
-            <li>Essay writing and structuring</li>
-            <li>Formal reports (lab, business, research)</li>
-            <li>Reflections and discussion posts</li>
-            <li>Editing and polishing existing drafts</li>
-          </ul>
+        
 
-          <p className="category-detail-note">
-            When Workly launches, you&apos;ll be able to upload your rubric and
-            connect directly with a creator for this type of task.
-          </p>
-
-          <Link href="/" className="category-detail-back">
-            ← Back to Workly home
-          </Link>
-        </section>
       </main>
     </div>
   );
