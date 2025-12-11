@@ -4,39 +4,37 @@ import Navbar from "../../components/Navbar";
 
 export default function ProgrammingTechPage() {
   return (
-    <div className="category-page">
+    <>
       <Head>
         <title>Programming & Tech | Workly</title>
-        <meta
-          name="description"
-          content="Support for intro programming tasks, debugging, and basic tech assignments."
-        />
       </Head>
 
-      <Navbar />
+      <div className="category-page">
+        <Navbar />
 
-      <main className="category-main">
-        <section className="category-hero">
-          <div className="category-hero-card">
-            <p className="category-pill">Category</p>
-            <h1 className="category-hero-title">Programming &amp; Tech</h1>
-            <p className="category-hero-subtitle">
-              Help with student-level coding exercises and simple technical tasks.
+        <main className="category-main">
+          <section className="category-hero">
+            <div className="category-card">
+              <div className="category-pill">Category</div>
+              <h1>Programming &amp; Tech</h1>
+              <p>Basic coding tasks and small tech work.</p>
+            </div>
+          </section>
+
+          <section className="category-detail-body">
+            <h2>Connect with your favorite creator</h2>
+            <p>
+              Later, this section will help you connect with your favorite
+              creator for intro-level coding tasks, debugging, and small
+              scripts that match your assignment level.
             </p>
-          </div>
-        </section>
 
-        <section className="category-creators-section">
-          <h2 className="category-creators-heading">Most popular creators</h2>
-          <p className="category-creators-caption">
-            Later, this will list creators who can work with your language,
-            rubric, and course level.
-          </p>
-        </section>
-
-        
-
-      </main>
-    </div>
+            <Link href="/" className="category-detail-back">
+              ← Back to Workly home
+            </Link>
+          </section>
+        </main>
+      </div>
+    </>
   );
 }

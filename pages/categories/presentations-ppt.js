@@ -18,8 +18,8 @@ export default function PresentationsPptPage() {
               <div className="category-pill">Category</div>
               <h1>Presentations &amp; PPT</h1>
               <p>
-                Clean, clear, and well-designed slides for your classes, group
-                presentations, and project defenses.
+                Slides, templates, and class presentations that look clean and
+                easy to understand.
               </p>
             </div>
           </section>

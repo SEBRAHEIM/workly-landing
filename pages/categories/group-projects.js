@@ -4,39 +4,39 @@ import Navbar from "../../components/Navbar";
 
 export default function GroupProjectsPage() {
   return (
-    <div className="category-page">
+    <>
       <Head>
         <title>Group Projects | Workly</title>
-        <meta
-          name="description"
-          content="Help with group projects, case studies, and team submissions."
-        />
       </Head>
 
-      <Navbar />
+      <div className="category-page">
+        <Navbar />
 
-      <main className="category-main">
-        <section className="category-hero">
-          <div className="category-hero-card">
-            <p className="category-pill">Category</p>
-            <h1 className="category-hero-title">Group projects</h1>
-            <p className="category-hero-subtitle">
-              Support for case studies, shared slides, and team assignments.
+        <main className="category-main">
+          <section className="category-hero">
+            <div className="category-card">
+              <div className="category-pill">Category</div>
+              <h1>Group projects</h1>
+              <p>
+                Support for case studies, shared slides, and team assignments.
+              </p>
+            </div>
+          </section>
+
+          <section className="category-detail-body">
+            <h2>Connect with your favorite creator</h2>
+            <p>
+              Later, this section will help you connect with your favorite
+              creator to coordinate group work, shared slides, and final files
+              that match your rubric.
             </p>
-          </div>
-        </section>
 
-        <section className="category-creators-section">
-          <h2 className="category-creators-heading">Most popular creators</h2>
-          <p className="category-creators-caption">
-            Creators here will focus on coordinating group work and building
-            clean final files that match your rubric.
-          </p>
-        </section>
-
-        
-
-      </main>
-    </div>
+            <Link href="/" className="category-detail-back">
+              ← Back to Workly home
+            </Link>
+          </section>
+        </main>
+      </div>
+    </>
   );
 }

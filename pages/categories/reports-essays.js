@@ -4,39 +4,40 @@ import Navbar from "../../components/Navbar";
 
 export default function ReportsEssaysPage() {
   return (
-    <div className="category-page">
+    <>
       <Head>
         <title>Reports & Essays | Workly</title>
-        <meta
-          name="description"
-          content="Help with reports, essays, reflections, and written university assignments."
-        />
       </Head>
 
-      <Navbar />
+      <div className="category-page">
+        <Navbar />
 
-      <main className="category-main">
-        <section className="category-hero">
-          <div className="category-hero-card">
-            <p className="category-pill">Category</p>
-            <h1 className="category-hero-title">Reports &amp; Essays</h1>
-            <p className="category-hero-subtitle">
-              Help with writing, structuring, and polishing your university assignments.
+        <main className="category-main">
+          <section className="category-hero">
+            <div className="category-card">
+              <div className="category-pill">Category</div>
+              <h1>Reports &amp; Essays</h1>
+              <p>
+                Help with writing, structuring, and polishing your university
+                assignments.
+              </p>
+            </div>
+          </section>
+
+          <section className="category-detail-body">
+            <h2>Connect with your favorite creator</h2>
+            <p>
+              Later, this section will help you connect with your favorite
+              creator for this type of task – from essays and reports to
+              reflections and summaries tailored to your rubric.
             </p>
-          </div>
-        </section>
 
-        <section className="category-creators-section">
-          <h2 className="category-creators-heading">Most popular creators</h2>
-          <p className="category-creators-caption">
-            In the full Workly experience, this space will show top creators for this
-            category, with ratings, response time, and price range.
-          </p>
-        </section>
-
-        
-
-      </main>
-    </div>
+            <Link href="/" className="category-detail-back">
+              ← Back to Workly home
+            </Link>
+          </section>
+        </main>
+      </div>
+    </>
   );
 }
