@@ -1830,3 +1830,117 @@ body {
   }
 }
 
+/* === Calm Academic color theme === */
+/* Palette:
+   Primary (olive): #4A5A3D
+   Secondary (sand): #E5D7C5
+   Accent (sage): #A8B79A
+   Text (espresso): #3B2F2F
+*/
+
+:root {
+  --color-primary-olive: #4A5A3D;
+  --color-secondary-sand: #E5D7C5;
+  --color-accent-sage: #A8B79A;
+  --color-text-espresso: #3B2F2F;
+}
+
+/* Global */
+
+body {
+  background: var(--color-secondary-sand);
+  color: var(--color-text-espresso);
+}
+
+/* Navbar */
+
+.top-nav {
+  background: var(--color-secondary-sand);
+  color: var(--color-text-espresso);
+}
+
+.brand-center {
+  color: var(--color-text-espresso);
+}
+
+.join-button {
+  background: var(--color-primary-olive);
+  color: #ffffff;
+}
+
+.join-button:hover {
+  background: #3b4a30;
+}
+
+/* Home hero */
+
+.home-hero-v3 {
+  background: radial-gradient(circle at top left, var(--color-accent-sage), var(--color-secondary-sand));
+  color: var(--color-text-espresso);
+}
+
+.home-hero-v3-eyebrow {
+  color: rgba(59, 47, 47, 0.7);
+}
+
+.home-hero-v3-title {
+  color: var(--color-text-espresso);
+}
+
+.home-hero-v3-subtitle {
+  color: rgba(59, 47, 47, 0.85);
+}
+
+.home-hero-v3-primary {
+  background: var(--color-primary-olive);
+  color: #ffffff;
+}
+
+/* Category cards on home */
+
+.home-category-section {
+  background: var(--color-secondary-sand);
+}
+
+.home-category-grid {
+  background: transparent;
+}
+
+.category-card,
+.home-category-card {
+  background: #f7efe1;
+  color: var(--color-text-espresso);
+}
+
+.category-card-title,
+.home-category-card h3 {
+  color: var(--color-text-espresso);
+}
+
+.category-card-text,
+.home-category-card p {
+  color: rgba(59, 47, 47, 0.85);
+}
+
+/* Features strip */
+
+.feature-section,
+.features-section {
+  background: #f0e3d1;
+  color: var(--color-text-espresso);
+}
+
+.feature-cta-button,
+.features-cta-button {
+  background: var(--color-primary-olive);
+  color: #ffffff;
+}
+
+/* Footer */
+
+.site-footer,
+footer {
+  background: #efe1cf;
+  color: rgba(59, 47, 47, 0.75);
+}
+
