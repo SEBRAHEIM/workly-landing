@@ -275,7 +275,7 @@ description: "Anything else required for your course.",
   return (
     <>
       <Head>
-        <title>Workly – University projects, done for you.</title>
+        <title>Workly – Smarter help for university projects.</title>
         <meta
           name="description"
           content="Pick a creator, upload your requirements, and get your complete university project delivered with zero effort."
@@ -302,7 +302,7 @@ description: "Anything else required for your course.",
         Share your assignment brief once, match with a creator, and get
         clean, ready-to-submit work without the all-nighters.
       </p>
-      <button className="home-hero-cta-v3">Start your brief</button>
+      <button className="home-hero-cta-v3">Begin now</button>
     </div>
   </section>
 
