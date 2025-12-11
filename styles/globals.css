@@ -1543,3 +1543,66 @@ body {
   color: rgba(90, 84, 73, 0.9);
 }
 
+
+
+/* === Workly hero banner === */
+.hero-banner {
+  padding: 24px 16px 8px;
+}
+
+.hero-banner-inner {
+  border-radius: 26px;
+  padding: 24px 22px 26px;
+  background: radial-gradient(circle at 0% 0%, #f4e7d6 0%, #f1e0cf 40%, #ecdbc7 100%);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.14);
+}
+
+.hero-banner-title {
+  margin: 0 0 8px;
+  font-size: 1.6rem;
+  line-height: 1.25;
+  color: #3f3528;
+}
+
+.hero-banner-subtitle {
+  margin: 0 0 18px;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: rgba(90, 84, 73, 0.95);
+}
+
+.hero-banner-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border-radius: 999px;
+  background: #c9ae88;
+  color: #ffffff;
+  font-size: 0.96rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 10px 26px rgba(150, 125, 92, 0.4);
+}
+
+.hero-banner-cta:active {
+  transform: translateY(1px);
+}
+
+@media (min-width: 768px) {
+  .hero-banner {
+    padding-top: 32px;
+  }
+
+  .hero-banner-inner {
+    padding: 28px 32px 30px;
+  }
+
+  .hero-banner-title {
+    font-size: 2rem;
+  }
+
+  .hero-banner-subtitle {
+    max-width: 520px;
+  }
+}

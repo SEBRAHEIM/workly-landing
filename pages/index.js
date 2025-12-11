@@ -284,52 +284,26 @@ description: "Anything else required for your course.",
 
       <div className="page-root">
               <Navbar />
+      <section className="hero-banner">
+        <div className="hero-banner-inner">
+          <h1 className="hero-banner-title">
+            University projects, done for you.
+          </h1>
+          <p className="hero-banner-subtitle">
+            Upload your brief once, match with a creator you trust, and get
+            your project handled without last-minute stress.
+          </p>
+          <Link href="/join" className="hero-banner-cta">
+            Start your brief
+          </Link>
+        </div>
+      </section>
+
 
 
         <main className="page-main">
-          <section className="hero">
-            <div className="hero-inner">
-              <h1 className="hero-title">University projects, done for you.</h1>
-              <p className="hero-subtitle">
-                Pick a creator, upload your requirements, and get your complete
-                project delivered with zero effort.
-              </p>
+          
 
-              <form
-                className="hero-search"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                }}
-              >
-                <input
-                  className="hero-search-input"
-                  type="text"
-                  placeholder='Try "marketing group project"'
-                />
-                <button className="hero-search-button" type="submit">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <circle
-                      cx="11"
-                      cy="11"
-                      r="5"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                    />
-                    <line
-                      x1="15"
-                      y1="15"
-                      x2="20"
-                      y2="20"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                </button>
-              </form>
-            </div>
-          </section>
 
           <section className="category-section" aria-labelledby="category-heading">
             <div className="category-header">
