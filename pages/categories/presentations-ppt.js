@@ -6,32 +6,36 @@ export default function PresentationsPptPage() {
   return (
     <>
       <Head>
-        <title>Presentations & PPT | Workly</title>
+        <title>Presentations &amp; PPT · Workly</title>
+        <meta
+          name="description"
+          content="Get help with slides, class presentations, and pitch decks."
+        />
       </Head>
-
       <div className="category-page">
         <Navbar />
-
         <main className="category-main">
           <section className="category-hero">
-            <div className="category-card">
-              <div className="category-pill">Category</div>
-              <h1>Presentations &amp; PPT</h1>
-              <p>
-                Slides, templates, and class presentations that look clean and
-                easy to understand.
+            <div className="category-hero-card">
+              <span className="category-pill">Category</span>
+              <h1 className="category-hero-title">Presentations &amp; PPT</h1>
+              <p className="category-hero-subtitle">
+                Turn messy content into clean, confident slides you can present with ease.
               </p>
             </div>
           </section>
 
-          <section className="category-detail-body">
-            <h2>Connect with your favorite creator</h2>
-            <p>
-              Later, this section will help you connect with your favorite
-              creator for this type of task – especially for slides, pitch
-              decks, and clear visual explanations of your ideas.
+          <section className="category-creators">
+            <h2 className="category-creators-heading">
+              Connect with your favorite creator
+            </h2>
+            <p className="category-creators-note">
+              Later, this section will help you connect with creators who specialize
+              in presentations, pitch decks, and visual communication.
             </p>
+          </section>
 
+          <section className="category-detail-footer">
             <Link href="/" className="category-detail-back">
               ← Back to Workly home
             </Link>

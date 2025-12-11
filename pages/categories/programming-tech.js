@@ -6,29 +6,36 @@ export default function ProgrammingTechPage() {
   return (
     <>
       <Head>
-        <title>Programming & Tech | Workly</title>
+        <title>Programming &amp; Tech · Workly</title>
+        <meta
+          name="description"
+          content="Support with intro-level coding exercises and small university tech tasks."
+        />
       </Head>
-
       <div className="category-page">
         <Navbar />
-
         <main className="category-main">
           <section className="category-hero">
-            <div className="category-card">
-              <div className="category-pill">Category</div>
-              <h1>Programming &amp; Tech</h1>
-              <p>Basic coding tasks and small tech work.</p>
+            <div className="category-hero-card">
+              <span className="category-pill">Category</span>
+              <h1 className="category-hero-title">Programming &amp; Tech</h1>
+              <p className="category-hero-subtitle">
+                Get help understanding code, fixing small bugs, and finishing intro assignments.
+              </p>
             </div>
           </section>
 
-          <section className="category-detail-body">
-            <h2>Connect with your favorite creator</h2>
-            <p>
-              Later, this section will help you connect with your favorite
-              creator for intro-level coding tasks, debugging, and small
-              scripts that match your assignment level.
+          <section className="category-creators">
+            <h2 className="category-creators-heading">
+              Connect with your favorite creator
+            </h2>
+            <p className="category-creators-note">
+              Later, this section will help you connect with creators who are comfortable
+              with student-level programming tasks and explanations.
             </p>
+          </section>
 
+          <section className="category-detail-footer">
             <Link href="/" className="category-detail-back">
               ← Back to Workly home
             </Link>

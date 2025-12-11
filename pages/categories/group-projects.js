@@ -6,31 +6,36 @@ export default function GroupProjectsPage() {
   return (
     <>
       <Head>
-        <title>Group Projects | Workly</title>
+        <title>Group Projects · Workly</title>
+        <meta
+          name="description"
+          content="Support for team assignments, case studies, and shared university projects."
+        />
       </Head>
-
       <div className="category-page">
         <Navbar />
-
         <main className="category-main">
           <section className="category-hero">
-            <div className="category-card">
-              <div className="category-pill">Category</div>
-              <h1>Group projects</h1>
-              <p>
-                Support for case studies, shared slides, and team assignments.
+            <div className="category-hero-card">
+              <span className="category-pill">Category</span>
+              <h1 className="category-hero-title">Group Projects</h1>
+              <p className="category-hero-subtitle">
+                Keep the group aligned and turn different parts into one clean final project.
               </p>
             </div>
           </section>
 
-          <section className="category-detail-body">
-            <h2>Connect with your favorite creator</h2>
-            <p>
-              Later, this section will help you connect with your favorite
-              creator to coordinate group work, shared slides, and final files
-              that match your rubric.
+          <section className="category-creators">
+            <h2 className="category-creators-heading">
+              Connect with your favorite creator
+            </h2>
+            <p className="category-creators-note">
+              Later, this section will help you connect with creators who are used to
+              working with group rubrics, shared files, and tight deadlines.
             </p>
+          </section>
 
+          <section className="category-detail-footer">
             <Link href="/" className="category-detail-back">
               ← Back to Workly home
             </Link>

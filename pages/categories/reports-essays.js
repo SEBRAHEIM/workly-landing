@@ -6,32 +6,36 @@ export default function ReportsEssaysPage() {
   return (
     <>
       <Head>
-        <title>Reports & Essays | Workly</title>
+        <title>Reports &amp; Essays · Workly</title>
+        <meta
+          name="description"
+          content="Get help with university reports, essays, reflections, and structured writing."
+        />
       </Head>
-
       <div className="category-page">
         <Navbar />
-
         <main className="category-main">
           <section className="category-hero">
-            <div className="category-card">
-              <div className="category-pill">Category</div>
-              <h1>Reports &amp; Essays</h1>
-              <p>
-                Help with writing, structuring, and polishing your university
-                assignments.
+            <div className="category-hero-card">
+              <span className="category-pill">Category</span>
+              <h1 className="category-hero-title">Reports &amp; Essays</h1>
+              <p className="category-hero-subtitle">
+                Turn rough rubrics and notes into clear, structured academic writing.
               </p>
             </div>
           </section>
 
-          <section className="category-detail-body">
-            <h2>Connect with your favorite creator</h2>
-            <p>
-              Later, this section will help you connect with your favorite
-              creator for this type of task – from essays and reports to
-              reflections and summaries tailored to your rubric.
+          <section className="category-creators">
+            <h2 className="category-creators-heading">
+              Connect with your favorite creator
+            </h2>
+            <p className="category-creators-note">
+              Later, this section will help you connect with creators who are
+              comfortable writing and editing university-level reports and essays.
             </p>
+          </section>
 
+          <section className="category-detail-footer">
             <Link href="/" className="category-detail-back">
               ← Back to Workly home
             </Link>
