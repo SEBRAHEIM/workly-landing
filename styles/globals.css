@@ -2023,3 +2023,25 @@ body {
   color: rgba(46, 43, 38, 0.8);
 }
 
+:root {
+  --workly-cta-green: #415437;
+}
+
+.join-button {
+  background: var(--workly-cta-green);
+  color: #ffffff;
+}
+
+.join-button:hover {
+  filter: brightness(0.95);
+}
+
+.home-hero-button {
+  background: var(--workly-cta-green);
+  color: #ffffff;
+}
+
+.home-hero-button:hover {
+  filter: brightness(0.95);
+}
+
