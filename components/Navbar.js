@@ -56,6 +56,11 @@ function Navbar() {
                     Join Workly
                   </Link>
                 </li>
+            <li className="mobile-menu-item">
+              <Link href="/creators/join" className="mobile-menu-link secondary">
+                Join as a Creator
+              </Link>
+            </li>
                 <li className="mobile-menu-item">
                   <Link href="/signin" className="mobile-menu-link secondary">
                     Sign in
