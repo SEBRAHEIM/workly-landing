@@ -6,21 +6,33 @@ export default function ExcelDataPage() {
   return (
     <div className="category-page">
       <Head>
-        <title>Excel &amp; Data | Workly</title>
+        <title>Excel & Data | Workly</title>
         <meta
           name="description"
-          content="Help with sheets, tables, simple dashboards, and basic data calculations."
+          content="Help with Excel sheets, tables, and basic data work for university."
         />
       </Head>
 
       <Navbar />
 
-      <main className="category-detail">
-        <h1>Excel &amp; Data</h1>
-        <p>
-          Get help with sheets, tables, simple dashboards, and basic
-          calculations for your course projects.
-        </p>
+      <main className="category-main">
+        <section className="category-hero">
+          <div className="category-hero-card">
+            <p className="category-pill">Category</p>
+            <h1 className="category-hero-title">Excel &amp; Data</h1>
+            <p className="category-hero-subtitle">
+              Help building clean spreadsheets, formulas, and simple dashboards.
+            </p>
+          </div>
+        </section>
+
+        <section className="category-creators-section">
+          <h2 className="category-creators-heading">Most popular creators</h2>
+          <p className="category-creators-caption">
+            This section will later show creators who are comfortable with
+            student-level Excel and data tasks.
+          </p>
+        </section>
 
         <section className="category-detail-body">
           <h2>Common tasks in this category</h2>

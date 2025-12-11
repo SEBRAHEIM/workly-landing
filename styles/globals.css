@@ -1356,3 +1356,88 @@ body {
 
 
 
+
+/* Category layout: hero card + creators section */
+
+.category-main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px 18px 40px;
+}
+
+.category-hero {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.category-hero-card {
+  border-radius: 22px;
+  padding: 18px 18px 20px;
+  background: linear-gradient(
+    135deg,
+    #f5eee4 0%,
+    #e6d6c5 40%,
+    #d3c2af 100%
+  );
+  box-shadow: 0 16px 38px rgba(90, 84, 73, 0.16);
+  color: #3a3025;
+}
+
+.category-pill {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.65);
+  color: rgba(90, 84, 73, 0.85);
+  margin-bottom: 6px;
+}
+
+.category-hero-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+
+.category-hero-subtitle {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: rgba(58, 48, 37, 0.9);
+}
+
+.category-creators-section {
+  margin-bottom: 22px;
+}
+
+.category-creators-heading {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 4px;
+  color: var(--sand-5);
+}
+
+.category-creators-caption {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(90, 84, 73, 0.9);
+}
+
+/* Small screen tweaks */
+@media (max-width: 760px) {
+  .category-main {
+    padding-inline: 18px;
+  }
+
+  .category-hero-card {
+    border-radius: 20px;
+    padding: 16px 16px 18px;
+  }
+
+  .category-hero-title {
+    font-size: 1.25rem;
+  }
+}

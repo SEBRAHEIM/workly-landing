@@ -6,21 +6,33 @@ export default function ProgrammingTechPage() {
   return (
     <div className="category-page">
       <Head>
-        <title>Programming &amp; Tech | Workly</title>
+        <title>Programming & Tech | Workly</title>
         <meta
           name="description"
-          content="Intro-level coding tasks, debugging, and small scripts for university courses."
+          content="Support for intro programming tasks, debugging, and basic tech assignments."
         />
       </Head>
 
       <Navbar />
 
-      <main className="category-detail">
-        <h1>Programming &amp; Tech</h1>
-        <p>
-          Get help with intro-level coding tasks, debugging, and small tech work
-          that matches your assignment requirements.
-        </p>
+      <main className="category-main">
+        <section className="category-hero">
+          <div className="category-hero-card">
+            <p className="category-pill">Category</p>
+            <h1 className="category-hero-title">Programming &amp; Tech</h1>
+            <p className="category-hero-subtitle">
+              Help with student-level coding exercises and simple technical tasks.
+            </p>
+          </div>
+        </section>
+
+        <section className="category-creators-section">
+          <h2 className="category-creators-heading">Most popular creators</h2>
+          <p className="category-creators-caption">
+            Later, this will list creators who can work with your language,
+            rubric, and course level.
+          </p>
+        </section>
 
         <section className="category-detail-body">
           <h2>Common tasks in this category</h2>

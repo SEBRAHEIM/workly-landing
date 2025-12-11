@@ -6,21 +6,33 @@ export default function OtherUniTasksPage() {
   return (
     <div className="category-page">
       <Head>
-        <title>Other Tasks | Workly</title>
+        <title>Other uni tasks | Workly</title>
         <meta
           name="description"
-          content="Flexible help for all the small or mixed university tasks that don’t fit a single category."
+          content="Space for all the mixed and small tasks that don’t fit a single category."
         />
       </Head>
 
       <Navbar />
 
-      <main className="category-detail">
-        <h1>Other Tasks</h1>
-        <p>
-          For all the small, mixed, or unusual tasks that don&apos;t fit a
-          single category but still matter for your course.
-        </p>
+      <main className="category-main">
+        <section className="category-hero">
+          <div className="category-hero-card">
+            <p className="category-pill">Category</p>
+            <h1 className="category-hero-title">Other uni tasks</h1>
+            <p className="category-hero-subtitle">
+              Small or mixed tasks that don&apos;t fit perfectly into one box.
+            </p>
+          </div>
+        </section>
+
+        <section className="category-creators-section">
+          <h2 className="category-creators-heading">Most popular creators</h2>
+          <p className="category-creators-caption">
+            In the future, creators here will help with all the miscellaneous
+            tasks students actually get in real life.
+          </p>
+        </section>
 
         <section className="category-detail-body">
           <h2>Examples of other tasks</h2>

@@ -9,23 +9,35 @@ export default function GroupProjectsPage() {
         <title>Group Projects | Workly</title>
         <meta
           name="description"
-          content="Support with case studies and team assignments, from structure to final polish."
+          content="Help with group projects, case studies, and team submissions."
         />
       </Head>
 
       <Navbar />
 
-      <main className="category-detail">
-        <h1>Group Projects</h1>
-        <p>
-          Get support with case studies and team assignments, from structure
-          and slides to final submission.
-        </p>
+      <main className="category-main">
+        <section className="category-hero">
+          <div className="category-hero-card">
+            <p className="category-pill">Category</p>
+            <h1 className="category-hero-title">Group projects</h1>
+            <p className="category-hero-subtitle">
+              Support for case studies, shared slides, and team assignments.
+            </p>
+          </div>
+        </section>
+
+        <section className="category-creators-section">
+          <h2 className="category-creators-heading">Most popular creators</h2>
+          <p className="category-creators-caption">
+            Creators here will focus on coordinating group work and building
+            clean final files that match your rubric.
+          </p>
+        </section>
 
         <section className="category-detail-body">
           <h2>Common tasks in this category</h2>
           <ul>
-            <li>Case-study write-ups and slides</li>
+            <li>Case-study writeups and slides</li>
             <li>Project structure and outline</li>
             <li>Combining different parts into one clear file</li>
             <li>Final review before submission</li>
