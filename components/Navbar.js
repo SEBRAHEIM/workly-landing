@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import { useAuthModal } from "../context/AuthContext";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { openAuthModal } = useAuthModal();
+
+  const openForIntent = (intent = "student") => {
+    openAuthModal(intent);
+    setMenuOpen(false);
+  };
 
   return (
     <>
@@ -22,9 +29,14 @@ function Navbar() {
 
         <div className="brand-center">WORKLY</div>
 
-        <Link href="/join" className="join-button">
+        <button
+          type="button"
+          className="join-button"
+          data-auth-modal-trigger
+          onClick={() => openForIntent("student")}
+        >
           Join
-        </Link>
+        </button>
       </header>
 
       {menuOpen && (
@@ -52,19 +64,35 @@ function Navbar() {
               <div className="mobile-menu-section-label">ACCOUNT</div>
               <ul className="mobile-menu-list">
                 <li className="mobile-menu-item">
-                  <Link href="/join" className="mobile-menu-link">
+                  <button
+                    type="button"
+                    className="mobile-menu-link"
+                    data-auth-modal-trigger
+                    onClick={() => openForIntent("student")}
+                  >
                     Join Workly
-                  </Link>
+                  </button>
                 </li>
-            <li className="mobile-menu-item">
-              <Link href="/creators/join" className="mobile-menu-link secondary">
-                Join as a Creator
-              </Link>
-            </li>
                 <li className="mobile-menu-item">
-                  <Link href="/signin" className="mobile-menu-link secondary">
+                  <button
+                    type="button"
+                    className="mobile-menu-link secondary"
+                    data-auth-modal-trigger
+                    data-auth-modal-intent="creator"
+                    onClick={() => openForIntent("creator")}
+                  >
+                    Join as a Creator
+                  </button>
+                </li>
+                <li className="mobile-menu-item">
+                  <button
+                    type="button"
+                    className="mobile-menu-link secondary"
+                    data-auth-modal-trigger
+                    onClick={() => openForIntent("student")}
+                  >
                     Sign in
-                  </Link>
+                  </button>
                 </li>
               </ul>
             </div>

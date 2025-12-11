@@ -1265,6 +1265,15 @@ body {
   font-size: 0.98rem;
   text-decoration: none;
   color: rgba(47, 40, 31, 0.95);
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+  display: inline-flex;
 }
 
 /* Smaller secondary links (e.g. Sign in) */
@@ -2058,3 +2067,149 @@ section.home-hero-v3 .home-hero-button:hover {
   background: #44382C;
 }
 
+/* Auth modal */
+.auth-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 22, 16, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 9999;
+}
+
+.auth-modal-panel {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 28px;
+  padding: 32px 28px 34px;
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.22);
+  position: relative;
+}
+
+.auth-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  border: none;
+  background: transparent;
+  color: rgba(47, 40, 31, 0.55);
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.auth-modal-eyebrow {
+  font-size: 0.76rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(47, 40, 31, 0.55);
+  margin: 0 0 10px;
+}
+
+.auth-modal-title {
+  font-size: 1.6rem;
+  margin: 0 0 10px;
+  color: rgba(47, 40, 31, 0.95);
+}
+
+.auth-modal-body {
+  margin: 0 0 22px;
+  color: rgba(47, 40, 31, 0.75);
+  line-height: 1.5;
+}
+
+.auth-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-modal-btn {
+  width: 100%;
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+}
+
+.auth-modal-btn.primary {
+  background: #2f3c2b;
+  color: #fff;
+}
+
+.auth-modal-btn.secondary {
+  background: #f4f0ea;
+  color: rgba(47, 40, 31, 0.9);
+}
+
+.auth-modal-btn:hover {
+  filter: brightness(0.97);
+}
+
+.auth-modal-btn:active {
+  transform: translateY(1px);
+}
+
+@media (max-width: 520px) {
+  .auth-modal-panel {
+    padding: 26px 22px 28px;
+    border-radius: 22px;
+  }
+}
+
+/* Creator setup page */
+.creator-setup-page {
+  min-height: 100vh;
+  background: #f2eee8;
+}
+
+.creator-setup-main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 72px 20px;
+  color: rgba(47, 40, 31, 0.9);
+}
+
+.creator-setup-main h1 {
+  font-size: 2.4rem;
+  margin-bottom: 18px;
+}
+
+.creator-setup-main p {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.creator-setup-steps {
+  margin: 0 0 28px 20px;
+  padding: 0;
+  line-height: 1.8;
+}
+
+.creator-setup-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 12px 32px;
+  background: #2f3c2b;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.creator-setup-btn:hover {
+  filter: brightness(0.95);
+}
+
+.creator-setup-link {
+  color: rgba(47, 40, 31, 0.8);
+  text-decoration: underline;
+  font-size: 0.95rem;
+}
