@@ -1475,3 +1475,71 @@ body {
   }
 }
 
+/* === Category pages: hero card + creators heading === */
+/* === Category pages: hero card + creators heading === */
+
+.category-main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 18px 18px 40px;
+}
+
+.category-hero {
+  margin-top: 8px;
+}
+
+.category-hero-card {
+  border-radius: 22px;
+  padding: 16px 16px 18px;
+  background: linear-gradient(
+    135deg,
+    rgba(246, 245, 244, 0.96),
+    rgba(216, 207, 196, 0.94)
+  );
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.06);
+}
+
+.category-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(90, 84, 73, 0.75);
+  background: rgba(255, 255, 255, 0.78);
+  margin-bottom: 8px;
+}
+
+.category-hero-title {
+  margin: 0 0 4px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--sand-5);
+}
+
+.category-hero-subtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(90, 84, 73, 0.9);
+}
+
+.category-creators {
+  margin-top: 22px;
+}
+
+.category-creators-heading {
+  margin: 0 0 6px;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--sand-5);
+}
+
+.category-creators-note {
+  margin: 0 0 20px;
+  font-size: 0.9rem;
+  color: rgba(90, 84, 73, 0.9);
+}
+
