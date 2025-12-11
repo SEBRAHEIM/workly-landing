@@ -25,16 +25,6 @@ export default function PresentationsPptPage() {
             </div>
           </section>
 
-          <section className="category-creators">
-            <h2 className="category-creators-heading">
-              Connect with your favorite creator
-            </h2>
-            <p className="category-creators-note">
-              Later, this section will help you connect with creators who specialize
-              in presentations, pitch decks, and visual communication.
-            </p>
-          </section>
-
           
         </main>
       </div>

@@ -25,16 +25,6 @@ export default function ProgrammingTechPage() {
             </div>
           </section>
 
-          <section className="category-creators">
-            <h2 className="category-creators-heading">
-              Connect with your favorite creator
-            </h2>
-            <p className="category-creators-note">
-              Later, this section will help you connect with creators who are comfortable
-              with student-level programming tasks and explanations.
-            </p>
-          </section>
-
           
         </main>
       </div>

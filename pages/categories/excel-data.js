@@ -25,16 +25,6 @@ export default function ExcelDataPage() {
             </div>
           </section>
 
-          <section className="category-creators">
-            <h2 className="category-creators-heading">
-              Connect with your favorite creator
-            </h2>
-            <p className="category-creators-note">
-              Later, this section will help you connect with creators comfortable
-              with student-level Excel, sheets, and simple data tasks.
-            </p>
-          </section>
-
           
         </main>
       </div>

@@ -25,16 +25,6 @@ export default function ReportsEssaysPage() {
             </div>
           </section>
 
-          <section className="category-creators">
-            <h2 className="category-creators-heading">
-              Connect with your favorite creator
-            </h2>
-            <p className="category-creators-note">
-              Later, this section will help you connect with creators who are
-              comfortable writing and editing university-level reports and essays.
-            </p>
-          </section>
-
           
         </main>
       </div>
