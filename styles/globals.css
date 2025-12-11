@@ -1347,3 +1347,20 @@ body {
   padding-top: 12px;
 }
 
+
+/* === Category page navbar spacing v2 === */
+.category-page {
+  padding-top: 0;
+}
+
+.category-page .top-nav {
+  margin-top: 0;
+  padding-top: 12px;
+}
+
+@media (max-width: 760px) {
+  .category-page .top-nav {
+    padding-top: 10px;
+  }
+}
+
