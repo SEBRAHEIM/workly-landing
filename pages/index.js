@@ -284,33 +284,7 @@ description: "Anything else required for your course.",
 
       <div className="page-root">
               <Navbar />
-      <section className="hero hero-full">
-  <div className="hero-full-inner">
-    <div className="hero-floating hero-floating-1">
-      <span className="hero-floating-emoji">📚</span>
-    </div>
-    <div className="hero-floating hero-floating-2">
-      <span className="hero-floating-emoji">✅</span>
-    </div>
-    <div className="hero-floating hero-floating-3">
-      <span className="hero-floating-emoji">⏰</span>
-    </div>
-    <div className="hero-floating hero-floating-4">
-      <span className="hero-floating-emoji">💬</span>
-    </div>
-
-    <div className="hero-full-copy">
-      <h1 className="hero-full-title">University projects, done for you.</h1>
-      <p className="hero-full-subtitle">
-        Share your assignment brief once, match with a creator, and get clean,
-        ready-to-submit work without the all-nighters.
-      </p>
-      <button className="hero-full-cta">
-        Start your brief
-      </button>
-    </div>
-  </div>
-</section>
+      
 
 
 
