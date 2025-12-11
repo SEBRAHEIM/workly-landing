@@ -35,11 +35,7 @@ export default function ProgrammingTechPage() {
             </p>
           </section>
 
-          <section className="category-detail-footer">
-            <Link href="/" className="category-detail-back">
-              ← Back to Workly home
-            </Link>
-          </section>
+          
         </main>
       </div>
     </>
