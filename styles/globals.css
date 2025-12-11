@@ -1944,3 +1944,82 @@ footer {
   color: rgba(59, 47, 47, 0.75);
 }
 
+/* === Soft warm neutral palette (global override) === */
+
+/* === Soft warm neutral palette (global override) === */
+
+/* Base */
+body {
+  background: #EDE9E3;        /* Soft cream */
+  color: #2E2B26;             /* Deep coffee text */
+}
+
+/* Navbar */
+.top-nav {
+  background: #EDE9E3;
+}
+
+/* Hero section (home) */
+.home-hero-v3 {
+  background: radial-gradient(circle at 0% 0%, #F4F0EA 0, #EDE9E3 38%, #C9C2B8 100%);
+  color: #2E2B26;
+}
+
+.home-hero-v3-title,
+.home-hero-v3-title span {
+  color: #2E2B26;
+}
+
+.home-hero-v3-tagline {
+  color: rgba(46, 43, 38, 0.78);
+}
+
+.home-hero-v3-cta {
+  background: #A89F93;        /* Muted taupe */
+  color: #FFFFFF;
+}
+
+.home-hero-v3-cta:hover {
+  background: #9A9184;
+}
+
+/* Categories list on home + category pages */
+.category-grid,
+.category-page {
+  background: #EDE9E3;
+}
+
+.category-card,
+.category-grid-card {
+  background: #FAF9F6;
+  color: #2E2B26;
+}
+
+.category-card-title,
+.category-grid-card-title {
+  color: #2E2B26;
+}
+
+.category-card-subtitle,
+.category-grid-card-subtitle {
+  color: rgba(46, 43, 38, 0.7);
+}
+
+/* Generic buttons (join / primary CTA) */
+.join-button,
+.cta-primary {
+  background: #4A5A3D;        /* Deep olive primary */
+  color: #FFFFFF;
+}
+
+.join-button:hover,
+.cta-primary:hover {
+  background: #414F35;
+}
+
+/* Footer */
+.site-footer {
+  background: #E0D8CF;
+  color: rgba(46, 43, 38, 0.8);
+}
+
