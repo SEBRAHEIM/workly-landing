@@ -1,96 +1,507 @@
+import { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
 
 export default function Home() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const categories = [
+    {
+      title: "Reports & Essays",
+      href: "/categories/reports-essays",
+    description: "Help with writing assignments and Word documents.",
+      icon: (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect
+            x="5"
+            y="3.5"
+            width="14"
+            height="17"
+            rx="2"
+            ry="2"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
+          <line
+            x1="8"
+            y1="8"
+            x2="16"
+            y2="8"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+          <line
+            x1="8"
+            y1="11"
+            x2="14"
+            y2="11"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+          <line
+            x1="8"
+            y1="14"
+            x2="13"
+            y2="14"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+        </svg>
+      ),
+    },
+    {
+      title: "Presentations & PPT",
+      href: "/categories/presentations-ppt",
+    description: "Slides, templates, and class presentations.",
+      icon: (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect
+            x="4"
+            y="5"
+            width="16"
+            height="11"
+            rx="2"
+            ry="2"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
+          <rect
+            x="8"
+            y="8"
+            width="6"
+            height="3"
+            rx="0.8"
+            ry="0.8"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
+          <line
+            x1="12"
+            y1="16"
+            x2="12"
+            y2="20"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+          <line
+            x1="9"
+            y1="20"
+            x2="15"
+            y2="20"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+        </svg>
+      ),
+    },
+    {
+      title: "Group Projects",
+      href: "/categories/group-projects",
+    description: "Case studies and team assignments.",
+      icon: (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle
+            cx="8"
+            cy="9"
+            r="2.3"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
+          <circle
+            cx="15.5"
+            cy="9"
+            r="2.3"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
+          <path
+            d="M4.5 16c0-2.1 1.6-3.8 3.5-3.8s3.5 1.7 3.5 3.8"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+          <path
+            d="M11.8 16c0-2.1 1.6-3.8 3.7-3.8 2.1 0 3.7 1.7 3.7 3.8"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+        </svg>
+      ),
+    },
+    {
+      title: "Excel & Data",
+      href: "/categories/excel-data",
+    description: "Sheets, tables, dashboards, simple calculations.",
+      icon: (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect
+            x="4"
+            y="4"
+            width="16"
+            height="16"
+            rx="2"
+            ry="2"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
+          <line
+            x1="9"
+            y1="4"
+            x2="9"
+            y2="20"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
+          <line
+            x1="15"
+            y1="4"
+            x2="15"
+            y2="20"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
+          <line
+            x1="4"
+            y1="9"
+            x2="20"
+            y2="9"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
+          <line
+            x1="4"
+            y1="15"
+            x2="20"
+            y2="15"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
+        </svg>
+      ),
+    },
+    {
+      title: "Programming & Tech",
+      href: "/categories/programming-tech",
+    description: "Basic coding tasks and small tech work.",
+      icon: (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect
+            x="3.5"
+            y="5"
+            width="17"
+            height="13"
+            rx="2"
+            ry="2"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
+          <polyline
+            points="9,9 7,12 9,15"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <polyline
+            points="15,9 17,12 15,15"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <line
+            x1="10.5"
+            y1="17.5"
+            x2="13.5"
+            y2="17.5"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+        </svg>
+      ),
+    },
+    {
+      title: "Other Tasks",
+            href: "/categories/other-uni-tasks",
+description: "Anything else required for your course.",
+      icon: (
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle
+            cx="12"
+            cy="7.5"
+            r="2.3"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+          />
+          <path
+            d="M7 15.5c0-2.1 2.2-3.8 5-3.8s5 1.7 5 3.8"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+          <path
+            d="M7 19h10"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+        </svg>
+      ),
+    },
+  ];
+
   return (
     <>
       <Head>
         <title>Workly – University projects, done for you.</title>
         <meta
           name="description"
-          content="Share your assignment brief once, match with a creator, and get clean, ready-to-submit work without the all-nighters."
+          content="Pick a creator, upload your requirements, and get your complete university project delivered with zero effort."
         />
       </Head>
 
-      <Navbar />
+      <div className="page-root">
+              <Navbar />
+      <section className="hero hero-full">
+  <div className="hero-full-inner">
+    <div className="hero-floating hero-floating-1">
+      <span className="hero-floating-emoji">📚</span>
+    </div>
+    <div className="hero-floating hero-floating-2">
+      <span className="hero-floating-emoji">✅</span>
+    </div>
+    <div className="hero-floating hero-floating-3">
+      <span className="hero-floating-emoji">⏰</span>
+    </div>
+    <div className="hero-floating hero-floating-4">
+      <span className="hero-floating-emoji">💬</span>
+    </div>
 
-      <main className="home-main-v3">
-        {/* Hero section */}
-        <section className="home-hero-v3">
-          <div className="home-hero-inner-v3">
-            <p className="home-hero-kicker-v3">For busy uni students</p>
-            <h1 className="home-hero-title-v3">
-              University projects,
-              <br />
-              done for you.
-            </h1>
-            <p className="home-hero-sub-v3">
-              Share your assignment brief once, match with a creator, and get
-              clean, ready-to-submit work without the all-nighters.
-            </p>
-            <button className="home-hero-cta-v3">Start your brief</button>
-          </div>
-        </section>
+    <div className="hero-full-copy">
+      <h1 className="hero-full-title">University projects, done for you.</h1>
+      <p className="hero-full-subtitle">
+        Share your assignment brief once, match with a creator, and get clean,
+        ready-to-submit work without the all-nighters.
+      </p>
+      <button className="hero-full-cta">
+        Start your brief
+      </button>
+    </div>
+  </div>
+</section>
 
-        {/* Categories */}
-        <section className="home-categories-v3">
-          <header className="home-categories-header-v3">
-            <h2>Choose a category</h2>
-            <p>Select what you need help with.</p>
-          </header>
 
-          <div className="home-categories-grid-v3">
-            <Link
-              href="/categories/reports-essays"
-              className="home-category-card-v3"
-            >
-              <h3>Reports &amp; Essays</h3>
-              <p>Help with writing assignments and Word documents.</p>
-            </Link>
 
-            <Link
-              href="/categories/presentations-ppt"
-              className="home-category-card-v3"
-            >
-              <h3>Presentations &amp; PPT</h3>
-              <p>Slides, templates, and clean class presentations.</p>
-            </Link>
 
-            <Link
-              href="/categories/group-projects"
-              className="home-category-card-v3"
-            >
-              <h3>Group projects</h3>
-              <p>Support for case studies, shared slides, and team work.</p>
-            </Link>
+        <main className="page-main">
+  <section className="home-hero-v3">
+    <div className="home-hero-inner-v3">
+      <p className="home-hero-kicker-v3">For busy uni students</p>
+      <h1 className="home-hero-title-v3">
+        University projects,
+        <br />
+        done for you.
+      </h1>
+      <p className="home-hero-sub-v3">
+        Share your assignment brief once, match with a creator, and get
+        clean, ready-to-submit work without the all-nighters.
+      </p>
+      <button className="home-hero-cta-v3">Start your brief</button>
+    </div>
+  </section>
 
-            <Link
-              href="/categories/excel-data"
-              className="home-category-card-v3"
-            >
-              <h3>Excel &amp; Data</h3>
-              <p>Student-level Excel sheets, tables, and simple dashboards.</p>
-            </Link>
+<section className="category-section" aria-labelledby="category-heading">
+            <div className="category-header">
+              <h2 id="category-heading" className="section-title">
+                Choose a category
+              </h2>
+              <p className="section-subtitle">Select what you need help with.</p>
+            </div>
 
-            <Link
-              href="/categories/programming-tech"
-              className="home-category-card-v3"
-            >
-              <h3>Programming &amp; Tech</h3>
-              <p>Basic code, scripts, and technical uni projects.</p>
-            </Link>
+            <div className="category-grid">
+              {categories.map((cat) => (
+                <Link
+                  key={cat.title}
+                  href={cat.href || "#"}
+                  className="category-card"
+                >
+                  <div className="category-icon">{cat.icon}</div>
+                  <h3 className="category-card-title">{cat.title}</h3>
+                  <p className="category-card-text">{cat.description}</p>
+                </Link>
+              ))}
+            </div>
+          </section>
 
-            <Link
-              href="/categories/other-uni-tasks"
-              className="home-category-card-v3"
-            >
-              <h3>Other uni tasks</h3>
-              <p>Small or mixed tasks that don’t fit in one box.</p>
-            </Link>
-          </div>
-        </section>
-      </main>
+          <section className="creators-section" aria-labelledby="creators-heading">
+            <div className="creators-inner">
+              <h2 id="creators-heading" className="section-title creators-title">
+                Make it all happen with creators
+              </h2>
+
+              <div className="creators-list">
+                <div className="creator-row">
+                  <div className="creator-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <circle
+                        cx="12"
+                        cy="9"
+                        r="2.4"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                      />
+                      <path
+                        d="M7 17c0-2.3 2.1-4 5-4s5 1.7 5 4"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </div>
+                  <p className="creator-text">
+                    Access top-talented creators.
+                  </p>
+                </div>
+
+                <div className="creator-row">
+                  <div className="creator-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="6"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                      />
+                      <path
+                        d="M12 9v3l2 1.5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <p className="creator-text">
+                    Match easily with the right expert for your task.
+                  </p>
+                </div>
+
+                <div className="creator-row">
+                  <div className="creator-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <rect
+                        x="5"
+                        y="5"
+                        width="14"
+                        height="14"
+                        rx="3"
+                        ry="3"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                      />
+                      <polyline
+                        points="8,12 11,14.5 16,9.5"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <p className="creator-text">
+                    Get high-quality work delivered fast and within budget.
+                  </p>
+                </div>
+
+                <div className="creator-row">
+                  <div className="creator-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <rect
+                        x="6"
+                        y="7"
+                        width="12"
+                        height="10"
+                        rx="1.8"
+                        ry="1.8"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                      />
+                      <line
+                        x1="9"
+                        y1="11"
+                        x2="15"
+                        y2="11"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                      />
+                      <line
+                        x1="9"
+                        y1="14"
+                        x2="13"
+                        y2="14"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </div>
+                  <p className="creator-text">
+                    Release payment only after you approve the result.
+                  </p>
+                </div>
+              </div>
+            
+              <div className="creators-cta">
+                <button type="button" className="creators-join-btn">
+                  Join now
+                </button>
+              </div>
+</div>
+          </section>
+        </main>
+
+        <footer className="site-footer">
+          <span>workly.day</span>
+      <p className="footer-disclaimer">
+        Workly is not affiliated with any university. Users are responsible for following their institution&apos;s academic rules.
+      </p>
+        
+        
+
+
+        </footer>
+      </div>
     </>
   );
 }
