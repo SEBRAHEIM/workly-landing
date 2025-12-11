@@ -1,28 +1,26 @@
 import Head from "next/head";
-import Navbar from "../../components/Navbar";
 import Link from "next/link";
+import Navbar from "../../components/Navbar";
 
 export default function PresentationsPptPage() {
   return (
     <div className="category-page">
-    <>
       <Head>
-        <title>Presentations & PPT – Workly</title>
+        <title>Presentations &amp; PPT | Workly</title>
         <meta
           name="description"
-          content="Help with class presentations, PowerPoint slides, and decks."
+          content="Clean, clear, and well-designed slides for your classes, group presentations, and defenses."
         />
       </Head>
 
-      <main className="category-detail">
       <Navbar />
-        <section className="category-detail-hero">
-          <h1>Presentations &amp; PPT</h1>
-          <p>
-            Clean, clear, and well-designed slides for your classes, group
-            presentations, and project defenses.
-          </p>
-        </section>
+
+      <main className="category-detail">
+        <h1>Presentations &amp; PPT</h1>
+        <p>
+          Clean, clear, and well-designed slides for your classes, group
+          presentations, and project defenses.
+        </p>
 
         <section className="category-detail-body">
           <h2>Common tasks in this category</h2>
@@ -44,6 +42,5 @@ export default function PresentationsPptPage() {
         </section>
       </main>
     </div>
-    </>
   );
 }

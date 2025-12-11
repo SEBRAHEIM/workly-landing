@@ -1,28 +1,26 @@
 import Head from "next/head";
-import Navbar from "../../components/Navbar";
 import Link from "next/link";
+import Navbar from "../../components/Navbar";
 
 export default function ExcelDataPage() {
   return (
     <div className="category-page">
-    <>
       <Head>
-        <title>Excel & Data – Workly</title>
+        <title>Excel &amp; Data | Workly</title>
         <meta
           name="description"
-          content="Help with Excel sheets, basic dashboards, and simple calculations."
+          content="Help with sheets, tables, simple dashboards, and basic data calculations."
         />
       </Head>
 
-      <main className="category-detail">
       <Navbar />
-        <section className="category-detail-hero">
-          <h1>Excel &amp; Data</h1>
-          <p>
-            Simple, clear spreadsheets, tables, and small dashboards for your
-            assignments and projects.
-          </p>
-        </section>
+
+      <main className="category-detail">
+        <h1>Excel &amp; Data</h1>
+        <p>
+          Get help with sheets, tables, simple dashboards, and basic
+          calculations for your course projects.
+        </p>
 
         <section className="category-detail-body">
           <h2>Common tasks in this category</h2>
@@ -44,6 +42,5 @@ export default function ExcelDataPage() {
         </section>
       </main>
     </div>
-    </>
   );
 }

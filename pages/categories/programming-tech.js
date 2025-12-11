@@ -1,28 +1,26 @@
 import Head from "next/head";
-import Navbar from "../../components/Navbar";
 import Link from "next/link";
+import Navbar from "../../components/Navbar";
 
 export default function ProgrammingTechPage() {
   return (
     <div className="category-page">
-    <>
       <Head>
-        <title>Programming & Tech – Workly</title>
+        <title>Programming &amp; Tech | Workly</title>
         <meta
           name="description"
-          content="Help with small coding tasks, scripts, and tech assignments."
+          content="Intro-level coding tasks, debugging, and small scripts for university courses."
         />
       </Head>
 
-      <main className="category-detail">
       <Navbar />
-        <section className="category-detail-hero">
-          <h1>Programming &amp; Tech</h1>
-          <p>
-            Support for basic coding assignments, scripts, and simple technical
-            tasks related to your courses.
-          </p>
-        </section>
+
+      <main className="category-detail">
+        <h1>Programming &amp; Tech</h1>
+        <p>
+          Get help with intro-level coding tasks, debugging, and small tech work
+          that matches your assignment requirements.
+        </p>
 
         <section className="category-detail-body">
           <h2>Common tasks in this category</h2>
@@ -44,6 +42,5 @@ export default function ProgrammingTechPage() {
         </section>
       </main>
     </div>
-    </>
   );
 }

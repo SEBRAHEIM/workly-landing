@@ -1,28 +1,26 @@
 import Head from "next/head";
-import Navbar from "../../components/Navbar";
 import Link from "next/link";
+import Navbar from "../../components/Navbar";
 
 export default function ReportsEssaysPage() {
   return (
     <div className="category-page">
-    <>
       <Head>
-        <title>Reports & Essays – Workly</title>
+        <title>Reports &amp; Essays | Workly</title>
         <meta
           name="description"
-          content="Help with university reports, essays, and written assignments."
+          content="Get help with written university assignments like essays, reports, reflections, and summaries — always tailored to your rubric."
         />
       </Head>
 
-      <main className="category-detail">
       <Navbar />
-        <section className="category-detail-hero">
-          <h1>Reports &amp; Essays</h1>
-          <p>
-            Get help with written university assignments like essays, reports,
-            reflections, and summaries – always tailored to your rubric.
-          </p>
-        </section>
+
+      <main className="category-detail">
+        <h1>Reports &amp; Essays</h1>
+        <p>
+          Get help with written university assignments like essays, reports,
+          reflections, and summaries – always tailored to your rubric.
+        </p>
 
         <section className="category-detail-body">
           <h2>Common tasks in this category</h2>
@@ -44,6 +42,5 @@ export default function ReportsEssaysPage() {
         </section>
       </main>
     </div>
-    </>
   );
 }

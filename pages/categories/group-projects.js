@@ -1,33 +1,31 @@
 import Head from "next/head";
-import Navbar from "../../components/Navbar";
 import Link from "next/link";
+import Navbar from "../../components/Navbar";
 
 export default function GroupProjectsPage() {
   return (
     <div className="category-page">
-    <>
       <Head>
-        <title>Group Projects – Workly</title>
+        <title>Group Projects | Workly</title>
         <meta
           name="description"
-          content="Help with group projects, case studies, and collaborative assignments."
+          content="Support with case studies and team assignments, from structure to final polish."
         />
       </Head>
 
-      <main className="category-detail">
       <Navbar />
-        <section className="category-detail-hero">
-          <h1>Group Projects</h1>
-          <p>
-            Support for multi-part group assignments, case studies, and semester
-            projects where many pieces need to come together.
-          </p>
-        </section>
+
+      <main className="category-detail">
+        <h1>Group Projects</h1>
+        <p>
+          Get support with case studies and team assignments, from structure
+          and slides to final submission.
+        </p>
 
         <section className="category-detail-body">
           <h2>Common tasks in this category</h2>
           <ul>
-            <li>Case-study writeups and slides</li>
+            <li>Case-study write-ups and slides</li>
             <li>Project structure and outline</li>
             <li>Combining different parts into one clear file</li>
             <li>Final review before submission</li>
@@ -44,6 +42,5 @@ export default function GroupProjectsPage() {
         </section>
       </main>
     </div>
-    </>
   );
 }
