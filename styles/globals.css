@@ -1703,3 +1703,130 @@ body {
   }
 }
 
+/* === Home hero v3 === */
+/* === Home hero v3 === */
+
+.home-main-v3 {
+  background: var(--bg-soft);
+  min-height: 100vh;
+}
+
+/* Hero: full-width gradient, no icons */
+.home-hero-v3 {
+  padding: 40px 20px 36px;
+  background: radial-gradient(circle at top left, #f7eee4 0%, #f3e4d6 45%, #efe0d2 75%, #ebd9c7 100%);
+}
+
+.home-hero-inner-v3 {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.home-hero-kicker-v3 {
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(90, 84, 73, 0.7);
+  margin-bottom: 10px;
+}
+
+.home-hero-title-v3 {
+  font-size: 2rem;
+  line-height: 1.15;
+  font-weight: 700;
+  color: #504133;
+  margin: 0 0 14px;
+}
+
+.home-hero-sub-v3 {
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: rgba(71, 60, 48, 0.9);
+  max-width: 34rem;
+  margin: 0 auto 20px;
+}
+
+.home-hero-cta-v3 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 26px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.98rem;
+  font-weight: 600;
+  background: #c9a980;
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+/* Categories section */
+.home-categories-v3 {
+  padding: 26px 20px 40px;
+}
+
+.home-categories-header-v3 {
+  max-width: 680px;
+  margin: 0 auto 18px;
+}
+
+.home-categories-header-v3 h2 {
+  font-size: 1.3rem;
+  margin: 0 0 4px;
+  color: #4b3f33;
+}
+
+.home-categories-header-v3 p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(90, 84, 73, 0.8);
+}
+
+/* Category cards grid */
+.home-categories-grid-v3 {
+  max-width: 680px;
+  margin: 14px auto 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+}
+
+.home-category-card-v3 {
+  display: block;
+  padding: 16px 16px 18px;
+  border-radius: 22px;
+  background: #fbf7f1;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.04);
+  text-decoration: none;
+}
+
+.home-category-card-v3 h3 {
+  margin: 0 0 6px;
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: #4b3f33;
+}
+
+.home-category-card-v3 p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(90, 84, 73, 0.85);
+}
+
+@media (min-width: 640px) {
+  .home-hero-v3 {
+    padding: 56px 24px 44px;
+  }
+
+  .home-hero-title-v3 {
+    font-size: 2.3rem;
+  }
+
+  .home-categories-grid-v3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
