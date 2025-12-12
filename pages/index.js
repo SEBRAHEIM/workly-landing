@@ -1,10 +1,10 @@
-import { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
+import { useAuthModal } from "../context/AuthContext";
 
 export default function Home() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { openAuthModal } = useAuthModal();
 
   const categories = [
     {
@@ -299,7 +299,14 @@ description: "Anything else required for your course.",
         done for you.
       </h1>
       
-      <button className="home-hero-cta-v3">Begin now</button>
+      <button
+        type="button"
+        className="home-hero-cta-v3"
+        data-auth-modal-trigger
+        onClick={() => openAuthModal("student")}
+      >
+        Begin now
+      </button>
     </div>
   </section>
 
@@ -454,7 +461,12 @@ description: "Anything else required for your course.",
               </div>
             
               <div className="creators-cta">
-                <button type="button" className="creators-join-btn">
+                <button
+                  type="button"
+                  className="creators-join-btn"
+                  data-auth-modal-trigger
+                  onClick={() => openAuthModal("student")}
+                >
                   Join now
                 </button>
               </div>
