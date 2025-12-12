@@ -2,6 +2,11 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "../../lib/supabaseClient";
 
+function getSiteUrl() {
+  if (typeof window !== "undefined") return window.location.origin;
+  return process.env.NEXT_PUBLIC_SITE_URL || "https://workly.day";
+}
+
 export default function VerifyEmailPage() {
   const router = useRouter();
   const email = (router.query.email || "").toString();
@@ -14,20 +19,20 @@ export default function VerifyEmailPage() {
   const [msg, setMsg] = useState("");
   const [err, setErr] = useState("");
 
-  const origin = useMemo(() => (typeof window !== "undefined" ? window.location.origin : ""), []);
   const callbackUrl = useMemo(() => {
-    const u = new URL(`${origin}/auth/callback`);
+    const base = getSiteUrl();
+    const u = new URL("/auth/callback", base);
     u.searchParams.set("intent", intent);
     u.searchParams.set("returnTo", returnTo);
     return u.toString();
-  }, [origin, intent, returnTo]);
+  }, [intent, returnTo]);
 
   function openMail(app) {
     if (typeof window === "undefined") return;
     const map = {
       gmail: "googlegmail://",
       outlook: "ms-outlook://",
-      apple: "message://",
+      apple: "mailto:",
     };
     window.location.href = map[app] || "mailto:";
   }
@@ -58,7 +63,6 @@ export default function VerifyEmailPage() {
     setCode(next);
     setErr("");
     setMsg("");
-
     if (d && i < 5) {
       const el = document.querySelector(`[data-otp="${i + 1}"]`);
       el?.focus?.();

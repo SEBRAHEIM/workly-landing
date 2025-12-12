@@ -2,6 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "../../lib/supabaseClient";
 
+function getSiteUrl() {
+  if (typeof window !== "undefined") return window.location.origin;
+  return process.env.NEXT_PUBLIC_SITE_URL || "https://workly.day";
+}
+
 export default function EmailAuthPage() {
   const router = useRouter();
   const intent = (router.query.intent || "student").toString();
@@ -11,13 +16,13 @@ export default function EmailAuthPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const origin = useMemo(() => (typeof window !== "undefined" ? window.location.origin : ""), []);
   const callbackUrl = useMemo(() => {
-    const u = new URL(`${origin}/auth/callback`);
+    const base = getSiteUrl();
+    const u = new URL("/auth/callback", base);
     u.searchParams.set("intent", intent);
     u.searchParams.set("returnTo", returnTo);
     return u.toString();
-  }, [origin, intent, returnTo]);
+  }, [intent, returnTo]);
 
   useEffect(() => {
     setError("");
@@ -35,10 +40,7 @@ export default function EmailAuthPage() {
 
       const { error: err } = await supabase.auth.signInWithOtp({
         email: cleaned,
-        options: {
-          shouldCreateUser: true,
-          emailRedirectTo: callbackUrl,
-        },
+        options: { shouldCreateUser: true, emailRedirectTo: callbackUrl },
       });
 
       if (err) throw err;
