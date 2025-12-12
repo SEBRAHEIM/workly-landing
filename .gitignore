@@ -5,3 +5,8 @@ npm-debug.log*
 yarn.lock
 pnpm-lock.yaml
 package-lock.json
+_handoff/
+.env
+.env.local
+.env.*
+!.env.example
