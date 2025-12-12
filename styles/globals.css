@@ -2304,3 +2304,86 @@ section.home-hero-v3 .home-hero-button:hover {
   height: 1px;
   background: rgba(47, 40, 31, 0.12);
 }
+
+
+/* Auth modal refinements v2 */
+.auth-modal-actions {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Better alignment for icon + text */
+.auth-modal-btn {
+  width: 100%;
+  border-radius: 999px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.auth-modal-btn.primary {
+  background: #2f3c2b;
+  color: #ffffff;
+}
+
+.auth-modal-btn.secondary {
+  background: #f5f1ea;
+  color: rgba(47, 40, 31, 0.9);
+}
+
+.auth-modal-btn-apple {
+  background: #ece5dc;
+}
+
+.auth-modal-icon {
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.auth-modal-btn span:last-child {
+  flex: 1;
+  text-align: center;
+}
+
+/* OR divider spacing */
+.auth-modal-divider {
+  margin: 6px 0 2px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: rgba(47, 40, 31, 0.55);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  justify-content: center;
+}
+
+.auth-modal-divider::before,
+.auth-modal-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(47, 40, 31, 0.12);
+}
+
+@media (max-width: 520px) {
+  .auth-modal-panel {
+    padding: 28px 20px 30px;
+  }
+}
