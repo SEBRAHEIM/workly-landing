@@ -1,95 +1,87 @@
-import Head from "next/head";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
-import { useMemo, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
 
-export default function EmailAuth() {
+export default function EmailAuthPage() {
   const router = useRouter();
+  const intent = (router.query.intent || "student").toString();
+  const returnTo = (router.query.returnTo || "/").toString();
+
   const [email, setEmail] = useState("");
-  const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const returnTo = useMemo(() => {
-    const rt = typeof router.query.returnTo === "string" ? router.query.returnTo : "/";
-    return rt || "/";
-  }, [router.query.returnTo]);
+  const origin = useMemo(() => (typeof window !== "undefined" ? window.location.origin : ""), []);
+  const callbackUrl = useMemo(() => {
+    const u = new URL(`${origin}/auth/callback`);
+    u.searchParams.set("intent", intent);
+    u.searchParams.set("returnTo", returnTo);
+    return u.toString();
+  }, [origin, intent, returnTo]);
 
-  const intent = useMemo(() => {
-    const i = typeof router.query.intent === "string" ? router.query.intent : "";
-    return i || "";
-  }, [router.query.intent]);
+  useEffect(() => {
+    setError("");
+  }, [email]);
 
-  const sendCode = async (e) => {
+  async function sendLink(e) {
     e.preventDefault();
     setError("");
-    if (!email.trim()) return setError("Enter your email.");
+    setLoading(true);
 
-    setBusy(true);
     try {
-      const base = typeof window !== "undefined" ? window.location.origin : "";
-      const emailRedirectTo = `${base}/auth/callback?returnTo=${encodeURIComponent(returnTo)}${intent ? `&intent=${encodeURIComponent(intent)}` : ""}`;
+      if (!supabase) throw new Error("Supabase not configured.");
+      const cleaned = email.trim().toLowerCase();
+      if (!cleaned.includes("@")) throw new Error("Enter a valid email.");
 
       const { error: err } = await supabase.auth.signInWithOtp({
-        email: email.trim(),
+        email: cleaned,
         options: {
           shouldCreateUser: true,
-          emailRedirectTo,
+          emailRedirectTo: callbackUrl,
         },
       });
 
       if (err) throw err;
 
-      router.push(`/auth/verify?email=${encodeURIComponent(email.trim())}&returnTo=${encodeURIComponent(returnTo)}`);
-    } catch (err) {
-      setError(err?.message || "Could not send code.");
+      router.replace({
+        pathname: "/auth/verify",
+        query: { email: cleaned, intent, returnTo },
+      });
+    } catch (e2) {
+      setError(e2?.message || "Could not send email. Try again.");
     } finally {
-      setBusy(false);
+      setLoading(false);
     }
-  };
+  }
 
   return (
-    <>
-      <Head>
-        <title>Continue with email</title>
-      </Head>
+    <div className="authShell">
+      <div className="authCard">
+        <div className="authBrand">WORKLY</div>
+        <h1 className="authTitle">Sign in with email</h1>
+        <p className="authSub">We’ll send you a secure login link. (No password needed.)</p>
 
-      <div className="auth-flow-page">
-        <div className="auth-flow-card">
-          <div className="auth-flow-top">
-            <div className="auth-flow-brand">WORKLY</div>
-            <h1 className="auth-flow-title">Continue with your email</h1>
-            <p className="auth-flow-subtitle">We’ll email you a 6-digit verification code.</p>
-          </div>
+        <form onSubmit={sendLink} className="authForm">
+          <label className="authLabel">Email</label>
+          <input
+            className="authInput"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-          <form className="auth-flow-form" onSubmit={sendCode}>
-            <label className="auth-flow-label" htmlFor="email">Email</label>
-            <input
-              id="email"
-              className="auth-flow-input"
-              type="email"
-              placeholder="name@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              inputMode="email"
-            />
+          {error ? <div className="authError">{error}</div> : null}
 
-            {error ? <div className="auth-flow-error">{error}</div> : null}
+          <button className="authBtn" type="submit" disabled={loading || !email.trim()}>
+            {loading ? "Sending…" : "Continue"}
+          </button>
 
-            <button className="auth-flow-primary-btn" type="submit" disabled={busy}>
-              {busy ? "Sending..." : "Continue"}
-            </button>
-
-            <button
-              className="auth-flow-secondary-link"
-              type="button"
-              onClick={() => router.push(returnTo || "/")}
-            >
-              Go back
-            </button>
-          </form>
-        </div>
+          <div className="authFoot">By continuing, you agree to our terms and privacy policy.</div>
+        </form>
       </div>
-    </>
+    </div>
   );
 }
