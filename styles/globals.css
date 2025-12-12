@@ -2255,8 +2255,10 @@ section.home-hero-v3 .home-hero-button:hover {
 }
 
 .auth-modal-btn-apple {
-  background: #e9e4dd;
+  background: #f5f1ea;
+  color: rgba(47, 40, 31, 0.9);
 }
+
 
 .auth-modal-icon {
   width: 26px;
@@ -2340,8 +2342,10 @@ section.home-hero-v3 .home-hero-button:hover {
 }
 
 .auth-modal-btn-apple {
-  background: #ece5dc;
+  background: #f5f1ea;
+  color: rgba(47, 40, 31, 0.9);
 }
+
 
 .auth-modal-icon {
   flex: 0 0 32px;
