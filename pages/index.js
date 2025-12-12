@@ -469,6 +469,15 @@ description: "Anything else required for your course.",
                 >
                   Join now
                 </button>
+                <button
+                  type="button"
+                  className="creators-join-btn"
+                  data-auth-modal-trigger
+                  data-auth-modal-intent="creator"
+                  style={{ marginLeft: 10, opacity: 0.95 }}
+                >
+                  Join as creator
+                </button>
               </div>
 </div>
           </section>
