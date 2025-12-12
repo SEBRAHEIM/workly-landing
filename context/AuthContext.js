@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
+import { supabase } from "../lib/supabaseClient";
 import AuthModal from "../components/AuthModal";
 
 const AuthContext = createContext(null);
@@ -7,9 +8,25 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [authIntent, setAuthIntent] = useState("student");
+  const [authIntent, setAuthIntent] = useState("student"); // "student" | "creator"
   const [returnTo, setReturnTo] = useState(null);
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    if (!supabase) return undefined;
+
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data?.session || null);
+    });
+
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession || null);
+    });
+
+    return () => {
+      sub?.subscription?.unsubscribe?.();
+    };
+  }, []);
 
   const openAuthModal = useCallback(
     (intent = "student", options = {}) => {
@@ -20,26 +37,27 @@ export function AuthProvider({ children }) {
     [router.asPath],
   );
 
-  const closeAuthModal = useCallback(() => {
-    setIsModalOpen(false);
-  }, []);
+  const closeAuthModal = useCallback(() => setIsModalOpen(false), []);
 
-  const completeAuth = useCallback(() => {
-    setIsAuthenticated(true);
-    setIsModalOpen(false);
+  const startOAuth = useCallback(
+    async (provider) => {
+      if (!supabase) return;
 
-    if (authIntent === "creator") {
-      router.push({
-        pathname: "/creators/setup",
-        query: { returnTo: returnTo || router.asPath },
+      const base = typeof window !== "undefined" ? window.location.origin : "";
+      const callbackUrl = `${base}/auth/callback?intent=${encodeURIComponent(
+        authIntent || "student",
+      )}&returnTo=${encodeURIComponent(returnTo || router.asPath)}`;
+
+      await supabase.auth.signInWithOAuth({
+        provider,
+        options: { redirectTo: callbackUrl },
       });
-    }
-  }, [authIntent, returnTo, router]);
+    },
+    [authIntent, returnTo, router.asPath],
+  );
 
   useEffect(() => {
-    if (typeof window === "undefined") {
-      return undefined;
-    }
+    if (typeof window === "undefined") return undefined;
 
     const clickHandler = (event) => {
       const trigger = event.target.closest("[data-auth-modal-trigger]");
@@ -56,15 +74,16 @@ export function AuthProvider({ children }) {
 
   const value = useMemo(
     () => ({
+      session,
+      isAuthenticated: !!session,
       authIntent,
-      isAuthenticated,
+      returnTo: returnTo || router.asPath,
       isModalOpen,
       openAuthModal,
       closeAuthModal,
-      completeAuth,
-      returnTo: returnTo || router.asPath,
+      startOAuth,
     }),
-    [authIntent, completeAuth, isAuthenticated, isModalOpen, openAuthModal, closeAuthModal, returnTo, router.asPath],
+    [session, authIntent, returnTo, router.asPath, isModalOpen, openAuthModal, closeAuthModal, startOAuth],
   );
 
   return (
@@ -75,16 +94,13 @@ export function AuthProvider({ children }) {
         authIntent={authIntent}
         returnTo={returnTo || router.asPath}
         onClose={closeAuthModal}
-        onSuccess={completeAuth}
       />
     </AuthContext.Provider>
   );
 }
 
 export function useAuthModal() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuthModal must be used within an AuthProvider");
-  }
-  return context;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuthModal must be used within an AuthProvider");
+  return ctx;
 }
