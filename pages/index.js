@@ -472,7 +472,41 @@ description: "Anything else required for your course.",
               </div>
 </div>
           </section>
-        </main>
+        
+      <div id="waitlist" style={{ padding: "26px 18px" }}>
+        <h2 style={{ margin: "0 0 10px", fontSize: "1.35rem" }}>Join Workly</h2>
+        <p style={{ margin: "0 0 14px", opacity: 0.85 }}>
+          Coming soon. Leave your email and we’ll notify you first.
+        </p>
+        <form style={{ display: "flex", gap: 10, flexWrap: "wrap" }} onSubmit={(e)=>e.preventDefault()}>
+          <input
+            type="email"
+            placeholder="Email address"
+            style={{
+              flex: "1 1 220px",
+              padding: "12px 14px",
+              borderRadius: 12,
+              border: "1px solid rgba(0,0,0,0.12)"
+            }}
+          />
+          <button
+            type="submit"
+            style={{
+              padding: "12px 16px",
+              borderRadius: 999,
+              border: "none",
+              background: "#111",
+              color: "#fff",
+              fontWeight: 600,
+              cursor: "pointer"
+            }}
+          >
+            Notify me
+          </button>
+        </form>
+      </div>
+
+    </main>
 
         <footer className="site-footer">
           <span>workly.day</span>
