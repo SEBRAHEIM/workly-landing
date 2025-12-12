@@ -303,7 +303,7 @@ description: "Anything else required for your course.",
         type="button"
         className="home-hero-cta-v3"
         data-auth-modal-trigger
-        onClick={() = type="button" data-auth-modal-trigger> openAuthModal("student")}
+        onClick={() => > openAuthModal("student")}
       >
         Begin now
       </button>
@@ -465,7 +465,7 @@ description: "Anything else required for your course.",
                   type="button"
                   className="creators-join-btn"
                   data-auth-modal-trigger
-                  onClick={() = type="button" data-auth-modal-trigger> openAuthModal("student")}
+                  onClick={() => > openAuthModal("student")}
                 >
                   Join now
                 </button>
