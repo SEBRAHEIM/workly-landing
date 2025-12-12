@@ -10,3 +10,5 @@ _handoff/
 .env.local
 .env.*
 !.env.example
+.vercel
+.env*.local
