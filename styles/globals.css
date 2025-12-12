@@ -2071,22 +2071,27 @@ section.home-hero-v3 .home-hero-button:hover {
 .auth-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(26, 22, 16, 0.72);
+  background: #ffffff;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  padding: 24px;
+  padding: 24px 16px;
   z-index: 9999;
+  overflow-y: auto;
 }
 
 .auth-modal-panel {
   width: 100%;
-  max-width: 420px;
-  background: #fff;
-  border-radius: 28px;
-  padding: 32px 28px 34px;
-  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.22);
+  max-width: 480px;
+  min-height: 100vh;
+  background: #ffffff;
+  border-radius: 0;
+  padding: 32px 24px 40px;
+  box-shadow: none;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .auth-modal-close {
@@ -2158,9 +2163,18 @@ section.home-hero-v3 .home-hero-button:hover {
 
 @media (max-width: 520px) {
   .auth-modal-panel {
-    padding: 26px 22px 28px;
-    border-radius: 22px;
-  }
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  background: #ffffff;
+  border-radius: 0;
+  padding: 32px 24px 40px;
+  box-shadow: none;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
 }
 
 /* Creator setup page */
