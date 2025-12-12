@@ -60,20 +60,37 @@ export default function AuthModal({ isOpen, authIntent, returnTo, onClose, onSuc
         <p className="auth-modal-body">{copy.body}</p>
 
         <div className="auth-modal-actions">
-          <button
-            type="button"
-            className="auth-modal-btn primary"
-            onClick={() => handleSuccess("google")}
-          >
-            Continue with Google
-          </button>
-          <button type="button" className="auth-modal-btn secondary" onClick={() => handleSuccess("email")}>
-            Continue with email
-          </button>
-          <button type="button" className="auth-modal-btn secondary" onClick={() => handleSuccess("apple")}>
-            Continue with Apple
-          </button>
-        </div>
+  <button
+    type="button"
+    className="auth-modal-btn primary"
+    onClick={() => handleSuccess("google")}
+  >
+    <span className="auth-modal-icon auth-modal-icon-google">G</span>
+    <span>Continue with Google</span>
+  </button>
+
+  <button
+    type="button"
+    className="auth-modal-btn secondary"
+    onClick={() => handleSuccess("email")}
+  >
+    <span className="auth-modal-icon auth-modal-icon-email">✉</span>
+    <span>Continue with email</span>
+  </button>
+
+  <div className="auth-modal-divider">
+    <span>OR</span>
+  </div>
+
+  <button
+    type="button"
+    className="auth-modal-btn secondary auth-modal-btn-apple"
+    onClick={() => handleSuccess("apple")}
+  >
+    <span className="auth-modal-icon auth-modal-icon-apple"></span>
+    <span>Continue with Apple</span>
+  </button>
+</div>
       </div>
     </div>,
     document.body,
