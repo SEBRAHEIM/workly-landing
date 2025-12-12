@@ -1,98 +1,148 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { supabase } from "../../lib/supabaseClient";
+import { getNextOnboardingPath } from "../../lib/onboarding";
 
-export default function VerifyEmailPage() {
+function clampDigits(s) {
+  return (s || "").replace(/\D/g, "").slice(0, 6);
+}
+
+export default function VerifyEmail() {
   const router = useRouter();
-  const email = typeof router.query.email === "string" ? router.query.email : "";
-  const [code, setCode] = useState(["", "", "", "", "", ""]);
-  const [submitting, setSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [code, setCode] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const inputsRef = useRef([]);
 
-  const handleChange = (index, value) => {
-    if (!/^[0-9]?$/.test(value)) return;
-    const next = [...code];
-    next[index] = value;
+  const email = useMemo(() => (typeof router.query.email === "string" ? router.query.email : ""), [router.query.email]);
+  const returnTo = useMemo(() => (typeof router.query.returnTo === "string" ? router.query.returnTo : "/"), [router.query.returnTo]);
+
+  useEffect(() => {
+    if (!code) return;
+    const digits = clampDigits(code);
+    if (digits.length === 6) {
+      // auto-submit
+      verify(digits);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [code]);
+
+  const setDigit = (idx, val) => {
+    const digits = clampDigits((val || "").slice(-1));
+    const arr = code.padEnd(6, " ").split("");
+    arr[idx] = digits ? digits : " ";
+    const next = arr.join("").replace(/\s/g, "");
     setCode(next);
+
+    if (digits && inputsRef.current[idx + 1]) {
+      inputsRef.current[idx + 1].focus();
+    }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const token = code.join("").trim();
-    if (token.length !== 6) return;
+  const onKeyDown = (idx, e) => {
+    if (e.key === "Backspace" && (!code[idx] || code.length <= idx)) {
+      if (inputsRef.current[idx - 1]) inputsRef.current[idx - 1].focus();
+    }
+  };
 
-    setSubmitting(true);
-    setErrorMessage("");
-
+  const resend = async () => {
+    setError("");
+    if (!email) return setError("Missing email.");
+    setBusy(true);
     try {
-      const response = await fetch("/api/auth/verify-otp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const base = typeof window !== "undefined" ? window.location.origin : "";
+      const emailRedirectTo = `${base}/auth/callback?returnTo=${encodeURIComponent(returnTo || "/")}`;
+
+      const { error: err } = await supabase.auth.signInWithOtp({
+        email: email.trim(),
+        options: {
+          shouldCreateUser: true,
+          emailRedirectTo,
         },
-        body: JSON.stringify({ email, token }),
       });
 
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data.error || "Verification failed.");
-      }
+      if (err) throw err;
+    } catch (err) {
+      setError(err?.message || "Could not resend code.");
+    } finally {
+      setBusy(false);
+    }
+  };
 
-      router.push("/auth/role");
-    } catch (error) {
-      setErrorMessage(error.message || "Could not verify the code.");
-      setSubmitting(false);
+  const verify = async (digits = code) => {
+    setError("");
+    if (!email) return setError("Missing email.");
+    if (clampDigits(digits).length !== 6) return setError("Enter the 6-digit code.");
+    setBusy(true);
+
+    try {
+      const { data, error: err } = await supabase.auth.verifyOtp({
+        email: email.trim(),
+        token: clampDigits(digits),
+        type: "email",
+      });
+
+      if (err) throw err;
+
+      const user = data?.user;
+      const next = getNextOnboardingPath(user, returnTo || "/");
+      router.replace(next);
+    } catch (err) {
+      setError(err?.message || "Invalid code.");
+    } finally {
+      setBusy(false);
     }
   };
 
   return (
     <>
       <Head>
-        <title>Confirm your email · Workly</title>
+        <title>Confirm your email</title>
       </Head>
-      <main className="auth-flow-page">
+
+      <div className="auth-flow-page">
         <div className="auth-flow-card">
-          <h1 className="auth-flow-title">Confirm your email</h1>
-          <p className="auth-flow-subtitle">
-            Enter the 6-digit code we emailed to:{" "}
-            <span className="auth-flow-highlight">{email || "your email"}</span>
-          </p>
+          <div className="auth-flow-top">
+            <div className="auth-flow-brand">WORKLY</div>
+            <h1 className="auth-flow-title">Confirm your email</h1>
+            <p className="auth-flow-subtitle">
+              Enter the verification code we emailed to: <b>{email || "your email"}</b>
+            </p>
+          </div>
 
-          <form onSubmit={handleSubmit} className="auth-flow-form">
-            <div className="auth-flow-otp-row">
-              {code.map((digit, index) => (
-                <input
-                  key={index}
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={1}
-                  className="auth-flow-otp-input"
-                  value={digit}
-                  onChange={(e) => handleChange(index, e.target.value)}
-                />
-              ))}
-            </div>
+          <div className="auth-flow-otp-row" aria-label="Verification code">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <input
+                key={i}
+                ref={(el) => (inputsRef.current[i] = el)}
+                className="auth-flow-otp-input"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                maxLength={1}
+                value={code[i] || ""}
+                onChange={(e) => setDigit(i, e.target.value)}
+                onKeyDown={(e) => onKeyDown(i, e)}
+                disabled={busy}
+              />
+            ))}
+          </div>
 
-            {errorMessage && <p className="auth-flow-error">{errorMessage}</p>}
+          {error ? <div className="auth-flow-error">{error}</div> : null}
 
-            <button
-              type="submit"
-              className="auth-flow-primary-btn"
-              disabled={submitting || code.join("").length !== 6}
-            >
-              {submitting ? "Verifying..." : "Submit"}
-            </button>
+          <button className="auth-flow-primary-btn" type="button" onClick={() => verify(code)} disabled={busy}>
+            {busy ? "Submitting..." : "Submit"}
+          </button>
 
-            <button
-              type="button"
-              className="auth-flow-secondary-link"
-              onClick={() => alert("Resend code placeholder — connect via API later.")}
-            >
-              Resend code
-            </button>
-          </form>
+          <button className="auth-flow-secondary-link" type="button" onClick={resend} disabled={busy}>
+            Resend code
+          </button>
+
+          <button className="auth-flow-secondary-link" type="button" onClick={() => router.push(`/auth/email?returnTo=${encodeURIComponent(returnTo || "/")}`)} disabled={busy}>
+            Use a different email
+          </button>
         </div>
-      </main>
+      </div>
     </>
   );
 }

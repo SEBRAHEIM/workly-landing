@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "../lib/supabaseClient";
+import { getNextOnboardingPath, isOnboardingRoute } from "../lib/onboarding";
 import AuthModal from "../components/AuthModal";
 
 const AuthContext = createContext(null);
@@ -38,6 +39,30 @@ export function AuthProvider({ children }) {
   );
 
   const closeAuthModal = useCallback(() => setIsModalOpen(false), []);
+
+  const ensureOnboardingRedirect = useCallback(
+    async (maybeUser = null) => {
+      try {
+        const pathname = router.pathname || "";
+        if (isOnboardingRoute(pathname)) return;
+
+        const user = maybeUser || session?.user;
+        if (!user) return;
+
+        const next = getNextOnboardingPath(user, router.asPath || "/");
+        if (next && next !== (router.asPath || "/") && next.startsWith("/onboarding")) {
+          router.replace(next);
+        }
+      } catch {}
+    },
+    [router, session],
+  );
+
+  useEffect(() => {
+    if (!session?.user) return;
+    ensureOnboardingRedirect(session.user);
+  }, [session, ensureOnboardingRedirect]);
+
 
   const startOAuth = useCallback(
     async (provider) => {

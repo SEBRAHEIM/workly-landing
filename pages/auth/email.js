@@ -1,112 +1,95 @@
 import Head from "next/head";
-import { useState } from "react";
 import { useRouter } from "next/router";
+import { useMemo, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
 
-export default function EmailSignUpPage() {
+export default function EmailAuth() {
   const router = useRouter();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
 
-  const isValidEmail = (value) => /\S+@\S+\.\S+/.test(value);
-  const isValidPassword = (value) =>
-    value.length >= 8 &&
-    /[A-Z]/.test(value) &&
-    /[a-z]/.test(value) &&
-    /\d/.test(value);
+  const returnTo = useMemo(() => {
+    const rt = typeof router.query.returnTo === "string" ? router.query.returnTo : "/";
+    return rt || "/";
+  }, [router.query.returnTo]);
 
-  const canSubmit = isValidEmail(email) && isValidPassword(password) && !submitting;
+  const intent = useMemo(() => {
+    const i = typeof router.query.intent === "string" ? router.query.intent : "";
+    return i || "";
+  }, [router.query.intent]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (!supabase) {
-      setErrorMessage("Supabase is not configured yet. Please add your keys in .env.local.");
-      return;
+  const sendCode = async (e) => {
+    e.preventDefault();
+    setError("");
+    if (!email.trim()) return setError("Enter your email.");
+
+    setBusy(true);
+    try {
+      const base = typeof window !== "undefined" ? window.location.origin : "";
+      const emailRedirectTo = `${base}/auth/callback?returnTo=${encodeURIComponent(returnTo)}${intent ? `&intent=${encodeURIComponent(intent)}` : ""}`;
+
+      const { error: err } = await supabase.auth.signInWithOtp({
+        email: email.trim(),
+        options: {
+          shouldCreateUser: true,
+          emailRedirectTo,
+        },
+      });
+
+      if (err) throw err;
+
+      router.push(`/auth/verify?email=${encodeURIComponent(email.trim())}&returnTo=${encodeURIComponent(returnTo)}`);
+    } catch (err) {
+      setError(err?.message || "Could not send code.");
+    } finally {
+      setBusy(false);
     }
-    if (!canSubmit) return;
-
-    setSubmitting(true);
-    setErrorMessage("");
-
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-
-    if (error) {
-      setErrorMessage(error.message || "Could not sign you up. Please try again.");
-      setSubmitting(false);
-      return;
-    }
-
-    // Next step: username
-    router.push(`/auth/username?email=${encodeURIComponent(email)}`);
   };
 
   return (
     <>
       <Head>
-        <title>Continue with email · Workly</title>
+        <title>Continue with email</title>
       </Head>
-      <main className="auth-flow-page">
+
+      <div className="auth-flow-page">
         <div className="auth-flow-card">
-          <h1 className="auth-flow-title">Continue with your email</h1>
-          <p className="auth-flow-subtitle">
-            Create your Workly account with an email and password.
-          </p>
+          <div className="auth-flow-top">
+            <div className="auth-flow-brand">WORKLY</div>
+            <h1 className="auth-flow-title">Continue with your email</h1>
+            <p className="auth-flow-subtitle">We’ll email you a 6-digit verification code.</p>
+          </div>
 
-          <form onSubmit={handleSubmit} className="auth-flow-form">
-            <label className="auth-flow-label">
-              Email
-              <input
-                type="email"
-                autoComplete="email"
-                className="auth-flow-input"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                required
-              />
-            </label>
-            {!isValidEmail(email) && email.length > 0 && (
-              <p className="auth-flow-error-small">Enter a valid email address.</p>
-            )}
+          <form className="auth-flow-form" onSubmit={sendCode}>
+            <label className="auth-flow-label" htmlFor="email">Email</label>
+            <input
+              id="email"
+              className="auth-flow-input"
+              type="email"
+              placeholder="name@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+              inputMode="email"
+            />
 
-            <label className="auth-flow-label">
-              Password
-              <input
-                type="password"
-                autoComplete="new-password"
-                className="auth-flow-input"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Choose a strong password"
-                required
-              />
-            </label>
-            <p className="auth-flow-hint">
-              At least 8 characters, with 1 uppercase, 1 lowercase, and 1 number.
-            </p>
-            {!isValidPassword(password) && password.length > 0 && (
-              <p className="auth-flow-error-small">
-                Password doesn&apos;t meet the requirements yet.
-              </p>
-            )}
+            {error ? <div className="auth-flow-error">{error}</div> : null}
 
-            {errorMessage && <p className="auth-flow-error">{errorMessage}</p>}
+            <button className="auth-flow-primary-btn" type="submit" disabled={busy}>
+              {busy ? "Sending..." : "Continue"}
+            </button>
 
             <button
-              type="submit"
-              className="auth-flow-primary-btn"
-              disabled={!canSubmit}
+              className="auth-flow-secondary-link"
+              type="button"
+              onClick={() => router.push(returnTo || "/")}
             >
-              {submitting ? "Creating account..." : "Continue"}
+              Go back
             </button>
           </form>
         </div>
-      </main>
+      </div>
     </>
   );
 }
