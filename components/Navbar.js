@@ -1,14 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useAuthModal } from "../context/AuthContext";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { openAuthModal } = useAuthModal();
+  const router = useRouter();
+
+  let openAuthModal;
+  try {
+    const ctx = useAuthModal();
+    openAuthModal =
+      ctx && typeof ctx.openAuthModal === "function" ? ctx.openAuthModal : undefined;
+  } catch (e) {
+    openAuthModal = undefined;
+  }
+
+  useEffect(() => {
+    const close = () => setMenuOpen(false);
+    router.events?.on("routeChangeStart", close);
+    return () => router.events?.off("routeChangeStart", close);
+  }, [router.events]);
+
+  const go = (href) => {
+    setMenuOpen(false);
+    router.push(href);
+  };
 
   const openForIntent = (intent = "student") => {
-    openAuthModal(intent);
     setMenuOpen(false);
+    if (openAuthModal) return openAuthModal(intent);
+    if (intent === "creator") return router.push("/creators/setup");
+    return router.push("/auth/email");
   };
 
   return (
@@ -18,7 +41,7 @@ function Navbar() {
           type="button"
           className="menu-button"
           aria-label="Open menu"
-          onClick={() => setMenuOpen(true)}
+          onClick={() => setMenuOpen((v) => !v)}
         >
           <span className="menu-button-lines">
             <span className="menu-button-line" />
@@ -42,10 +65,13 @@ function Navbar() {
       {menuOpen && (
         <div
           className="mobile-menu-overlay"
+          role="presentation"
           onClick={() => setMenuOpen(false)}
         >
           <div
             className="mobile-menu-panel"
+            role="dialog"
+            aria-modal="true"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mobile-menu-header">
@@ -89,7 +115,7 @@ function Navbar() {
                     type="button"
                     className="mobile-menu-link secondary"
                     data-auth-modal-trigger
-                    onClick={() => openForIntent("student")}
+                    onClick={() => (openAuthModal ? openForIntent("student") : go("/auth/login"))}
                   >
                     Sign in
                   </button>
@@ -101,17 +127,22 @@ function Navbar() {
               <div className="mobile-menu-section-label">FOR STUDENTS</div>
               <ul className="mobile-menu-list">
                 <li className="mobile-menu-item">
-                  <Link href="#categories" className="mobile-menu-link">
+                  <a
+                    href="#categories"
+                    className="mobile-menu-link"
+                    onClick={() => setMenuOpen(false)}
+                  >
                     Browse categories
-                  </Link>
+                  </a>
                 </li>
                 <li className="mobile-menu-item">
-                  <Link
+                  <a
                     href="#how-workly-works"
                     className="mobile-menu-link secondary"
+                    onClick={() => setMenuOpen(false)}
                   >
                     How Workly works
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -120,12 +151,20 @@ function Navbar() {
               <div className="mobile-menu-section-label">GENERAL</div>
               <ul className="mobile-menu-list">
                 <li className="mobile-menu-item">
-                  <Link href="/about" className="mobile-menu-link">
+                  <Link
+                    href="/about"
+                    className="mobile-menu-link"
+                    onClick={() => setMenuOpen(false)}
+                  >
                     About Workly
                   </Link>
                 </li>
                 <li className="mobile-menu-item">
-                  <Link href="/support" className="mobile-menu-link secondary">
+                  <Link
+                    href="/support"
+                    className="mobile-menu-link secondary"
+                    onClick={() => setMenuOpen(false)}
+                  >
                     Support
                   </Link>
                 </li>

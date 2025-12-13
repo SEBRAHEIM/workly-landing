@@ -3273,3 +3273,29 @@ section.home-hero-v3 .home-hero-button:hover {
 html, body, #__next {
   pointer-events: auto !important;
 }
+
+
+/* WORKLY_NAV_CLICK_FIX */
+.top-nav {
+  position: relative;
+  z-index: 10000;
+  pointer-events: auto !important;
+}
+.menu-button, .join-button {
+  position: relative;
+  z-index: 10001;
+  pointer-events: auto !important;
+}
+.mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: auto;
+}
+.mobile-menu-panel {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  pointer-events: auto;
+}
