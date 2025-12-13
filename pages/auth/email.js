@@ -24,9 +24,7 @@ export default function EmailAuthPage() {
     return u.toString();
   }, [intent, returnTo]);
 
-  useEffect(() => {
-    setError("");
-  }, [email]);
+  useEffect(() => setError(""), [email]);
 
   async function sendLink(e) {
     e.preventDefault();
@@ -36,7 +34,7 @@ export default function EmailAuthPage() {
     try {
       if (!supabase) throw new Error("Supabase not configured.");
       const cleaned = email.trim().toLowerCase();
-      if (!cleaned.includes("@")) throw new Error("Enter a valid email.");
+      if (!cleaned || !cleaned.includes("@")) throw new Error("Enter a valid email.");
 
       const { error: err } = await supabase.auth.signInWithOtp({
         email: cleaned,
@@ -61,7 +59,11 @@ export default function EmailAuthPage() {
       <div className="authCard">
         <div className="authBrand">WORKLY</div>
         <h1 className="authTitle">Sign in with email</h1>
-        <p className="authSub">We’ll send you a secure login link. (No password needed.)</p>
+        <p className="authSub">
+          We’ll email you a secure sign-in link.
+          <br />
+          No password, no code.
+        </p>
 
         <form onSubmit={sendLink} className="authForm">
           <label className="authLabel">Email</label>
@@ -81,7 +83,9 @@ export default function EmailAuthPage() {
             {loading ? "Sending…" : "Continue"}
           </button>
 
-          <div className="authFoot">By continuing, you agree to our terms and privacy policy.</div>
+          <div className="authFoot">
+            By continuing, you agree to our terms and privacy policy.
+          </div>
         </form>
       </div>
     </div>
