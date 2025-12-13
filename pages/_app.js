@@ -1,10 +1,11 @@
 import "../styles/globals.css";
-import { AuthProvider } from "../context/AuthContext";
+import AuthBadge from "../components/AuthBadge";
 
-export default function MyApp({ Component, pageProps }) {
+export default function App({ Component, pageProps }) {
   return (
-    <AuthProvider>
+    <>
+      <AuthBadge />
       <Component {...pageProps} />
-    </AuthProvider>
+    </>
   );
 }

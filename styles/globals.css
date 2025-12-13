@@ -3109,3 +3109,161 @@ section.home-hero-v3 .home-hero-button:hover {
   font-size:14px;
 }
 
+
+.authShell{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:28px 16px;
+  background:#f4f1ea;
+}
+
+.authCard{
+  width:min(520px,100%);
+  background:#ffffff;
+  border:1px solid rgba(60,55,47,.14);
+  border-radius:20px;
+  padding:22px;
+  box-shadow:0 18px 40px rgba(0,0,0,.08);
+  color:#2f2a22;
+}
+
+.authBrand{
+  font-weight:800;
+  letter-spacing:.22em;
+  font-size:13px;
+  opacity:.9;
+  margin-bottom:10px;
+  color:#2f2a22;
+}
+
+.authTitle{
+  margin:0;
+  font-size:34px;
+  line-height:1.08;
+  font-weight:800;
+  letter-spacing:-0.02em;
+  color:#2f2a22;
+}
+
+.authSub{
+  margin:10px 0 18px;
+  font-size:15px;
+  line-height:1.55;
+  color:rgba(47,42,34,.72);
+}
+
+.authForm{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.authLabel{
+  font-size:13px;
+  color:rgba(47,42,34,.68);
+}
+
+.authInput{
+  height:50px;
+  border-radius:16px;
+  border:1px solid rgba(60,55,47,.18);
+  background:#faf7f0;
+  padding:0 16px;
+  font-size:16px;
+  color:#2f2a22;
+  outline:none;
+}
+
+.authInput::placeholder{
+  color:rgba(47,42,34,.40);
+}
+
+.authInput:focus{
+  border-color:rgba(47,62,44,.55);
+  box-shadow:0 0 0 2px rgba(47,62,44,.12);
+}
+
+.authBtn{
+  height:52px;
+  border-radius:999px;
+  border:none;
+  font-weight:800;
+  cursor:pointer;
+  background:#2f3e2c;
+  color:#ffffff;
+}
+
+.authBtn:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+.authBtnGhost{
+  height:48px;
+  border-radius:999px;
+  border:1px solid rgba(60,55,47,.18);
+  background:transparent;
+  color:#2f2a22;
+  cursor:pointer;
+  font-weight:800;
+}
+
+.authBtnGhost:hover{
+  background:rgba(47,62,44,.06);
+}
+
+.authLinkBtn{
+  border:none;
+  background:transparent;
+  padding:6px 0;
+  text-align:left;
+  cursor:pointer;
+  font-weight:800;
+  color:rgba(47,42,34,.72);
+}
+
+.authLinkBtn:hover{
+  color:#2f2a22;
+  text-decoration:underline;
+}
+
+.authError{
+  border:1px solid rgba(190,60,60,.28);
+  background:rgba(190,60,60,.07);
+  color:#7a1f1f;
+  padding:10px 12px;
+  border-radius:14px;
+  font-size:14px;
+}
+
+.authOk{
+  border:1px solid rgba(47,62,44,.22);
+  background:rgba(47,62,44,.08);
+  color:#2f3e2c;
+  padding:10px 12px;
+  border-radius:14px;
+  font-size:14px;
+}
+
+.worklyAuthBadge{
+  position:fixed;
+  top:14px;
+  left:14px;
+  z-index:9999;
+  padding:10px 14px;
+  border-radius:999px;
+  background:#ffffff;
+  border:1px solid rgba(60,55,47,.14);
+  box-shadow:0 10px 24px rgba(0,0,0,.10);
+  color:#2f2a22;
+  font-weight:800;
+  font-size:13px;
+  letter-spacing:.04em;
+}
+
+.worklyAuthed a[href="/auth/login"],
+.worklyAuthed a[href="/auth/email"]{
+  display:none !important;
+}
