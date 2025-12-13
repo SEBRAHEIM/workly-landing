@@ -1,18 +1,14 @@
 import "../styles/globals.css";
 import AuthBadge from "../components/AuthBadge";
-
-let SafeAuthProvider = ({ children }) => children;
-
-try {
-  const m = require("../components/AuthModal");
-  SafeAuthProvider = m?.AuthProvider || m?.default || SafeAuthProvider;
-} catch (e) {}
+import AuthModal from "../components/AuthModal";
+import { AuthProvider } from "../context/AuthContext";
 
 export default function App({ Component, pageProps }) {
   return (
-    <SafeAuthProvider>
+    <AuthProvider>
       <AuthBadge />
+      <AuthModal />
       <Component {...pageProps} />
-    </SafeAuthProvider>
+    </AuthProvider>
   );
 }

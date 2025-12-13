@@ -3267,3 +3267,9 @@ section.home-hero-v3 .home-hero-button:hover {
 .worklyAuthed a[href="/auth/email"]{
   display:none !important;
 }
+
+
+/* WORKLY_CLICK_FIX: ensure site remains clickable even if a wrapper gets pointer-events:none */
+html, body, #__next {
+  pointer-events: auto !important;
+}
