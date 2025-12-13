@@ -4,7 +4,16 @@ import { supabase } from "../lib/supabaseClient";
 import { getNextOnboardingPath, isOnboardingRoute } from "../lib/onboarding";
 import AuthModal from "../components/AuthModal";
 
-const AuthContext = createContext(null);
+const AuthContext = createContext(({ __worklyAuth: true,
+  isOpen: false,
+  mode: null,
+  open: function(){},
+  close: function(){},
+  setMode: function(){},
+  setOpen: function(){},
+  show: function(){},
+  hide: function(){}
+}));
 
 export function AuthProvider({ children }) {
   const router = useRouter();
@@ -126,6 +135,15 @@ export function AuthProvider({ children }) {
 
 export function useAuthModal() {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuthModal must be used within an AuthProvider");
+  if (!ctx) return ({ __worklyAuth: true,
+  isOpen: false,
+  mode: null,
+  open: function(){},
+  close: function(){},
+  setMode: function(){},
+  setOpen: function(){},
+  show: function(){},
+  hide: function(){}
+});
   return ctx;
 }
