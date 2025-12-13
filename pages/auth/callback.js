@@ -1,22 +1,9 @@
-import { supabase } from "../../lib/supabaseClient";
+import { useEffect } from "react";
 
-export default async function handler(req, res) {
-  const { data: { user } } = await supabase.auth.getUser(req);
+export default function AuthCallback() {
+  useEffect(() => {
+    window.location.href = "/api/auth/callback";
+  }, []);
 
-  if (!user) {
-    res.redirect("/");
-    return;
-  }
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("id")
-    .eq("id", user.id)
-    .single();
-
-  if (!profile) {
-    res.redirect("/onboarding");
-  } else {
-    res.redirect("/");
-  }
+  return null;
 }
