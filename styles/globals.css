@@ -2978,3 +2978,134 @@ section.home-hero-v3 .home-hero-button:hover {
   font-size: 14px;
 }
 
+
+/* ================================
+   WORKLY AUTH – LIGHT BRAND UI
+   Matches post-signup flow exactly
+   ================================ */
+
+.authShell{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:32px 16px;
+  background:#F5F1EA;
+}
+
+.authCard{
+  width:min(520px,100%);
+  background:#FFFFFF;
+  border:1px solid #EFE9DF;
+  border-radius:20px;
+  padding:28px;
+  box-shadow:0 12px 40px rgba(0,0,0,.06);
+  color:#2E2B26;
+}
+
+.authBrand{
+  font-weight:700;
+  letter-spacing:.18em;
+  font-size:13px;
+  margin-bottom:14px;
+}
+
+.authTitle{
+  margin:0;
+  font-size:28px;
+  line-height:1.2;
+  font-weight:800;
+}
+
+.authSub{
+  margin:10px 0 22px;
+  font-size:15px;
+  color:#6B665E;
+}
+
+.authForm{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.authLabel{
+  font-size:13px;
+  color:#6B665E;
+}
+
+.authInput{
+  height:50px;
+  border-radius:14px;
+  border:1px solid #EFE9DF;
+  background:#F9F6F1;
+  padding:0 16px;
+  font-size:16px;
+  color:#2E2B26;
+  outline:none;
+}
+
+.authInput::placeholder{
+  color:#9C978E;
+}
+
+.authInput:focus{
+  border-color:#8C8F6A;
+  background:#FFFFFF;
+}
+
+.authBtn{
+  height:52px;
+  border-radius:16px;
+  border:none;
+  font-weight:700;
+  cursor:pointer;
+  background:#2F3E2A;
+  color:#FFFFFF;
+}
+
+.authBtn:hover{
+  background:#3A4C33;
+}
+
+.authBtnGhost{
+  height:46px;
+  border-radius:14px;
+  border:1px solid #EFE9DF;
+  background:#FFFFFF;
+  color:#2E2B26;
+  font-weight:600;
+}
+
+.authLinkBtn{
+  background:none;
+  border:none;
+  padding:6px 0;
+  font-weight:600;
+  color:#6B665E;
+  text-align:left;
+}
+
+.authLinkBtn:hover{
+  color:#2E2B26;
+  text-decoration:underline;
+}
+
+.authError{
+  background:#FFF1F1;
+  border:1px solid #F2CACA;
+  color:#7A2E2E;
+  padding:12px 14px;
+  border-radius:14px;
+  font-size:14px;
+}
+
+.authOk{
+  background:#F2F5EC;
+  border:1px solid #D6DFC5;
+  color:#3E4A2E;
+  padding:12px 14px;
+  border-radius:14px;
+  font-size:14px;
+}
+
