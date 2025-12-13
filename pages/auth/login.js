@@ -1,121 +1,161 @@
-import { useMemo, useState } from "react";
-import { useRouter } from "next/router";
-import { supabase } from "../../lib/supabaseClient";
+import { useEffect, useMemo, useState } from "react"
+import { useRouter } from "next/router"
+
+function isValidEmail(v) {
+  const x = String(v || "").trim()
+  return x.includes("@") && x.includes(".") && x.length >= 6
+}
 
 export default function LoginPage() {
-  const router = useRouter();
-  const returnTo = (router.query.returnTo || "/").toString();
+  const router = useRouter()
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [sending, setSending] = useState(false);
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [emailExists, setEmailExists] = useState(null)
+  const [checking, setChecking] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [msg, setMsg] = useState("")
+  const [err, setErr] = useState("")
 
-  const cleanEmail = useMemo(() => email.trim().toLowerCase(), [email]);
+  const canCheck = useMemo(() => isValidEmail(email), [email])
 
-  async function afterAuthRedirect() {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return router.replace("/");
-
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("id")
-      .eq("id", user.id)
-      .single();
-
-    if (!profile) return router.replace("/onboarding");
-    return router.replace(returnTo || "/");
-  }
-
-  async function signIn(e) {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+  async function checkEmailExists() {
+    setErr("")
+    setMsg("")
+    if (!canCheck) {
+      setEmailExists(null)
+      return
+    }
+    setChecking(true)
     try {
-      if (!cleanEmail || !cleanEmail.includes("@")) throw new Error("Enter a valid email.");
-      if (!password) throw new Error("Enter your password.");
-
-      const { error: err } = await supabase.auth.signInWithPassword({
-        email: cleanEmail,
-        password,
-      });
-
-      if (err) throw err;
-      await afterAuthRedirect();
-    } catch (e2) {
-      setError("Couldn’t sign in. If you’re new, use the email code option below.");
+      const r = await fetch(`/api/auth/check-email?email=${encodeURIComponent(email.trim())}`)
+      const j = await r.json().catch(() => null)
+      if (j && j.ok) {
+        setEmailExists(!!j.exists)
+      } else {
+        setEmailExists(null)
+      }
+    } catch (e) {
+      setEmailExists(null)
     } finally {
-      setLoading(false);
+      setChecking(false)
     }
   }
 
-  async function continueWithCode() {
-    setError("");
-    setSending(true);
+  useEffect(() => {
+    setEmailExists(null)
+    setErr("")
+    setMsg("")
+  }, [email])
+
+  async function onSubmit(e) {
+    e.preventDefault()
+    setErr("")
+    setMsg("")
+
+    const cleanEmail = email.trim().toLowerCase()
+
+    if (!isValidEmail(cleanEmail)) {
+      setErr("Enter a valid email.")
+      return
+    }
+
+    if (emailExists === false) {
+      router.push(`/auth/email?email=${encodeURIComponent(cleanEmail)}`)
+      return
+    }
+
+    setLoading(true)
     try {
-      if (!cleanEmail || !cleanEmail.includes("@")) throw new Error("Enter a valid email.");
+      const r = await fetch("/api/auth/login-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: cleanEmail, password })
+      })
 
-      const { error: err } = await supabase.auth.signInWithOtp({
-        email: cleanEmail,
-        options: {
-          shouldCreateUser: true,
-        },
-      });
+      const j = await r.json().catch(() => null)
 
-      if (err) throw err;
+      if (r.ok) {
+        router.push("/dashboard")
+        return
+      }
 
-      router.replace({
-        pathname: "/auth/verify",
-        query: { email: cleanEmail, returnTo },
-      });
-    } catch (e2) {
-      setError(e2?.message || "Could not send code. Try again.");
+      const message = j?.error || "Sign in failed."
+
+      if (emailExists === null) {
+        await checkEmailExists()
+      }
+
+      if (emailExists === false) {
+        router.push(`/auth/email?email=${encodeURIComponent(cleanEmail)}`)
+        return
+      }
+
+      setErr(message)
+    } catch (e) {
+      setErr("Something went wrong. Try again.")
     } finally {
-      setSending(false);
+      setLoading(false)
     }
   }
 
   return (
-    <div className="authShell">
+    <div className="authWrap">
       <div className="authCard">
         <div className="authBrand">WORKLY</div>
         <h1 className="authTitle">Sign in</h1>
-        <p className="authSub">Existing users sign in with password. New users use an email code once, then set a password.</p>
+        <p className="authSubtitle">
+          Existing users sign in with password. New users verify email once, then set a password.
+        </p>
 
-        <form onSubmit={signIn} className="authForm">
+        <form onSubmit={onSubmit} className="authForm">
           <label className="authLabel">Email</label>
           <input
             className="authInput"
             type="email"
-            inputMode="email"
-            autoComplete="email"
-            placeholder="you@example.com"
             value={email}
+            placeholder="you@example.com"
             onChange={(e) => setEmail(e.target.value)}
+            onBlur={checkEmailExists}
+            autoComplete="email"
           />
 
-          <label className="authLabel">Password</label>
-          <input
-            className="authInput"
-            type="password"
-            autoComplete="current-password"
-            placeholder="Your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          {emailExists !== false && (
+            <>
+              <label className="authLabel">Password</label>
+              <input
+                className="authInput"
+                type="password"
+                value={password}
+                placeholder="Your password"
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+              />
+            </>
+          )}
 
-          {error ? <div className="authError">{error}</div> : null}
+          {err ? <div className="authError">{err}</div> : null}
+          {msg ? <div className="authMsg">{msg}</div> : null}
 
-          <button className="authBtn" type="submit" disabled={loading}>
-            {loading ? "Signing in…" : "Sign in"}
+          <button
+            type="submit"
+            className="authPrimaryBtn"
+            disabled={loading || checking}
+          >
+            {checking ? "Checking…" : emailExists === false ? "Verify email" : loading ? "Signing in…" : "Sign in"}
           </button>
 
-          <button className="authBtnGhost" type="button" onClick={continueWithCode} disabled={sending}>
-            {sending ? "Sending code…" : "New here? Continue with email code"}
+          <div style={{ height: 10 }} />
+
+          <button
+            type="button"
+            className="authSecondaryBtn"
+            onClick={() => router.push(`/auth/email?email=${encodeURIComponent(email.trim().toLowerCase())}`)}
+          >
+            Use email code instead
           </button>
         </form>
       </div>
     </div>
-  );
+  )
 }
