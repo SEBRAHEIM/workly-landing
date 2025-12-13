@@ -32,13 +32,15 @@ export default function EmailAuthPage() {
     setLoading(true);
 
     try {
-      if (!supabase) throw new Error("Supabase not configured.");
       const cleaned = email.trim().toLowerCase();
       if (!cleaned || !cleaned.includes("@")) throw new Error("Enter a valid email.");
 
       const { error: err } = await supabase.auth.signInWithOtp({
         email: cleaned,
-        options: { shouldCreateUser: true, emailRedirectTo: callbackUrl },
+        options: {
+          shouldCreateUser: true,
+          emailRedirectTo: callbackUrl,
+        },
       });
 
       if (err) throw err;
@@ -58,7 +60,7 @@ export default function EmailAuthPage() {
     <div className="authShell">
       <div className="authCard">
         <div className="authBrand">WORKLY</div>
-        <h1 className="authTitle">Sign in</h1>
+        <h1 className="authTitle">Sign in / Sign up</h1>
         <p className="authSub">We’ll email you a 6-digit code.</p>
 
         <form onSubmit={sendCode} className="authForm">
@@ -76,10 +78,8 @@ export default function EmailAuthPage() {
           {error ? <div className="authError">{error}</div> : null}
 
           <button className="authBtn" type="submit" disabled={loading || !email.trim()}>
-            {loading ? "Sending…" : "Continue"}
+            {loading ? "Sending…" : "Send 6-digit code"}
           </button>
-
-          <div className="authFoot">By continuing, you agree to our terms and privacy policy.</div>
         </form>
       </div>
     </div>

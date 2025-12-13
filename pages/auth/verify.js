@@ -13,8 +13,8 @@ export default function VerifyEmailPage() {
   const intent = (router.query.intent || "student").toString();
   const returnTo = (router.query.returnTo || "/").toString();
 
-  const [code, setCode] = useState(["", "", "", "", "", ""]);
-  const [submitting, setSubmitting] = useState(false);
+  const [code, setCode] = useState("");
+  const [loading, setLoading] = useState(false);
   const [resending, setResending] = useState(false);
   const [msg, setMsg] = useState("");
   const [err, setErr] = useState("");
@@ -27,16 +27,38 @@ export default function VerifyEmailPage() {
     return u.toString();
   }, [intent, returnTo]);
 
-  function handleDigit(i, v) {
-    const d = (v || "").replace(/\D/g, "").slice(0, 1);
-    const next = [...code];
-    next[i] = d;
-    setCode(next);
+  async function verify(e) {
+    e.preventDefault();
     setErr("");
     setMsg("");
-    if (d && i < 5) {
-      const el = document.querySelector(`[data-otp="${i + 1}"]`);
-      el?.focus?.();
+    setLoading(true);
+
+    try {
+      const token = code.trim();
+      if (!email) throw new Error("Missing email.");
+      if (!/^[0-9]{6}$/.test(token)) throw new Error("Enter the 6-digit code.");
+
+      const attempt = async (type) => {
+        const { data, error } = await supabase.auth.verifyOtp({
+          email,
+          token,
+          type,
+        });
+        if (error) throw error;
+        return data;
+      };
+
+      try {
+        await attempt("signup");
+      } catch {
+        await attempt("email");
+      }
+
+      router.replace(returnTo || "/");
+    } catch (e2) {
+      setErr(e2?.message || "Invalid code. Try again.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -52,38 +74,10 @@ export default function VerifyEmailPage() {
       });
       if (error) throw error;
       setMsg("Sent! Check your inbox (and spam).");
-    } catch (e) {
-      setErr(e?.message || "Could not resend. Try again.");
+    } catch (e2) {
+      setErr(e2?.message || "Could not resend. Try again.");
     } finally {
       setResending(false);
-    }
-  }
-
-  async function submitCode(e) {
-    e.preventDefault();
-    setErr("");
-    setMsg("");
-    setSubmitting(true);
-
-    try {
-      const token = code.join("");
-      if (token.length !== 6) throw new Error("Enter the 6-digit code.");
-      if (!email) throw new Error("Missing email.");
-
-      const { error } = await supabase.auth.verifyOtp({
-        email,
-        token,
-        type: "email",
-      });
-
-      if (error) throw error;
-
-      setMsg("Verified. Redirecting…");
-      router.replace(returnTo || "/");
-    } catch (e2) {
-      setErr(e2?.message || "Verification failed.");
-    } finally {
-      setSubmitting(false);
     }
   }
 
@@ -91,38 +85,32 @@ export default function VerifyEmailPage() {
     <div className="authShell">
       <div className="authCard">
         <div className="authBrand">WORKLY</div>
-        <h1 className="authTitle">Enter code</h1>
-
+        <h1 className="authTitle">Enter the code</h1>
         <p className="authSub">
           We sent a 6-digit code to <b>{email || "your email"}</b>.
         </p>
 
-        <form onSubmit={submitCode} className="authForm">
-          <div className="otpGrid" aria-label="6 digit code">
-            {code.map((v, i) => (
-              <input
-                key={i}
-                data-otp={i}
-                className="otpBox"
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                value={v}
-                onChange={(e) => handleDigit(i, e.target.value)}
-              />
-            ))}
-          </div>
+        <form onSubmit={verify} className="authForm">
+          <label className="authLabel">6-digit code</label>
+          <input
+            className="authInput"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            placeholder="123456"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+          />
 
           {err ? <div className="authError">{err}</div> : null}
           {msg ? <div className="authOk">{msg}</div> : null}
 
-          <div className="authRow authRowTight">
-            <button className="authBtn" type="submit" disabled={submitting}>
-              {submitting ? "Verifying…" : "Submit"}
-            </button>
-            <button className="authLinkBtn" type="button" onClick={resend} disabled={resending}>
-              {resending ? "Resending…" : "Resend code"}
-            </button>
-          </div>
+          <button className="authBtn" type="submit" disabled={loading}>
+            {loading ? "Verifying…" : "Verify"}
+          </button>
+
+          <button className="authBtnGhost" type="button" onClick={resend} disabled={resending}>
+            {resending ? "Resending…" : "Resend code"}
+          </button>
 
           <button
             className="authLinkBtn"
