@@ -2810,3 +2810,153 @@ section.home-hero-v3 .home-hero-button:hover {
 .authFoot{margin-top:6px;font-size:12px;opacity:.65;}
 
 .authBtnWide{width:100%;}
+
+/* ================================
+   WORKLY AUTH – DARK PREMIUM UI
+   Palette: black / charcoal / white / olive-gold
+   ================================ */
+
+.authShell{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:32px 16px;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(120,140,80,.08), transparent 60%),
+    radial-gradient(900px 500px at 90% 110%, rgba(160,140,80,.06), transparent 55%),
+    #0b0b0f;
+}
+
+.authCard{
+  width:min(520px,100%);
+  background:#11131a;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:20px;
+  padding:26px;
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.55),
+    inset 0 1px 0 rgba(255,255,255,.04);
+  color:#ffffff;
+}
+
+.authBrand{
+  font-weight:900;
+  letter-spacing:.28em;
+  font-size:13px;
+  opacity:.85;
+  margin-bottom:12px;
+}
+
+.authTitle{
+  margin:0;
+  font-size:30px;
+  line-height:1.15;
+  font-weight:800;
+}
+
+.authSub{
+  margin:12px 0 20px;
+  font-size:15px;
+  line-height:1.6;
+  color:rgba(255,255,255,.78);
+}
+
+.authForm{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.authLabel{
+  font-size:13px;
+  color:rgba(255,255,255,.7);
+}
+
+.authInput{
+  height:50px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  background:#0b0d14;
+  padding:0 16px;
+  font-size:16px;
+  color:#ffffff;
+  outline:none;
+  letter-spacing:.08em;
+}
+
+.authInput::placeholder{
+  color:rgba(255,255,255,.35);
+}
+
+.authInput:focus{
+  border-color:rgba(160,170,110,.55);
+  box-shadow:0 0 0 1px rgba(160,170,110,.25);
+}
+
+.authBtn{
+  height:50px;
+  border-radius:14px;
+  border:none;
+  font-weight:800;
+  cursor:pointer;
+  background:linear-gradient(135deg,#8f9a5a,#b7b36b);
+  color:#0b0b0f;
+}
+
+.authBtn:hover{
+  filter:brightness(1.05);
+}
+
+.authBtn:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+.authBtnGhost{
+  height:44px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.14);
+  background:transparent;
+  color:#ffffff;
+  cursor:pointer;
+  font-weight:700;
+}
+
+.authBtnGhost:hover{
+  background:rgba(255,255,255,.04);
+}
+
+.authLinkBtn{
+  border:none;
+  background:transparent;
+  padding:6px 0;
+  text-align:left;
+  cursor:pointer;
+  font-weight:700;
+  color:rgba(255,255,255,.75);
+}
+
+.authLinkBtn:hover{
+  color:#ffffff;
+  text-decoration:underline;
+}
+
+.authError{
+  border:1px solid rgba(255,80,80,.35);
+  background:rgba(255,80,80,.08);
+  color:#ffd6d6;
+  padding:12px 14px;
+  border-radius:14px;
+  font-size:14px;
+}
+
+.authOk{
+  border:1px solid rgba(140,170,100,.35);
+  background:rgba(140,170,100,.10);
+  color:#e6f0c8;
+  padding:12px 14px;
+  border-radius:14px;
+  font-size:14px;
+}
+
