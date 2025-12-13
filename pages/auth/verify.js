@@ -13,6 +13,8 @@ export default function VerifyEmailPage() {
   const intent = (router.query.intent || "student").toString();
   const returnTo = (router.query.returnTo || "/").toString();
 
+  const [code, setCode] = useState(["", "", "", "", "", ""]);
+  const [submitting, setSubmitting] = useState(false);
   const [resending, setResending] = useState(false);
   const [msg, setMsg] = useState("");
   const [err, setErr] = useState("");
@@ -25,10 +27,17 @@ export default function VerifyEmailPage() {
     return u.toString();
   }, [intent, returnTo]);
 
-  function openMail(app) {
-    if (typeof window === "undefined") return;
-    const map = { gmail: "googlegmail://", outlook: "ms-outlook://", apple: "mailto:" };
-    window.location.href = map[app] || "mailto:";
+  function handleDigit(i, v) {
+    const d = (v || "").replace(/\D/g, "").slice(0, 1);
+    const next = [...code];
+    next[i] = d;
+    setCode(next);
+    setErr("");
+    setMsg("");
+    if (d && i < 5) {
+      const el = document.querySelector(`[data-otp="${i + 1}"]`);
+      el?.focus?.();
+    }
   }
 
   async function resend() {
@@ -50,31 +59,70 @@ export default function VerifyEmailPage() {
     }
   }
 
+  async function submitCode(e) {
+    e.preventDefault();
+    setErr("");
+    setMsg("");
+    setSubmitting(true);
+
+    try {
+      const token = code.join("");
+      if (token.length !== 6) throw new Error("Enter the 6-digit code.");
+      if (!email) throw new Error("Missing email.");
+
+      const { error } = await supabase.auth.verifyOtp({
+        email,
+        token,
+        type: "email",
+      });
+
+      if (error) throw error;
+
+      setMsg("Verified. Redirecting…");
+      router.replace(returnTo || "/");
+    } catch (e2) {
+      setErr(e2?.message || "Verification failed.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   return (
     <div className="authShell">
       <div className="authCard">
         <div className="authBrand">WORKLY</div>
-        <h1 className="authTitle">Check your email</h1>
+        <h1 className="authTitle">Enter code</h1>
 
         <p className="authSub">
-          We sent a secure sign-in link to <b>{email || "your email"}</b>.
-          <br />
-          Open the email and tap <b>Confirm Email</b> to sign in.
+          We sent a 6-digit code to <b>{email || "your email"}</b>.
         </p>
 
-        <div className="authRow">
-          <button className="authBtnGhost" type="button" onClick={() => openMail("apple")}>Open Mail</button>
-          <button className="authBtnGhost" type="button" onClick={() => openMail("gmail")}>Gmail</button>
-          <button className="authBtnGhost" type="button" onClick={() => openMail("outlook")}>Outlook</button>
-        </div>
+        <form onSubmit={submitCode} className="authForm">
+          <div className="otpGrid" aria-label="6 digit code">
+            {code.map((v, i) => (
+              <input
+                key={i}
+                data-otp={i}
+                className="otpBox"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                value={v}
+                onChange={(e) => handleDigit(i, e.target.value)}
+              />
+            ))}
+          </div>
 
-        {err ? <div className="authError" style={{ marginTop: 12 }}>{err}</div> : null}
-        {msg ? <div className="authOk" style={{ marginTop: 12 }}>{msg}</div> : null}
+          {err ? <div className="authError">{err}</div> : null}
+          {msg ? <div className="authOk">{msg}</div> : null}
 
-        <div className="authActions">
-          <button className="authBtn" type="button" onClick={resend} disabled={resending}>
-            {resending ? "Resending…" : "Resend email"}
-          </button>
+          <div className="authRow authRowTight">
+            <button className="authBtn" type="submit" disabled={submitting}>
+              {submitting ? "Verifying…" : "Submit"}
+            </button>
+            <button className="authLinkBtn" type="button" onClick={resend} disabled={resending}>
+              {resending ? "Resending…" : "Resend code"}
+            </button>
+          </div>
 
           <button
             className="authLinkBtn"
@@ -83,7 +131,7 @@ export default function VerifyEmailPage() {
           >
             Use a different email
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );

@@ -13,8 +13,7 @@ export default function EmailAuthPage() {
   const returnTo = (router.query.returnTo || "/").toString();
 
   const [email, setEmail] = useState("");
-  const [loadingEmail, setLoadingEmail] = useState(false);
-  const [loadingOAuth, setLoadingOAuth] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const callbackUrl = useMemo(() => {
@@ -27,26 +26,11 @@ export default function EmailAuthPage() {
 
   useEffect(() => setError(""), [email]);
 
-  async function startOAuth(provider) {
-    setError("");
-    setLoadingOAuth(provider);
-    try {
-      if (!supabase) throw new Error("Supabase not configured.");
-      const { error: err } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: { redirectTo: callbackUrl },
-      });
-      if (err) throw err;
-    } catch (e) {
-      setError(e?.message || "OAuth failed. Try again.");
-      setLoadingOAuth("");
-    }
-  }
-
-  async function sendLink(e) {
+  async function sendCode(e) {
     e.preventDefault();
     setError("");
-    setLoadingEmail(true);
+    setLoading(true);
+
     try {
       if (!supabase) throw new Error("Supabase not configured.");
       const cleaned = email.trim().toLowerCase();
@@ -56,6 +40,7 @@ export default function EmailAuthPage() {
         email: cleaned,
         options: { shouldCreateUser: true, emailRedirectTo: callbackUrl },
       });
+
       if (err) throw err;
 
       router.replace({
@@ -63,9 +48,9 @@ export default function EmailAuthPage() {
         query: { email: cleaned, intent, returnTo },
       });
     } catch (e2) {
-      setError(e2?.message || "Could not send email. Try again.");
+      setError(e2?.message || "Could not send code. Try again.");
     } finally {
-      setLoadingEmail(false);
+      setLoading(false);
     }
   }
 
@@ -73,32 +58,10 @@ export default function EmailAuthPage() {
     <div className="authShell">
       <div className="authCard">
         <div className="authBrand">WORKLY</div>
-        <h1 className="authTitle">Welcome back</h1>
-        <p className="authSub">Sign in to continue.</p>
+        <h1 className="authTitle">Sign in</h1>
+        <p className="authSub">We’ll email you a 6-digit code.</p>
 
-        <div className="authActions">
-          <button
-            className="authBtn authBtnWide"
-            type="button"
-            onClick={() => startOAuth("google")}
-            disabled={!!loadingOAuth}
-          >
-            {loadingOAuth === "google" ? "Connecting…" : "Continue with Google"}
-          </button>
-
-          <button
-            className="authBtnGhost authBtnWide"
-            type="button"
-            onClick={() => startOAuth("apple")}
-            disabled={!!loadingOAuth}
-          >
-            {loadingOAuth === "apple" ? "Connecting…" : "Continue with Apple"}
-          </button>
-        </div>
-
-        <div className="authDivider"><span>or</span></div>
-
-        <form onSubmit={sendLink} className="authForm">
+        <form onSubmit={sendCode} className="authForm">
           <label className="authLabel">Email</label>
           <input
             className="authInput"
@@ -112,11 +75,11 @@ export default function EmailAuthPage() {
 
           {error ? <div className="authError">{error}</div> : null}
 
-          <button className="authBtn" type="submit" disabled={loadingEmail || !email.trim()}>
-            {loadingEmail ? "Sending…" : "Email me a sign-in link"}
+          <button className="authBtn" type="submit" disabled={loading || !email.trim()}>
+            {loading ? "Sending…" : "Continue"}
           </button>
 
-          <div className="authFoot">We use secure magic links (no passwords).</div>
+          <div className="authFoot">By continuing, you agree to our terms and privacy policy.</div>
         </form>
       </div>
     </div>
