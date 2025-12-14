@@ -12,18 +12,9 @@ function cleanCode(v) {
 
 export default function LoginPage() {
   const router = useRouter();
-  const {
-    user,
-    profile,
-    loading,
-    apiCheckEmailExists,
-    signInWithPassword,
-    signInWithOtp,
-    verifyEmailOtp
-  } = useAuth();
+  const { user, profile, loading, apiCheckEmailExists, signInWithPassword, signInWithOtp, verifyEmailOtp } = useAuth();
 
   const [email, setEmail] = useState("");
-  const [mode, setMode] = useState("unknown");
   const [step, setStep] = useState("email");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
@@ -78,7 +69,7 @@ export default function LoginPage() {
     return false;
   }, [email, password, busy, step, code]);
 
-  const setAllClean = () => {
+  const resetMsgs = () => {
     setErr("");
     setPill("");
     setFieldErr({ email: "", password: "", code: "" });
@@ -97,59 +88,36 @@ export default function LoginPage() {
       ok = false;
     }
 
-    if (step === "password") {
-      if (!password) {
-        next.password = "Password is required.";
-        ok = false;
-      }
+    if (step === "password" && !password) {
+      next.password = "Password is required.";
+      ok = false;
     }
 
-    if (step === "otp") {
-      if (cleanCode(code).length !== 6) {
-        next.code = "Enter the 6-digit code.";
-        ok = false;
-      }
+    if (step === "otp" && cleanCode(code).length !== 6) {
+      next.code = "Enter the 6-digit code.";
+      ok = false;
     }
 
     setFieldErr(next);
     return ok;
   };
 
-  const detectMode = async () => {
+  const goEmailStep = async () => {
     const e = email.trim().toLowerCase();
-    if (!e || !validEmail(e)) return;
-
-    setAllClean();
-
-    try {
-      setBusy(true);
-      const exists = await apiCheckEmailExists(e);
-      if (exists === true) {
-        setMode("existing");
-        setStep("password");
-        setPill("");
-        return;
-      }
-      if (exists === false) {
-        setMode("new");
-        setStep("email");
-        setPill("New email detected. We’ll verify your email to continue.");
-        return;
-      }
-      setMode("unknown");
-      setStep("email");
-      setPill("");
-    } catch (_e2) {
-      setMode("unknown");
-      setStep("email");
-      setPill("");
-    } finally {
-      setBusy(false);
+    const exists = await apiCheckEmailExists(e);
+    if (exists === true) {
+      setStep("password");
+      setPill("Email recognized. Enter your password.");
+      return;
     }
+    await signInWithOtp({ email: e });
+    setStep("otp");
+    setCode("");
+    setPill("Code sent. Check your email.");
   };
 
   const go = async () => {
-    setAllClean();
+    resetMsgs();
     if (!validate()) return;
 
     const e = email.trim().toLowerCase();
@@ -158,25 +126,14 @@ export default function LoginPage() {
       setBusy(true);
 
       if (step === "email") {
-        let exists = null;
         try {
-          exists = await apiCheckEmailExists(e);
+          await goEmailStep();
         } catch (_x) {
-          exists = null;
+          await signInWithOtp({ email: e });
+          setStep("otp");
+          setCode("");
+          setPill("Code sent. Check your email.");
         }
-
-        if (exists === true) {
-          setMode("existing");
-          setStep("password");
-          setPill("");
-          return;
-        }
-
-        setMode("new");
-        await signInWithOtp({ email: e });
-        setStep("otp");
-        setCode("");
-        setPill("Code sent. Check your email.");
         return;
       }
 
@@ -212,13 +169,13 @@ export default function LoginPage() {
     }
   };
 
-  const backToEmail = () => {
-    setAllClean();
+  const useDifferentEmail = () => {
+    resetMsgs();
     setStep("email");
     setPassword("");
     setShowPass(false);
     setCode("");
-    setPill(mode === "new" ? "New email detected. We’ll verify your email to continue." : "");
+    setPill("");
   };
 
   return (
@@ -242,14 +199,8 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
-              setMode("unknown");
-              setStep("email");
-              setPassword("");
-              setShowPass(false);
-              setCode("");
-              setAllClean();
+              useDifferentEmail();
             }}
-            onBlur={detectMode}
             placeholder="you@example.com"
             autoComplete="email"
             required
@@ -277,6 +228,10 @@ export default function LoginPage() {
             >
               {showPass ? "Hide password" : "Show password"}
             </button>
+
+            <button type="button" className="authSecondaryBtn" onClick={useDifferentEmail}>
+              Use a different email
+            </button>
           </div>
         ) : null}
 
@@ -294,14 +249,14 @@ export default function LoginPage() {
             {fieldErr.code ? <div className="authError">{fieldErr.code}</div> : null}
 
             <div className="authRow">
-              <button type="button" className="authLinkBtn" onClick={backToEmail}>
+              <button type="button" className="authLinkBtn" onClick={useDifferentEmail}>
                 Back
               </button>
               <button
                 type="button"
                 className="authLinkBtn"
                 onClick={async () => {
-                  setAllClean();
+                  resetMsgs();
                   const e = email.trim().toLowerCase();
                   if (!e || !validEmail(e)) return;
                   try {

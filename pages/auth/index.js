@@ -1,7 +1,9 @@
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 export default function AuthStart() {
   const router = useRouter();
+  const [notice, setNotice] = useState("");
 
   return (
     <div className="authStartPage">
@@ -23,8 +25,14 @@ export default function AuthStart() {
           Continue your request without losing your place. You&apos;ll stay on this page after signing in.
         </p>
 
+        {notice ? <div className="authStartNotice">{notice}</div> : null}
+
         <div className="authStartButtons">
-          <button type="button" className="authProviderBtn isDisabled" disabled aria-disabled="true">
+          <button
+            type="button"
+            className="authProviderBtn isProvider"
+            onClick={() => setNotice("Google sign-in is coming soon. Use email for now.")}
+          >
             <span className="authProviderIcon">G</span>
             <span className="authProviderText">Continue with Google</span>
           </button>
@@ -32,7 +40,7 @@ export default function AuthStart() {
           <button
             type="button"
             className="authProviderBtn isEmail"
-            onClick={() => router.push("/auth")}
+            onClick={() => router.push("/auth/login")}
           >
             <span className="authProviderIcon">✉</span>
             <span className="authProviderText">Continue with email</span>
@@ -44,7 +52,11 @@ export default function AuthStart() {
             <div className="authOrLine" />
           </div>
 
-          <button type="button" className="authProviderBtn isDisabled" disabled aria-disabled="true">
+          <button
+            type="button"
+            className="authProviderBtn isProvider"
+            onClick={() => setNotice("Apple sign-in is coming soon. Use email for now.")}
+          >
             <span className="authProviderIcon"></span>
             <span className="authProviderText">Continue with Apple</span>
           </button>
