@@ -1,11 +1,9 @@
 import Head from "next/head";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
-import { useAuthModal } from "../context/AuthContext";
 
 export default function Home() {
-  const { openAuthModal } = useAuthModal();
-
+const openAuthModal = () => { if (typeof window !== "undefined") window.location.href = "/auth/login"; };
   const categories = [
     {
       title: "Reports & Essays",
@@ -303,7 +301,7 @@ description: "Anything else required for your course.",
         type="button"
         className="home-hero-cta-v3"
         data-auth-modal-trigger
-        onClick={() => openAuthModal("student")}
+        onClick={() => { window.location.href = "/auth/login"; }}
       >
         Begin now
       </button>
@@ -465,7 +463,7 @@ description: "Anything else required for your course.",
                   type="button"
                   className="creators-join-btn"
                   data-auth-modal-trigger
-                  onClick={() => openAuthModal("student")}
+                  onClick={() => { window.location.href = "/auth/login"; }}
                 >
                   Join now
                 </button>
