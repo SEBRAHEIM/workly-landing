@@ -27,7 +27,7 @@ export default function Nav() {
           <span>{profile.username}</span>
         </div>
       ) : (
-        <a href="/auth/email">Join</a>
+        <a href="/auth/login">Join</a>
       )}
     </nav>
   );

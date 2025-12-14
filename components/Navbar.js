@@ -30,7 +30,7 @@ function Navbar() {
     setMenuOpen(false);
     if (openAuthModal) return window.location.href="/auth";
     if (intent === "creator") return router.push("/creators/setup");
-    return router.push("/auth/email");
+    return router.push("/auth/login");
   };
 
   return (

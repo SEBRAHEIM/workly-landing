@@ -25,7 +25,7 @@ export default function UsernameStepPage() {
       if (!mounted) return;
 
       if (!user) {
-        router.replace("/auth/email");
+        router.replace("/auth/login");
         return;
       }
       setLoadingUser(false);

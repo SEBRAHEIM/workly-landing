@@ -7,6 +7,6 @@ export async function getServerSideProps() {
   };
 }
 
-export default function AuthEmailRedirect() {
+export default function AuthVerifyRedirect() {
   return null;
 }
