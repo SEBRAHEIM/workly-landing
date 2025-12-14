@@ -58,7 +58,7 @@ export default function ForgotPassword() {
         </button>
 
         <div className="authRow">
-          <a className="authLink" href="/auth/login">Back to sign in</a>
+          <a className="authLink" href="/auth">Back to sign in</a>
         </div>
       </div>
     </div>

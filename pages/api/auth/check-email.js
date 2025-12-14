@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const service = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  if (!url || !service) return res.status(500).json({ error: "server_missing_keys" });
+  if (!url || !service) return res.status(200).json({ exists: null, error: "server_missing_keys" });
 
   try {
     const supabaseAdmin = createClient(url, service, { auth: { persistSession: false } });
@@ -21,6 +21,6 @@ export default async function handler(req, res) {
     if (error) return res.status(200).json({ exists: false });
     return res.status(200).json({ exists: !!data?.user });
   } catch (_e) {
-    return res.status(500).json({ error: "server_error" });
+    return res.status(200).json({ exists: null, error: "server_error" });
   }
 }

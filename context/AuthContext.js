@@ -55,12 +55,15 @@ export function AuthProvider({ children }) {
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ email })
   });
+
   const json = await res.json().catch(() => ({}));
+
   if (!res.ok) {
-    const msg = json && json.error ? String(json.error) : "check-email failed";
-    throw new Error(msg);
+    return null;
   }
-  return !!json.exists;
+
+  if (json && typeof json.exists === "boolean") return json.exists;
+  return null;
 };
 
   const signInWithPassword = async ({ email, password }) => {
@@ -70,10 +73,29 @@ export function AuthProvider({ children }) {
   };
 
   const signUpWithPassword = async ({ email, password }) => {
-    const { data, error } = await supabase.auth.signUp({ email, password });
-    if (error) throw error;
-    return data;
-  };
+  const { data, error } = await supabase.auth.signUp({ email, password });
+  if (error) throw error;
+  return data;
+};
+
+const signInWithOtp = async ({ email }) => {
+  const { data, error } = await supabase.auth.signInWithOtp({
+    email,
+    options: { shouldCreateUser: true }
+  });
+  if (error) throw error;
+  return data;
+};
+
+const verifyEmailOtp = async ({ email, token }) => {
+  const { data, error } = await supabase.auth.verifyOtp({
+    email,
+    token,
+    type: "email"
+  });
+  if (error) throw error;
+  return data;
+};
 
   const saveOnboarding = async ({ role, username }) => {
     const uid = user?.id;
@@ -106,9 +128,13 @@ export function AuthProvider({ children }) {
       apiCheckEmailExists,
       signInWithPassword,
       signUpWithPassword,
-      saveOnboarding,
-      signOut
-    }),
+signInWithOtp,
+verifyEmailOtp,
+saveOnboarding,
+signInWithOtp,
+verifyEmailOtp,
+signOut
+}),
     [session, user, profile, loading]
   );
 

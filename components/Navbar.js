@@ -28,7 +28,7 @@ function Navbar() {
 
   const openForIntent = (intent = "student") => {
     setMenuOpen(false);
-    if (openAuthModal) return window.location.href='/auth/login';
+    if (openAuthModal) return window.location.href="/auth";
     if (intent === "creator") return router.push("/creators/setup");
     return router.push("/auth/email");
   };
@@ -114,7 +114,7 @@ function Navbar() {
                     type="button"
                     className="mobile-menu-link secondary"
                     data-auth-modal-trigger
-                    onClick={() => (openAuthModal ? openForIntent("student") : go("/auth/login"))}
+                    onClick={() => (openAuthModal ? openForIntent("student") : go("/auth"))}
                   >
                     Sign in
                   </button>

@@ -8,7 +8,7 @@ export default function CreatorHome() {
 
   useEffect(() => {
     if (loading) return;
-    if (!user) router.replace("/auth/login");
+    if (!user) router.replace("/auth");
     else if (!profile?.role || !profile?.username) router.replace("/onboarding");
     else if (profile.role !== "creator") router.replace("/");
   }, [loading, user, profile, router]);

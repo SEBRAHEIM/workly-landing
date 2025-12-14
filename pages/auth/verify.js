@@ -90,7 +90,7 @@ export default function VerifyEmailCode() {
             {resending ? "Resending…" : "Resend code"}
           </button>
 
-          <button className="authLinkBtn" type="button" onClick={() => router.replace({ pathname: "/auth/login", query: { returnTo } })}>
+          <button className="authLinkBtn" type="button" onClick={() => router.replace({ pathname: "/auth", query: { returnTo } })}>
             Back to password sign in
           </button>
         </form>

@@ -5,7 +5,7 @@ export default function EmailRedirect() {
   const router = useRouter();
   useEffect(() => {
     const q = router.query || {};
-    router.replace({ pathname: "/auth/login", query: q });
+    router.replace({ pathname: "/auth", query: q });
   }, [router]);
   return null;
 }

@@ -3,7 +3,7 @@ import Link from "next/link";
 import Navbar from "../components/Navbar";
 
 export default function Home() {
-const openAuthModal = () => { if (typeof window !== "undefined") window.location.href = "/auth/login"; };
+const openAuthModal = () => { if (typeof window !== "undefined") window.location.href="/auth"; };
   const categories = [
     {
       title: "Reports & Essays",
@@ -301,7 +301,7 @@ description: "Anything else required for your course.",
         type="button"
         className="home-hero-cta-v3"
         data-auth-modal-trigger
-        onClick={() => { window.location.href = "/auth/login"; }}
+        onClick={() => { window.location.href="/auth"; }}
       >
         Begin now
       </button>
@@ -463,7 +463,7 @@ description: "Anything else required for your course.",
                   type="button"
                   className="creators-join-btn"
                   data-auth-modal-trigger
-                  onClick={() => { window.location.href = "/auth/login"; }}
+                  onClick={() => { window.location.href="/auth"; }}
                 >
                   Join now
                 </button>

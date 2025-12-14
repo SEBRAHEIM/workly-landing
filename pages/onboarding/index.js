@@ -17,7 +17,7 @@ export default function Onboarding() {
 
   useEffect(() => {
     if (loading) return;
-    if (!user) router.replace("/auth/login");
+    if (!user) router.replace("/auth");
   }, [loading, user, router]);
 
   useEffect(() => {
