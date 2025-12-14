@@ -1,13 +1,23 @@
 import "../styles/globals.css";
-import AuthBadge from "../components/AuthBadge";
-import AuthModal from "../components/AuthModal";
-import { AuthProvider } from "../context/AuthContext";
+import { AuthProvider, useAuth } from "../context/AuthContext";
+import { useEffect } from "react";
+
+function RoleBinder() {
+  const { profile, loading } = useAuth();
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const role = !loading && profile?.role ? profile.role : "guest";
+    document.documentElement.setAttribute("data-role", role);
+  }, [profile, loading]);
+
+  return null;
+}
 
 export default function App({ Component, pageProps }) {
   return (
     <AuthProvider>
-      <AuthBadge />
-      <AuthModal />
+      <RoleBinder />
       <Component {...pageProps} />
     </AuthProvider>
   );

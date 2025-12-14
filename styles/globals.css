@@ -3299,3 +3299,125 @@ html, body, #__next {
   height: 100%;
   pointer-events: auto;
 }
+
+.authPage{
+  min-height:100vh;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:28px 18px;
+  background:radial-gradient(1200px 600px at 50% 0%, rgba(31,77,44,0.10), rgba(0,0,0,0)), linear-gradient(180deg, rgba(0,0,0,0.03), rgba(0,0,0,0.00));
+}
+.authCard{
+  width:min(520px,100%);
+  background:#ffffff;
+  border-radius:20px;
+  box-shadow:0 22px 70px rgba(0,0,0,0.10);
+  padding:26px 22px;
+  border:1px solid rgba(0,0,0,0.06);
+}
+.authBrand{
+  letter-spacing:0.35em;
+  font-weight:800;
+  font-size:12px;
+  opacity:0.75;
+  margin-bottom:10px;
+}
+.authTitle{
+  margin:0 0 8px;
+  font-size:44px;
+  line-height:1;
+}
+.authSubtitle{
+  margin:0 0 18px;
+  font-size:16px;
+  opacity:0.72;
+}
+.authField{
+  margin:12px 0;
+}
+.authLabel{
+  display:block;
+  font-size:13px;
+  opacity:0.7;
+  margin:0 0 8px;
+  font-weight:700;
+}
+.authInput{
+  width:100%;
+  border-radius:14px;
+  border:1px solid rgba(0,0,0,0.14);
+  background:rgba(0,0,0,0.02);
+  padding:14px 14px;
+  font-size:16px;
+  outline:none;
+}
+.authInput:focus{
+  border-color:rgba(31,77,44,0.45);
+  box-shadow:0 0 0 4px rgba(31,77,44,0.10);
+  background:#fff;
+}
+.authPrimary{
+  width:100%;
+  border:none;
+  border-radius:999px;
+  padding:14px 16px;
+  font-size:18px;
+  font-weight:800;
+  cursor:pointer;
+  margin-top:10px;
+  background:rgba(31,77,44,1);
+  color:#fff;
+}
+.authPrimary:disabled{
+  opacity:0.55;
+  cursor:not-allowed;
+}
+.authRow{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:12px;
+}
+.authLink{
+  color:rgba(31,77,44,1);
+  text-decoration:none;
+  font-weight:800;
+  opacity:0.95;
+}
+.authLink:hover{
+  text-decoration:underline;
+}
+.authInlineToggle{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:999px;
+  border:1px solid rgba(0,0,0,0.12);
+  background:rgba(0,0,0,0.03);
+  cursor:pointer;
+  font-weight:800;
+  color:rgba(31,77,44,1);
+}
+.authError{
+  margin-top:8px;
+  color:#b3261e;
+  font-size:13px;
+  font-weight:800;
+}
+.authErrorBar{
+  margin-top:10px;
+  padding:12px 12px;
+  border-radius:12px;
+  background:rgba(179,38,30,0.10);
+  color:#b3261e;
+  font-weight:900;
+  font-size:14px;
+}
+.authFinePrint{
+  margin-top:14px;
+  font-size:13px;
+  opacity:0.72;
+}
+@media(max-width:520px){
+  .authTitle{font-size:40px;}
+}

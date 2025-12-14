@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useAuthModal } from "../context/AuthContext";
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -9,7 +8,7 @@ function Navbar() {
 
   let openAuthModal;
   try {
-    const ctx = useAuthModal();
+    const ctx = null;
     openAuthModal =
       ctx && typeof ctx.openAuthModal === "function" ? ctx.openAuthModal : undefined;
   } catch (e) {
@@ -29,7 +28,7 @@ function Navbar() {
 
   const openForIntent = (intent = "student") => {
     setMenuOpen(false);
-    if (openAuthModal) return openAuthModal(intent);
+    if (openAuthModal) return window.location.href='/auth/login';
     if (intent === "creator") return router.push("/creators/setup");
     return router.push("/auth/email");
   };

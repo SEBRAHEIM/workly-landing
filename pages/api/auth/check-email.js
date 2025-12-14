@@ -1,35 +1,26 @@
+import { createClient } from "@supabase/supabase-js";
+
+function isValidEmail(email) {
+  return typeof email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
 export default async function handler(req, res) {
+  if (req.method !== "POST") return res.status(405).json({ error: "method" });
+
+  const { email } = req.body || {};
+  if (!isValidEmail(email)) return res.status(400).json({ error: "email" });
+
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const service = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!url || !service) return res.status(500).json({ error: "server_missing_keys" });
+
   try {
-    const email = String(req.query.email || "").trim().toLowerCase()
-
-    if (!email || !email.includes("@")) {
-      return res.status(200).json({ ok: true, exists: false })
-    }
-
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-
-    if (!url || !serviceKey) {
-      return res.status(500).json({ ok: false, error: "Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY" })
-    }
-
-    const r = await fetch(`${url}/auth/v1/admin/users?email=${encodeURIComponent(email)}`, {
-      headers: {
-        Authorization: `Bearer ${serviceKey}`,
-        apikey: serviceKey
-      }
-    })
-
-    if (!r.ok) {
-      const t = await r.text()
-      return res.status(500).json({ ok: false, error: "Admin lookup failed", detail: t })
-    }
-
-    const data = await r.json()
-    const exists = Array.isArray(data?.users) ? data.users.length > 0 : false
-
-    return res.status(200).json({ ok: true, exists })
-  } catch (e) {
-    return res.status(500).json({ ok: false, error: "Unexpected error" })
+    const supabaseAdmin = createClient(url, service, { auth: { persistSession: false } });
+    const { data, error } = await supabaseAdmin.auth.admin.getUserByEmail(email.toLowerCase());
+    if (error) return res.status(200).json({ exists: false });
+    return res.status(200).json({ exists: !!data?.user });
+  } catch (_e) {
+    return res.status(500).json({ error: "server_error" });
   }
 }

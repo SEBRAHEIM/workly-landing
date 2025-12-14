@@ -1,161 +1,206 @@
-import { useEffect, useMemo, useState } from "react"
-import { useRouter } from "next/router"
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/router";
+import { useAuth } from "../../context/AuthContext";
 
-function isValidEmail(v) {
-  const x = String(v || "").trim()
-  return x.includes("@") && x.includes(".") && x.length >= 6
+function validEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 export default function LoginPage() {
-  const router = useRouter()
+  const router = useRouter();
+  const { user, profile, loading, apiCheckEmailExists, signInWithPassword, signUpWithPassword } = useAuth();
 
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [emailExists, setEmailExists] = useState(null)
-  const [checking, setChecking] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [msg, setMsg] = useState("")
-  const [err, setErr] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPass, setShowPass] = useState(false);
 
-  const canCheck = useMemo(() => isValidEmail(email), [email])
+  const [mode, setMode] = useState("unknown");
+  const [busy, setBusy] = useState(false);
 
-  async function checkEmailExists() {
-    setErr("")
-    setMsg("")
-    if (!canCheck) {
-      setEmailExists(null)
-      return
-    }
-    setChecking(true)
-    try {
-      const r = await fetch(`/api/auth/check-email?email=${encodeURIComponent(email.trim())}`)
-      const j = await r.json().catch(() => null)
-      if (j && j.ok) {
-        setEmailExists(!!j.exists)
-      } else {
-        setEmailExists(null)
-      }
-    } catch (e) {
-      setEmailExists(null)
-    } finally {
-      setChecking(false)
-    }
-  }
+  const [errEmail, setErrEmail] = useState("");
+  const [errPass, setErrPass] = useState("");
+  const [errGeneral, setErrGeneral] = useState("");
 
   useEffect(() => {
-    setEmailExists(null)
-    setErr("")
-    setMsg("")
-  }, [email])
+    if (loading) return;
+    if (user) {
+      if (!profile?.role || !profile?.username) router.replace("/onboarding");
+      else if (profile.role === "creator") router.replace("/creator");
+      else router.replace("/");
+    }
+  }, [loading, user, profile, router]);
 
-  async function onSubmit(e) {
-    e.preventDefault()
-    setErr("")
-    setMsg("")
+  const primaryLabel = useMemo(() => {
+    if (busy) {
+      if (mode === "existing") return "Signing in…";
+      if (mode === "new") return "Creating account…";
+      return "Checking…";
+    }
+    if (mode === "existing") return "Sign in";
+    if (mode === "new") return "Verify email";
+    return "Continue";
+  }, [busy, mode]);
 
-    const cleanEmail = email.trim().toLowerCase()
+  const subtitle = useMemo(() => {
+    if (mode === "existing") return "Welcome back. Sign in with your password.";
+    if (mode === "new") return "New here? We’ll create your account and continue to onboarding.";
+    return "Existing users sign in with password. New users verify email once, then set a password.";
+  }, [mode]);
 
-    if (!isValidEmail(cleanEmail)) {
-      setErr("Enter a valid email.")
-      return
+  const validate = () => {
+    let ok = true;
+    setErrGeneral("");
+
+    if (!email.trim()) {
+      setErrEmail("Email is required.");
+      ok = false;
+    } else if (!validEmail(email.trim())) {
+      setErrEmail("Enter a valid email.");
+      ok = false;
+    } else {
+      setErrEmail("");
     }
 
-    if (emailExists === false) {
-      router.push(`/auth/email?email=${encodeURIComponent(cleanEmail)}`)
-      return
+    if (!password) {
+      setErrPass("Password is required.");
+      ok = false;
+    } else {
+      setErrPass("");
     }
 
-    setLoading(true)
+    return ok;
+  };
+
+  const detectMode = async () => {
+    const e = email.trim().toLowerCase();
+    if (!e || !validEmail(e)) return;
+    setErrGeneral("");
     try {
-      const r = await fetch("/api/auth/login-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: cleanEmail, password })
-      })
-
-      const j = await r.json().catch(() => null)
-
-      if (r.ok) {
-        router.push("/dashboard")
-        return
-      }
-
-      const message = j?.error || "Sign in failed."
-
-      if (emailExists === null) {
-        await checkEmailExists()
-      }
-
-      if (emailExists === false) {
-        router.push(`/auth/email?email=${encodeURIComponent(cleanEmail)}`)
-        return
-      }
-
-      setErr(message)
-    } catch (e) {
-      setErr("Something went wrong. Try again.")
+      setBusy(true);
+      const exists = await apiCheckEmailExists(e);
+      setMode(exists ? "existing" : "new");
+    } catch (e2) {
+      setMode("unknown");
+      setErrGeneral("Email check is unavailable. Add SUPABASE_SERVICE_ROLE_KEY in Vercel env then redeploy.");
     } finally {
-      setLoading(false)
+      setBusy(false);
     }
-  }
+  };
+
+  const goNext = async () => {
+    if (!validate()) return;
+
+    const e = email.trim().toLowerCase();
+    setErrGeneral("");
+    setBusy(true);
+
+    try {
+      let currentMode = mode;
+
+      if (currentMode === "unknown") {
+        const exists = await apiCheckEmailExists(e);
+        currentMode = exists ? "existing" : "new";
+        setMode(currentMode);
+      }
+
+      if (currentMode === "existing") {
+        await signInWithPassword({ email: e, password });
+        router.replace("/onboarding");
+        return;
+      }
+
+      if (currentMode === "new") {
+        await signUpWithPassword({ email: e, password });
+        router.replace("/onboarding");
+        return;
+      }
+
+      setErrGeneral("Something went wrong. Try again.");
+    } catch (e2) {
+      const msg = e2 && e2.message ? String(e2.message) : "Authentication failed.";
+      const low = msg.toLowerCase();
+
+      if (low.includes("invalid login credentials")) {
+        setMode("existing");
+        setErrGeneral("Incorrect email or password.");
+      } else if (low.includes("user already registered")) {
+        setMode("existing");
+        setErrGeneral("This email already exists. Please sign in.");
+      } else if (low.includes("server_missing_keys")) {
+        setErrGeneral("Server missing keys. Add SUPABASE_SERVICE_ROLE_KEY in Vercel env then redeploy.");
+      } else {
+        setErrGeneral("Could not continue. Try again.");
+      }
+    } finally {
+      setBusy(false);
+    }
+  };
 
   return (
-    <div className="authWrap">
+    <div className="authPage">
       <div className="authCard">
         <div className="authBrand">WORKLY</div>
         <h1 className="authTitle">Sign in</h1>
-        <p className="authSubtitle">
-          Existing users sign in with password. New users verify email once, then set a password.
-        </p>
+        <p className="authSubtitle">{subtitle}</p>
 
-        <form onSubmit={onSubmit} className="authForm">
+        <div className="authField">
           <label className="authLabel">Email</label>
           <input
             className="authInput"
             type="email"
             value={email}
+            onChange={(e) => { setEmail(e.target.value); setMode("unknown"); }}
+            onBlur={detectMode}
             placeholder="you@example.com"
-            onChange={(e) => setEmail(e.target.value)}
-            onBlur={checkEmailExists}
             autoComplete="email"
+            required
           />
+          {errEmail ? <div className="authError">{errEmail}</div> : null}
+        </div>
 
-          {emailExists !== false && (
-            <>
-              <label className="authLabel">Password</label>
-              <input
-                className="authInput"
-                type="password"
-                value={password}
-                placeholder="Your password"
-                onChange={(e) => setPassword(e.target.value)}
-                autoComplete="current-password"
-              />
-            </>
-          )}
-
-          {err ? <div className="authError">{err}</div> : null}
-          {msg ? <div className="authMsg">{msg}</div> : null}
-
-          <button
-            type="submit"
-            className="authPrimaryBtn"
-            disabled={loading || checking}
-          >
-            {checking ? "Checking…" : emailExists === false ? "Verify email" : loading ? "Signing in…" : "Sign in"}
-          </button>
-
-          <div style={{ height: 10 }} />
+        <div className="authField">
+          <label className="authLabel">Password</label>
+          <input
+            className="authInput"
+            type={showPass ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Your password"
+            autoComplete={mode === "new" ? "new-password" : "current-password"}
+            required
+          />
+          {errPass ? <div className="authError">{errPass}</div> : null}
 
           <button
             type="button"
-            className="authSecondaryBtn"
-            onClick={() => router.push(`/auth/email?email=${encodeURIComponent(email.trim().toLowerCase())}`)}
+            className="authInlineToggle"
+            onClick={() => setShowPass((v) => !v)}
           >
-            Use email code instead
+            {showPass ? "Hide password" : "Show password"}
           </button>
-        </form>
+        </div>
+
+        {errGeneral ? <div className="authErrorBar">{errGeneral}</div> : null}
+
+        <button
+          type="button"
+          className="authPrimary"
+          onClick={goNext}
+          disabled={busy || !email.trim() || !validEmail(email.trim()) || !password}
+        >
+          {primaryLabel}
+        </button>
+
+        <div className="authRow">
+          <a className="authLink" href="/auth/forgot-password">Forgot password?</a>
+          <a className="authLink" href="/api/auth/env-check" target="_blank" rel="noreferrer">Env check</a>
+        </div>
+
+        <div className="authFinePrint">
+          By continuing you agree to <a className="authLink" href="/terms">Terms</a> &{" "}
+          <a className="authLink" href="/privacy">Privacy</a>
+        </div>
       </div>
     </div>
-  )
+  );
 }

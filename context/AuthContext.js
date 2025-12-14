@@ -1,149 +1,122 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/router";
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
-import { getNextOnboardingPath, isOnboardingRoute } from "../lib/onboarding";
-import AuthModal from "../components/AuthModal";
 
-const AuthContext = createContext(({ __worklyAuth: true,
-  isOpen: false,
-  mode: null,
-  open: function(){},
-  close: function(){},
-  setMode: function(){},
-  setOpen: function(){},
-  show: function(){},
-  hide: function(){}
-}));
+const AuthCtx = createContext(null);
 
 export function AuthProvider({ children }) {
-  const router = useRouter();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [authIntent, setAuthIntent] = useState("student"); // "student" | "creator"
-  const [returnTo, setReturnTo] = useState(null);
   const [session, setSession] = useState(null);
+  const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  async function fetchProfile(uid) {
+    if (!uid) return null;
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("user_id,email,username,role")
+      .eq("user_id", uid)
+      .maybeSingle();
+    if (error) return null;
+    return data || null;
+  }
 
   useEffect(() => {
-    if (!supabase) return undefined;
+    let alive = true;
 
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data?.session || null);
-    });
+    (async () => {
+      const { data } = await supabase.auth.getSession();
+      if (!alive) return;
+      const s = data?.session || null;
+      setSession(s);
+      setUser(s?.user || null);
+      const p = await fetchProfile(s?.user?.id || null);
+      if (!alive) return;
+      setProfile(p);
+      setLoading(false);
+    })();
 
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
-      setSession(newSession || null);
+    const { data: sub } = supabase.auth.onAuthStateChange(async (_event, s) => {
+      setSession(s || null);
+      setUser(s?.user || null);
+      const p = await fetchProfile(s?.user?.id || null);
+      setProfile(p);
+      setLoading(false);
     });
 
     return () => {
+      alive = false;
       sub?.subscription?.unsubscribe?.();
     };
   }, []);
 
-  const openAuthModal = useCallback(
-    (intent = "student", options = {}) => {
-      setAuthIntent(intent);
-      setReturnTo(options.returnTo || router.asPath);
-      setIsModalOpen(true);
-    },
-    [router.asPath],
-  );
+  const apiCheckEmailExists = async (email) => {
+  const res = await fetch("/api/auth/check-email", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ email })
+  });
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const msg = json && json.error ? String(json.error) : "check-email failed";
+    throw new Error(msg);
+  }
+  return !!json.exists;
+};
 
-  const closeAuthModal = useCallback(() => setIsModalOpen(false), []);
+  const signInWithPassword = async ({ email, password }) => {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    return data;
+  };
 
-  const ensureOnboardingRedirect = useCallback(
-    async (maybeUser = null) => {
-      try {
-        const pathname = router.pathname || "";
-        if (isOnboardingRoute(pathname)) return;
+  const signUpWithPassword = async ({ email, password }) => {
+    const { data, error } = await supabase.auth.signUp({ email, password });
+    if (error) throw error;
+    return data;
+  };
 
-        const user = maybeUser || session?.user;
-        if (!user) return;
+  const saveOnboarding = async ({ role, username }) => {
+    const uid = user?.id;
+    const email = user?.email || null;
+    if (!uid) throw new Error("Not signed in");
 
-        const next = getNextOnboardingPath(user, router.asPath || "/");
-        if (next && next !== (router.asPath || "/") && next.startsWith("/onboarding")) {
-          router.replace(next);
-        }
-      } catch {}
-    },
-    [router, session],
-  );
+    const payload = { user_id: uid, email, role, username };
 
-  useEffect(() => {
-    if (!session?.user) return;
-    ensureOnboardingRedirect(session.user);
-  }, [session, ensureOnboardingRedirect]);
+    const { error } = await supabase
+      .from("profiles")
+      .upsert(payload, { onConflict: "user_id" });
 
+    if (error) throw error;
 
-  const startOAuth = useCallback(
-    async (provider) => {
-      if (!supabase) return;
+    const p = await fetchProfile(uid);
+    setProfile(p);
+    return p;
+  };
 
-      const base = typeof window !== "undefined" ? window.location.origin : "";
-      const callbackUrl = `${base}/auth/callback?intent=${encodeURIComponent(
-        authIntent || "student",
-      )}&returnTo=${encodeURIComponent(returnTo || router.asPath)}`;
-
-      await supabase.auth.signInWithOAuth({
-        provider,
-        options: { redirectTo: callbackUrl },
-      });
-    },
-    [authIntent, returnTo, router.asPath],
-  );
-
-  useEffect(() => {
-    if (typeof window === "undefined") return undefined;
-
-    const clickHandler = (event) => {
-      const trigger = event.target.closest("[data-auth-modal-trigger]");
-      if (!trigger) return;
-
-      event.preventDefault();
-      const intent = trigger.getAttribute("data-auth-modal-intent") || "student";
-      openAuthModal(intent);
-    };
-
-    document.addEventListener("click", clickHandler);
-    return () => document.removeEventListener("click", clickHandler);
-  }, [openAuthModal]);
+  const signOut = async () => {
+    await supabase.auth.signOut();
+  };
 
   const value = useMemo(
     () => ({
       session,
-      isAuthenticated: !!session,
-      authIntent,
-      returnTo: returnTo || router.asPath,
-      isModalOpen,
-      openAuthModal,
-      closeAuthModal,
-      startOAuth,
+      user,
+      profile,
+      loading,
+      apiCheckEmailExists,
+      signInWithPassword,
+      signUpWithPassword,
+      saveOnboarding,
+      signOut
     }),
-    [session, authIntent, returnTo, router.asPath, isModalOpen, openAuthModal, closeAuthModal, startOAuth],
+    [session, user, profile, loading]
   );
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-      <AuthModal
-        isOpen={isModalOpen}
-        authIntent={authIntent}
-        returnTo={returnTo || router.asPath}
-        onClose={closeAuthModal}
-      />
-    </AuthContext.Provider>
-  );
+  return <AuthCtx.Provider value={value}>{children}</AuthCtx.Provider>;
 }
 
-export function useAuthModal() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) return ({ __worklyAuth: true,
-  isOpen: false,
-  mode: null,
-  open: function(){},
-  close: function(){},
-  setMode: function(){},
-  setOpen: function(){},
-  show: function(){},
-  hide: function(){}
-});
+export function useAuth() {
+  const ctx = useContext(AuthCtx);
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
   return ctx;
 }

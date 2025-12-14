@@ -1,75 +1,102 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
-import { supabase } from "../../lib/supabaseClient";
+import { useAuth } from "../../context/AuthContext";
+
+function cleanUsername(v) {
+  return v.toLowerCase().replace(/[^a-z0-9_]/g, "").slice(0, 20);
+}
 
 export default function Onboarding() {
   const router = useRouter();
+  const { user, profile, loading, saveOnboarding } = useAuth();
+
+  const [role, setRole] = useState("student");
   const [username, setUsername] = useState("");
-  const [role, setRole] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
 
-  async function submit(e) {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+  useEffect(() => {
+    if (loading) return;
+    if (!user) router.replace("/auth/login");
+  }, [loading, user, router]);
 
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+  useEffect(() => {
+    if (profile?.role) setRole(profile.role);
+    if (profile?.username) setUsername(profile.username);
+  }, [profile]);
 
-      const { error: insertError } = await supabase
-        .from("profiles")
-        .insert({
-          id: user.id,
-          username: username.trim(),
-          role
-        });
+  const canSave = useMemo(() => {
+    const u = cleanUsername(username || "");
+    return u.length >= 3 && (role === "student" || role === "creator");
+  }, [username, role]);
 
-      if (insertError) throw insertError;
-
-      router.replace("/");
-    } catch (err) {
-      setError(err.message || "Something went wrong");
-    } finally {
-      setLoading(false);
+  const submit = async () => {
+    setErr("");
+    const u = cleanUsername(username || "");
+    if (u.length < 3) {
+      setErr("Username is required.");
+      return;
     }
-  }
+    setBusy(true);
+    try {
+      const p = await saveOnboarding({ role, username: u });
+      if (p?.role === "creator") router.replace("/creator");
+      else router.replace("/");
+    } catch (e) {
+      const msg = e && e.message ? String(e.message) : "";
+      if (msg.toLowerCase().includes("duplicate") || msg.toLowerCase().includes("unique")) {
+        setErr("Username is taken.");
+      } else {
+        setErr("Could not save. Try again.");
+      }
+    } finally {
+      setBusy(false);
+    }
+  };
 
   return (
-    <div className="authShell">
+    <div className="authPage">
       <div className="authCard">
         <div className="authBrand">WORKLY</div>
-        <h1 className="authTitle">Get your profile started</h1>
-        <p className="authSub">Choose a username and your role.</p>
+        <h1 className="authTitle">Tell us who you are</h1>
+        <p className="authSubtitle">Choose a role and a username to continue.</p>
 
-        <form onSubmit={submit} className="authForm">
+        <div className="roleGrid">
+          <button
+            type="button"
+            className={role === "creator" ? "roleCard active" : "roleCard"}
+            onClick={() => setRole("creator")}
+          >
+            <div className="roleTitle">Creator</div>
+            <div className="roleDesc">Offer services to students</div>
+          </button>
+
+          <button
+            type="button"
+            className={role === "student" ? "roleCard active" : "roleCard"}
+            onClick={() => setRole("student")}
+          >
+            <div className="roleTitle">Student</div>
+            <div className="roleDesc">Browse and request help</div>
+          </button>
+        </div>
+
+        <div className="authField">
           <label className="authLabel">Username</label>
           <input
             className="authInput"
-            placeholder="john_smith"
             value={username}
-            onChange={e => setUsername(e.target.value)}
+            onChange={(e) => setUsername(cleanUsername(e.target.value))}
+            placeholder="username"
+            autoComplete="username"
           />
+        </div>
 
-          <button type="button"
-            className={`authBtnGhost ${role === "student" ? "active" : ""}`}
-            onClick={() => setRole("student")}>
-            I'm a student
-          </button>
+        {err ? <div className="authErrorBar">{err}</div> : null}
 
-          <button type="button"
-            className={`authBtnGhost ${role === "creator" ? "active" : ""}`}
-            onClick={() => setRole("creator")}>
-            I'm a creator
-          </button>
-
-          {error && <div className="authError">{error}</div>}
-
-          <button className="authBtn" disabled={loading || !username || !role}>
-            {loading ? "Saving…" : "Continue"}
-          </button>
-        </form>
+        <button type="button" className="authPrimary" onClick={submit} disabled={!canSave || busy}>
+          {busy ? "Saving…" : "Continue"}
+        </button>
       </div>
     </div>
   );
