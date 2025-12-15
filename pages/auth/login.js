@@ -59,25 +59,21 @@ export default function LoginPage() {
 
   const subtitle = useMemo(() => {
     if (step === "otp") return "Enter the 6-digit code we sent to your email.";
-    if (step === "password") return "Welcome back. Enter your password to continue.";
-    return "Enter your email and password. If it’s your first time, we’ll verify your email once.";
+    return "Enter your email and password. First time? We’ll verify your email once.";
   }, [step]);
 
   const primaryLabel = useMemo(() => {
     if (busy) return "Please wait…";
-    if (step === "email") return "Continue";
-    if (step === "password") return "Sign in";
-    return "Verify code";
+    if (step === "otp") return "Verify code";
+    return "Continue";
   }, [busy, step]);
 
   const shouldDisablePrimary = useMemo(() => {
     const e = email.trim().toLowerCase();
     if (!e || !validEmail(e)) return true;
     if (busy) return true;
-    if (step === "email") return !password;
-    if (step === "password") return !password;
     if (step === "otp") return cleanCode(code).length !== 6;
-    return false;
+    return !password;
   }, [email, password, busy, step, code]);
 
   const resetMsgs = () => {
@@ -99,7 +95,7 @@ export default function LoginPage() {
       ok = false;
     }
 
-    if ((step === "email" || step === "password") && !password) {
+    if (step !== "otp" && !password) {
       next.password = "Password is required.";
       ok = false;
     }
@@ -113,7 +109,7 @@ export default function LoginPage() {
     return ok;
   };
 
-  const useDifferentEmail = () => {
+  const restart = () => {
     resetMsgs();
     setStep("email");
     setCode("");
@@ -138,8 +134,8 @@ export default function LoginPage() {
         }
 
         if (exists === true) {
-          setStep("password");
-          setPill("Email recognized. Sign in with your password.");
+          await signInWithPassword({ email: e, password });
+          router.replace("/onboarding");
           return;
         }
 
@@ -151,20 +147,11 @@ export default function LoginPage() {
         return;
       }
 
-      if (step === "password") {
-        await signInWithPassword({ email: e, password });
-        router.replace("/onboarding");
-        return;
-      }
-
       await verifyEmailOtp({ email: e, token: cleanCode(code) });
 
       const pw = pendingPassword || password;
       if (pw) {
-        try {
-          await updateUserPassword({ password: pw });
-        } catch (_e) {
-        }
+        await updateUserPassword({ password: pw });
       }
 
       router.replace("/onboarding");
@@ -172,21 +159,16 @@ export default function LoginPage() {
       const msg = e2 && e2.message ? String(e2.message) : "Could not continue. Try again.";
       const low = msg.toLowerCase();
 
-      if (step === "password") {
+      if (step === "email") {
         if (low.includes("invalid login credentials")) {
           setErr("Incorrect email or password.");
           return;
         }
-        setErr("Could not sign in. Try again.");
+        setErr("Could not continue. Try again.");
         return;
       }
 
-      if (step === "otp") {
-        setErr("Invalid code. Try again.");
-        return;
-      }
-
-      setErr("Could not continue. Try again.");
+      setErr("Invalid code. Try again.");
     } finally {
       setBusy(false);
     }
@@ -213,10 +195,7 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
-              setStep("email");
-              setCode("");
-              setPendingPassword("");
-              resetMsgs();
+              restart();
             }}
             placeholder="you@example.com"
             autoComplete="email"
@@ -234,7 +213,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Your password"
-              autoComplete={step === "password" ? "current-password" : "new-password"}
+              autoComplete="current-password"
             />
             {fieldErr.password ? <div className="authError">{fieldErr.password}</div> : null}
 
@@ -245,12 +224,6 @@ export default function LoginPage() {
             >
               {showPass ? "Hide password" : "Show password"}
             </button>
-
-            {step === "password" ? (
-              <button type="button" className="authSecondaryBtn" onClick={useDifferentEmail}>
-                Use a different email
-              </button>
-            ) : null}
           </div>
         ) : null}
 
@@ -268,7 +241,7 @@ export default function LoginPage() {
             {fieldErr.code ? <div className="authError">{fieldErr.code}</div> : null}
 
             <div className="authRow">
-              <button type="button" className="authLinkBtn" onClick={useDifferentEmail}>
+              <button type="button" className="authLinkBtn" onClick={restart}>
                 Back
               </button>
               <button
@@ -276,11 +249,11 @@ export default function LoginPage() {
                 className="authLinkBtn"
                 onClick={async () => {
                   resetMsgs();
-                  const e = email.trim().toLowerCase();
-                  if (!e || !validEmail(e)) return;
+                  const em = email.trim().toLowerCase();
+                  if (!em || !validEmail(em)) return;
                   try {
                     setBusy(true);
-                    await signInWithOtp({ email: e });
+                    await signInWithOtp({ email: em });
                     setPill("Code resent. Check your email.");
                   } catch (_e) {
                     setErr("Could not resend. Try again.");
