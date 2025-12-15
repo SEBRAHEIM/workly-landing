@@ -12,11 +12,21 @@ function cleanCode(v) {
 
 export default function LoginPage() {
   const router = useRouter();
-  const { user, profile, loading, apiCheckEmailExists, signInWithPassword, signInWithOtp, verifyEmailOtp } = useAuth();
+  const {
+    user,
+    profile,
+    loading,
+    apiCheckEmailExists,
+    signInWithPassword,
+    signInWithOtp,
+    verifyEmailOtp,
+    updateUserPassword
+  } = useAuth();
 
   const [email, setEmail] = useState("");
   const [step, setStep] = useState("email");
   const [password, setPassword] = useState("");
+  const [pendingPassword, setPendingPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [code, setCode] = useState("");
 
@@ -50,7 +60,7 @@ export default function LoginPage() {
   const subtitle = useMemo(() => {
     if (step === "otp") return "Enter the 6-digit code we sent to your email.";
     if (step === "password") return "Welcome back. Enter your password to continue.";
-    return "Continue with email. We’ll guide you based on your account.";
+    return "Enter your email and password. If it’s your first time, we’ll verify your email once.";
   }, [step]);
 
   const primaryLabel = useMemo(() => {
@@ -64,6 +74,7 @@ export default function LoginPage() {
     const e = email.trim().toLowerCase();
     if (!e || !validEmail(e)) return true;
     if (busy) return true;
+    if (step === "email") return !password;
     if (step === "password") return !password;
     if (step === "otp") return cleanCode(code).length !== 6;
     return false;
@@ -88,7 +99,7 @@ export default function LoginPage() {
       ok = false;
     }
 
-    if (step === "password" && !password) {
+    if ((step === "email" || step === "password") && !password) {
       next.password = "Password is required.";
       ok = false;
     }
@@ -102,21 +113,14 @@ export default function LoginPage() {
     return ok;
   };
 
-  const goEmailStep = async () => {
-    const e = email.trim().toLowerCase();
-    const exists = await apiCheckEmailExists(e);
-    if (exists === true) {
-      setStep("password");
-      setPill("Email recognized. Enter your password.");
-      return;
-    }
-    await signInWithOtp({ email: e });
-    setStep("otp");
+  const useDifferentEmail = () => {
+    resetMsgs();
+    setStep("email");
     setCode("");
-    setPill("Code sent. Check your email.");
+    setPendingPassword("");
   };
 
-  const go = async () => {
+  const onContinue = async () => {
     resetMsgs();
     if (!validate()) return;
 
@@ -126,14 +130,24 @@ export default function LoginPage() {
       setBusy(true);
 
       if (step === "email") {
+        let exists = null;
         try {
-          await goEmailStep();
+          exists = await apiCheckEmailExists(e);
         } catch (_x) {
-          await signInWithOtp({ email: e });
-          setStep("otp");
-          setCode("");
-          setPill("Code sent. Check your email.");
+          exists = null;
         }
+
+        if (exists === true) {
+          setStep("password");
+          setPill("Email recognized. Sign in with your password.");
+          return;
+        }
+
+        setPendingPassword(password);
+        await signInWithOtp({ email: e });
+        setStep("otp");
+        setCode("");
+        setPill("Code sent. Check your email.");
         return;
       }
 
@@ -144,6 +158,15 @@ export default function LoginPage() {
       }
 
       await verifyEmailOtp({ email: e, token: cleanCode(code) });
+
+      const pw = pendingPassword || password;
+      if (pw) {
+        try {
+          await updateUserPassword({ password: pw });
+        } catch (_e) {
+        }
+      }
+
       router.replace("/onboarding");
     } catch (e2) {
       const msg = e2 && e2.message ? String(e2.message) : "Could not continue. Try again.";
@@ -169,15 +192,6 @@ export default function LoginPage() {
     }
   };
 
-  const useDifferentEmail = () => {
-    resetMsgs();
-    setStep("email");
-    setPassword("");
-    setShowPass(false);
-    setCode("");
-    setPill("");
-  };
-
   return (
     <div className="authPage">
       <div className="authCard">
@@ -199,7 +213,10 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
-              useDifferentEmail();
+              setStep("email");
+              setCode("");
+              setPendingPassword("");
+              resetMsgs();
             }}
             placeholder="you@example.com"
             autoComplete="email"
@@ -208,7 +225,7 @@ export default function LoginPage() {
           {fieldErr.email ? <div className="authError">{fieldErr.email}</div> : null}
         </div>
 
-        {step === "password" ? (
+        {step !== "otp" ? (
           <div className="authField">
             <label className="authLabel">Password</label>
             <input
@@ -217,7 +234,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Your password"
-              autoComplete="current-password"
+              autoComplete={step === "password" ? "current-password" : "new-password"}
             />
             {fieldErr.password ? <div className="authError">{fieldErr.password}</div> : null}
 
@@ -229,9 +246,11 @@ export default function LoginPage() {
               {showPass ? "Hide password" : "Show password"}
             </button>
 
-            <button type="button" className="authSecondaryBtn" onClick={useDifferentEmail}>
-              Use a different email
-            </button>
+            {step === "password" ? (
+              <button type="button" className="authSecondaryBtn" onClick={useDifferentEmail}>
+                Use a different email
+              </button>
+            ) : null}
           </div>
         ) : null}
 
@@ -281,7 +300,7 @@ export default function LoginPage() {
         <button
           type="button"
           className="authPrimary"
-          onClick={go}
+          onClick={onContinue}
           disabled={shouldDisablePrimary}
         >
           {primaryLabel}

@@ -97,6 +97,12 @@ const verifyEmailOtp = async ({ email, token }) => {
   return data;
 };
 
+const updateUserPassword = async ({ password }) => {
+  const { data, error } = await supabase.auth.updateUser({ password });
+  if (error) throw error;
+  return data;
+};
+
   const saveOnboarding = async ({ role, username }) => {
     const uid = user?.id;
     const email = user?.email || null;
@@ -130,9 +136,11 @@ const verifyEmailOtp = async ({ email, token }) => {
       signUpWithPassword,
 signInWithOtp,
 verifyEmailOtp,
+updateUserPassword,
 saveOnboarding,
 signInWithOtp,
 verifyEmailOtp,
+updateUserPassword,
 signOut
 }),
     [session, user, profile, loading]
