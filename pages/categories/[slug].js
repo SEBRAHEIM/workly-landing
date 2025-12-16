@@ -60,7 +60,7 @@ export default function CategoryPage() {
           <Link href="/" style={{ fontWeight: 900 }}>Home</Link>
           {isStudent ? <Link href="/student/requests" style={{ fontWeight: 900 }}>My requests</Link> : null}
           {isCreator ? <Link href="/creator/requests" style={{ fontWeight: 900 }}>Requests</Link> : null}
-          {!isAuthed ? <Link href="/auth" style={{ fontWeight: 900 }}>Join</Link> : null}
+          {!isAuthed ? <Link href="/auth" data-join style={{ fontWeight: 900 }}>Join</Link> : null}
         </div>
       </div>
 
@@ -98,7 +98,7 @@ export default function CategoryPage() {
                   View profile
                 </Link>
                 {!isAuthed ? (
-                  <Link href="/auth" style={{ fontWeight: 1000 }}>
+                  <Link href="/auth" data-join style={{ fontWeight: 1000 }}>
                     Join to request
                   </Link>
                 ) : null}

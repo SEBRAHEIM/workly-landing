@@ -112,7 +112,7 @@ export default function CreatorProfilePage() {
         </div>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           <Link href="/" style={{ fontWeight: 900 }}>Home</Link>
-          <Link href="/auth" style={{ fontWeight: 900 }}>Auth</Link>
+          <Link href="/auth" data-join style={{ fontWeight: 900 }}>Auth</Link>
           {isStudent ? <Link href="/student/requests" style={{ fontWeight: 900 }}>My requests</Link> : null}
         </div>
       </div>
@@ -180,7 +180,7 @@ export default function CreatorProfilePage() {
               >
                 Send offer
               </button>
-              {!isAuthed ? <Link href="/auth" style={{ fontWeight: 1000 }}>Join to request</Link> : null}
+              {!isAuthed ? <Link href="/auth" data-join style={{ fontWeight: 1000 }}>Join to request</Link> : null}
             </div>
           </div>
         </>

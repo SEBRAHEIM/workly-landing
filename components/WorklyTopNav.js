@@ -76,7 +76,7 @@ export default function WorklyTopNav() {
 
           <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 120, justifyContent: "flex-end" }}>
             {!isAuthed ? (
-              <Link href="/auth" style={{ fontWeight: 1000, textDecoration: "none" }}>
+              <Link href="/auth" data-join style={{ fontWeight: 1000, textDecoration: "none" }}>
                 Join
               </Link>
             ) : null}
