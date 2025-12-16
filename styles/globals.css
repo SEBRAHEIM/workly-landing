@@ -3718,3 +3718,12 @@ WORKLY_AUTH_UI_FINAL
 @media(max-width:520px){
   .authStartTitle{font-size:40px;}
 }
+WORKLY_MARKET_UI_V1
+.authErrorBar{
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:14px;
+  background:rgba(220,0,0,0.08);
+  color:rgba(0,0,0,0.75);
+  font-weight:900;
+}

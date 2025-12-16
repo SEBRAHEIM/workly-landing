@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "../../context/AuthContext";
-import { centsToMoney, moneyToCents } from "../../lib/money";
+import { moneyToCents, centsToMoney } from "../../lib/money";
 
-export default function StudentRequests() {
+export default function CreatorRequests() {
   const { session, profile, loading } = useAuth();
   const token = session?.access_token || "";
 
@@ -11,10 +11,10 @@ export default function StudentRequests() {
   const [err, setErr] = useState("");
   const [requests, setRequests] = useState([]);
 
-  const [amount, setAmount] = useState("");
   const [selected, setSelected] = useState("");
+  const [amount, setAmount] = useState("");
 
-  const isStudent = !loading && profile?.role === "student";
+  const isCreator = !loading && profile?.role === "creator";
 
   const load = async () => {
     setErr("");
@@ -37,11 +37,7 @@ export default function StudentRequests() {
     load();
   }, [token]);
 
-  const canCounter = useMemo(() => {
-    return !!selected && !!moneyToCents(amount);
-  }, [selected, amount]);
-
-  const counter = async (is_final) => {
+  const send = async (is_final) => {
     setErr("");
     const cents = moneyToCents(amount);
     if (!cents) {
@@ -75,24 +71,25 @@ export default function StudentRequests() {
     <div style={{ padding: 24, maxWidth: 980, margin: "0 auto" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}>
         <div>
-          <h1 style={{ margin: 0 }}>My requests</h1>
-          <div style={{ opacity: 0.75, marginTop: 8 }}>Negotiation is numbers only (AED).</div>
+          <h1 style={{ margin: 0 }}>Requests</h1>
+          <div style={{ opacity: 0.75, marginTop: 8 }}>Reply with numbers only (AED).</div>
         </div>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           <Link href="/" style={{ fontWeight: 900 }}>Home</Link>
-          <Link href="/student" style={{ fontWeight: 900 }}>Student</Link>
+          <Link href="/creator" style={{ fontWeight: 900 }}>Creator</Link>
+          <Link href="/creator/setup" style={{ fontWeight: 900 }}>Setup</Link>
         </div>
       </div>
 
       {!token ? (
         <div style={{ marginTop: 14, padding: 12, borderRadius: 14, background: "rgba(0,0,0,0.04)", fontWeight: 900 }}>
-          Please sign in to view your requests.
+          Please sign in to view requests.
         </div>
       ) : null}
 
-      {!isStudent && token ? (
+      {!isCreator && token ? (
         <div style={{ marginTop: 14, padding: 12, borderRadius: 14, background: "rgba(220,0,0,0.08)", fontWeight: 900 }}>
-          Students only.
+          Creators only.
         </div>
       ) : null}
 
@@ -120,7 +117,7 @@ export default function StudentRequests() {
         ))}
       </div>
 
-      {token && isStudent ? (
+      {token && isCreator ? (
         <div style={{ marginTop: 14, padding: 16, borderRadius: 16, border: "1px solid rgba(0,0,0,0.10)", background: "#fff" }}>
           <div style={{ fontWeight: 1000 }}>Send a number</div>
           <div style={{ marginTop: 8, opacity: 0.75 }}>Select a request then enter amount (AED).</div>
@@ -129,22 +126,22 @@ export default function StudentRequests() {
             <input
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              placeholder="Example: 120"
+              placeholder="Example: 200"
               inputMode="decimal"
               style={{ padding: 12, borderRadius: 12, border: "1px solid rgba(0,0,0,0.12)", minWidth: 220, fontWeight: 900 }}
             />
             <button
               type="button"
-              disabled={!canCounter || busy}
-              onClick={() => counter(false)}
+              disabled={!selected || !moneyToCents(amount) || busy}
+              onClick={() => send(false)}
               style={{ padding: "12px 16px", borderRadius: 999, border: "1px solid rgba(0,0,0,0.12)", background: "#fff", fontWeight: 1000, cursor: "pointer" }}
             >
               Counter
             </button>
             <button
               type="button"
-              disabled={!canCounter || busy}
-              onClick={() => counter(true)}
+              disabled={!selected || !moneyToCents(amount) || busy}
+              onClick={() => send(true)}
               style={{ padding: "12px 16px", borderRadius: 999, border: "1px solid rgba(0,0,0,0.12)", background: "#fff", fontWeight: 1000, cursor: "pointer" }}
             >
               Finalize

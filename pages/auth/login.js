@@ -193,8 +193,8 @@ export default function LoginPage() {
             className="authInput"
             type="email"
             value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
+            onChange={(e3) => {
+              setEmail(e3.target.value);
               restart();
             }}
             placeholder="you@example.com"
@@ -211,7 +211,7 @@ export default function LoginPage() {
               className="authInput"
               type={showPass ? "text" : "password"}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e4) => setPassword(e4.target.value)}
               placeholder="Your password"
               autoComplete="current-password"
             />
@@ -234,7 +234,7 @@ export default function LoginPage() {
               className="authInput authCodeInput"
               inputMode="numeric"
               value={code}
-              onChange={(e) => setCode(cleanCode(e.target.value))}
+              onChange={(e5) => setCode(cleanCode(e5.target.value))}
               placeholder="6-digit code"
               autoComplete="one-time-code"
             />
