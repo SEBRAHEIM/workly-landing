@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import { useAuth } from "../context/AuthContext";
 import WorklyMenu from "./WorklyMenu";
@@ -21,6 +21,22 @@ export default function WorklyTopNav() {
   }, [router.pathname]);
 
   if (hideNav) return null;
+  useEffect(() => {
+    if (loading) return;
+    if (isStudent) {
+      const p = router.pathname || "";
+      if (p.startsWith("/auth")) {
+        router.replace("/student");
+      }
+    }
+    if (isCreator) {
+      const p = router.pathname || "";
+      if (p.startsWith("/auth")) {
+        router.replace("/creator");
+      }
+    }
+  }, [loading, isStudent, isCreator, router]);
+
 
   return (
     <>
