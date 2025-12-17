@@ -1,99 +1,194 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import { supabase } from "../../lib/supabaseClient";
 
-export default function VerifyEmailCode() {
+export default function VerifyPage() {
   const router = useRouter();
-  const email = (router.query.email || "").toString();
-  const returnTo = (router.query.returnTo || "/").toString();
 
+  const qEmail = useMemo(() => {
+    const v = router.query?.email;
+    return v ? String(v) : "";
+  }, [router.query]);
+
+  const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [resending, setResending] = useState(false);
+  const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
-  const [msg, setMsg] = useState("");
 
-  async function verify(e) {
-    e.preventDefault();
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const stored = window.sessionStorage.getItem("workly_email") || "";
+    const finalEmail = qEmail || stored;
+    if (finalEmail) {
+      setEmail(finalEmail);
+      window.sessionStorage.setItem("workly_email", finalEmail);
+    }
+  }, [qEmail]);
+
+  const canSubmit = email && code.replace(/\D/g, "").length === 6 && !busy;
+
+  const goNext = async () => {
+    const { data: sData } = await supabase.auth.getSession();
+    const token = sData?.session?.access_token || "";
+
+    if (!token) {
+      router.replace("/auth");
+      return;
+    }
+
+    const r = await fetch("/api/market/profile", {
+      headers: { authorization: `Bearer ${token}` }
+    });
+    const j = await r.json().catch(() => ({}));
+
+    const role = j?.profile?.role || "";
+    if (role === "student") {
+      window.location.href = "/student";
+      return;
+    }
+    if (role === "creator") {
+      window.location.href = "/creator";
+      return;
+    }
+    window.location.href = "/auth/role";
+  };
+
+  const verify = async () => {
     setErr("");
-    setMsg("");
-    setLoading(true);
+    const clean = code.replace(/\D/g, "");
+    if (!email) {
+      setErr("Missing email.");
+      return;
+    }
+    if (clean.length !== 6) {
+      setErr("Enter the 6-digit code.");
+      return;
+    }
 
+    setBusy(true);
     try {
-      const token = code.trim();
-      if (!email) throw new Error("Missing email.");
-      if (!/^[0-9]{6}$/.test(token)) throw new Error("Enter the 6-digit code.");
-
       const { error } = await supabase.auth.verifyOtp({
         email,
-        token,
-        type: "signup",
+        token: clean,
+        type: "email"
       });
 
-      if (error) throw error;
+      if (error) {
+        setErr(error.message || "Verification failed.");
+        return;
+      }
 
-      router.replace({ pathname: "/auth/set-password", query: { returnTo } });
-    } catch (e2) {
-      setErr(e2?.message || "Invalid code. Try again.");
+      await goNext();
+    } catch (e) {
+      setErr(String(e?.message || e || "Verification failed."));
     } finally {
-      setLoading(false);
+      setBusy(false);
     }
-  }
+  };
 
-  async function resend() {
+  const resend = async () => {
     setErr("");
-    setMsg("");
-    setResending(true);
-    try {
-      if (!email) throw new Error("Missing email.");
-
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: { shouldCreateUser: true },
-      });
-
-      if (error) throw error;
-      setMsg("Sent! Check your inbox (and spam).");
-    } catch (e2) {
-      setErr(e2?.message || "Could not resend. Try again.");
-    } finally {
-      setResending(false);
+    if (!email) {
+      setErr("Missing email.");
+      return;
     }
-  }
+    setBusy(true);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({ email });
+      if (error) {
+        setErr(error.message || "Could not resend code.");
+        return;
+      }
+    } catch (e) {
+      setErr(String(e?.message || e || "Could not resend code."));
+    } finally {
+      setBusy(false);
+    }
+  };
 
   return (
-    <div className="authShell">
-      <div className="authCard">
-        <div className="authBrand">WORKLY</div>
-        <h1 className="authTitle">Enter the code</h1>
-        <p className="authSub">We sent a 6-digit code to <b>{email || "your email"}</b>.</p>
+    <div style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
+      <div style={{ fontWeight: 1100, letterSpacing: 6, opacity: 0.7 }}>WORKLY</div>
+      <h1 style={{ marginTop: 14, marginBottom: 8, fontSize: 44, fontWeight: 1200 }}>Verify your email</h1>
+      <div style={{ opacity: 0.75, fontWeight: 900 }}>
+        Enter the 6-digit code we sent to your email.
+      </div>
 
-        <form onSubmit={verify} className="authForm">
-          <label className="authLabel">6-digit code</label>
-          <input
-            className="authInput"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            placeholder="123456"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-          />
+      {err ? (
+        <div style={{ marginTop: 14, padding: 12, borderRadius: 14, background: "rgba(220,0,0,0.08)", fontWeight: 900 }}>
+          {err}
+        </div>
+      ) : null}
 
-          {err ? <div className="authError">{err}</div> : null}
-          {msg ? <div className="authOk">{msg}</div> : null}
+      <div style={{ marginTop: 18 }}>
+        <div style={{ opacity: 0.7, fontWeight: 900, marginBottom: 8 }}>Email</div>
+        <input
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          inputMode="email"
+          placeholder="you@example.com"
+          style={{ width: "100%", padding: 14, borderRadius: 14, border: "1px solid rgba(0,0,0,0.14)", background: "rgba(255,240,120,0.35)", fontWeight: 950 }}
+        />
+      </div>
 
-          <button className="authBtn" type="submit" disabled={loading}>
-            {loading ? "Verifying…" : "Verify"}
-          </button>
+      <div style={{ marginTop: 14 }}>
+        <div style={{ opacity: 0.7, fontWeight: 900, marginBottom: 8 }}>Verification code</div>
+        <input
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+          inputMode="numeric"
+          placeholder="123456"
+          style={{ width: "100%", padding: 14, borderRadius: 14, border: "1px solid rgba(0,0,0,0.14)", background: "#fff", fontWeight: 1100, letterSpacing: 8, textAlign: "center" }}
+        />
+      </div>
 
-          <button className="authBtnGhost" type="button" onClick={resend} disabled={resending}>
-            {resending ? "Resending…" : "Resend code"}
-          </button>
+      <div style={{ marginTop: 12, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+        <button
+          type="button"
+          onClick={() => router.back()}
+          style={{ border: "none", background: "transparent", fontWeight: 1100, cursor: "pointer", textDecoration: "underline" }}
+        >
+          Back
+        </button>
 
-          <button className="authLinkBtn" type="button" onClick={() => router.replace({ pathname: "/auth", query: { returnTo } })}>
-            Back to password sign in
-          </button>
-        </form>
+        <button
+          type="button"
+          onClick={resend}
+          disabled={busy || !email}
+          style={{ border: "none", background: "transparent", fontWeight: 1100, cursor: "pointer", textDecoration: "underline", opacity: busy || !email ? 0.5 : 1 }}
+        >
+          Resend code
+        </button>
+      </div>
+
+      <button
+        type="button"
+        disabled={!canSubmit}
+        onClick={verify}
+        style={{
+          marginTop: 12,
+          width: "100%",
+          padding: "16px 18px",
+          borderRadius: 999,
+          border: "1px solid rgba(0,0,0,0.12)",
+          background: "#6f8f7d",
+          color: "#fff",
+          fontWeight: 1200,
+          cursor: canSubmit ? "pointer" : "not-allowed",
+          opacity: canSubmit ? 1 : 0.7
+        }}
+      >
+        {busy ? "Please wait..." : "Continue"}
+      </button>
+
+      <div style={{ marginTop: 14, display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+        <Link href="/auth/forgot-password" style={{ fontWeight: 1000, textDecoration: "none" }}>Forgot password?</Link>
+        <Link href="/auth" style={{ fontWeight: 1000, textDecoration: "none" }}>Back to options</Link>
+      </div>
+
+      <div style={{ marginTop: 10, opacity: 0.65, fontWeight: 900 }}>
+        By continuing you agree to Terms & Privacy
       </div>
     </div>
   );
