@@ -1,8 +1,32 @@
+import { useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
+import { useRouter } from "next/router";
 import Head from "next/head";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
 
 export default function Home() {
+  const router = useRouter();
+  const { user, profile, loading } = useAuth();
+
+  useEffect(() => {
+    if (loading) return;
+    if (!user) return;
+    const r = profile?.role || "";
+    if (r === "student") {
+      router.replace("/student");
+      return;
+    }
+    if (r === "creator") {
+      router.replace("/creator");
+      return;
+    }
+    router.replace("/auth/role");
+  }, [loading, user, profile, router]);
+
+  if (!loading && user) return null;
+
+  /* AUTO_REDIRECT_ON_AUTH_V1 */
 const openAuthModal = () => { if (typeof window !== "undefined") window.location.href="/auth"; };
   const categories = [
     {
