@@ -44,6 +44,8 @@ export default function WorklyMenu({ open, onClose, profile }) {
     </Link>
   );
 
+  const homeHref = role === "student" ? "/student" : role === "creator" ? "/creator" : "/";
+
   return (
     <>
       <div
@@ -91,12 +93,15 @@ export default function WorklyMenu({ open, onClose, profile }) {
         </div>
 
         <div style={{ marginTop: 12, display: "grid", gap: 10 }}>
+          <LinkItem href={homeHref} label="Home" />
+
           {role === "student" ? (
             <>
-              <LinkItem href="/student" label="Student home" />
               <LinkItem href="/student/requests" label="My requests" />
               <LinkItem href="/student/orders" label="My orders" />
               <LinkItem href="/student/wallet" label="Wallet" />
+              <LinkItem href="/student/saved" label="Saved" />
+              <LinkItem href="/student/messages" label="Messages" />
               <LinkItem href="/profile/edit" label="Edit profile" />
             </>
           ) : null}
