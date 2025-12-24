@@ -1,6 +1,5 @@
 import "../styles/globals.css";
 import RoleAuthGate from "../components/RoleAuthGate";
-import WorklyTopNav from "../components/WorklyTopNav";
 import { AuthProvider, useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
 
@@ -21,8 +20,7 @@ export default function App({ Component, pageProps }) {
     <AuthProvider>
       <RoleBinder />
       <RoleAuthGate />
-      <WorklyTopNav />
-<Component {...pageProps} />
+      <Component {...pageProps} />
     </AuthProvider>
   );
 }
