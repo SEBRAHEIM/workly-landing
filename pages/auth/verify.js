@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { supabase } from "../../lib/supabaseClient";
 
 export default function VerifyPage() {
   const router = useRouter();
-  const email = useMemo(() => String(router.query.email || "").trim(), [router.query.email]);
+  const email = useMemo(() => String(router.query.email || "").trim().toLowerCase(), [router.query.email]);
 
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
@@ -13,24 +13,28 @@ export default function VerifyPage() {
   const [err, setErr] = useState("");
   const [ok, setOk] = useState("");
 
+  const getPendingPassword = () => {
+    try { return sessionStorage.getItem(`workly_pending_password:${email}`) || ""; } catch { return ""; }
+  };
+
+  const clearPendingPassword = () => {
+    try { sessionStorage.removeItem(`workly_pending_password:${email}`); } catch {}
+  };
+
   const resend = async () => {
     setErr("");
     setOk("");
-    const e = String(email || "").trim().toLowerCase();
-    if (!e.includes("@")) {
-      setErr("missing_email");
+    if (!email.includes("@")) {
+      setErr("Missing email");
       return;
     }
     setResendBusy(true);
     try {
-      const { error } = await supabase.auth.signInWithOtp({
-        email: e,
-        options: { shouldCreateUser: true }
-      });
+      const { error } = await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
       if (error) throw error;
       setOk("New code sent. Check your email.");
-    } catch (e2) {
-      setErr(String(e2?.message || e2));
+    } catch (e) {
+      setErr(String(e?.message || e));
     } finally {
       setResendBusy(false);
     }
@@ -40,10 +44,13 @@ export default function VerifyPage() {
     setErr("");
     setOk("");
     const token = String(code || "").replace(/\s+/g, "");
-    const e = String(email || "").trim().toLowerCase();
-
-    if (!e.includes("@")) {
-      setErr("missing_email");
+    if (!email.includes("@")) {
+      setErr("Missing email");
+      return;
+    }
+    const pendingPass = getPendingPassword();
+    if (!pendingPass || pendingPass.length < 8) {
+      setErr("Missing password from signup. Go back and sign up again.");
       return;
     }
     if (token.length !== 6) {
@@ -53,18 +60,17 @@ export default function VerifyPage() {
 
     setBusy(true);
     try {
-      const { data, error } = await supabase.auth.verifyOtp({
-        email: e,
-        token,
-        type: "email"
-      });
+      const { data, error } = await supabase.auth.verifyOtp({ email, token, type: "email" });
       if (error) throw error;
 
-      if (!data?.session) {
-        const { data: s2 } = await supabase.auth.getSession();
-        if (!s2?.session) throw new Error("no_session_after_verify");
-      }
+      const { data: s2 } = await supabase.auth.getSession();
+      const session = data?.session || s2?.session;
+      if (!session) throw new Error("no_session_after_verify");
 
+      const { error: upErr } = await supabase.auth.updateUser({ password: pendingPass });
+      if (upErr) throw upErr;
+
+      clearPendingPassword();
       window.location.href = "/auth/profile";
     } catch (e3) {
       const msg = String(e3?.message || e3);
@@ -83,15 +89,11 @@ export default function VerifyPage() {
       <div style={{ maxWidth: 520, margin: "0 auto", background: "#fff", borderRadius: 18, padding: 18, border: "1px solid rgba(0,0,0,0.10)" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
           <div style={{ fontWeight: 1100, letterSpacing: 4, opacity: 0.75 }}>WORKLY</div>
-          <Link href="/auth" style={{ textDecoration: "none", fontWeight: 1000 }}>✕</Link>
+          <Link href="/auth/login" style={{ textDecoration: "none", fontWeight: 1000 }}>✕</Link>
         </div>
 
-        <div style={{ marginTop: 14, fontWeight: 1200, fontSize: 34, lineHeight: 1.05, color: "#3a332b" }}>
-          Verify your email
-        </div>
-        <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>
-          Enter the 6-digit code we sent to your email.
-        </div>
+        <div style={{ marginTop: 14, fontWeight: 1200, fontSize: 34, lineHeight: 1.05, color: "#3a332b" }}>Verify your email</div>
+        <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>Paste the 6-digit code we sent to your email.</div>
 
         <div style={{ marginTop: 18, fontWeight: 1000, opacity: 0.7 }}>Email</div>
         <div style={{ marginTop: 8, padding: 12, borderRadius: 14, background: "rgba(200,200,0,0.15)", border: "1px solid rgba(0,0,0,0.10)", fontWeight: 1000 }}>
@@ -99,73 +101,16 @@ export default function VerifyPage() {
         </div>
 
         <div style={{ marginTop: 16, fontWeight: 1000, opacity: 0.7 }}>Verification code</div>
-        <input
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          inputMode="numeric"
-          autoComplete="one-time-code"
-          placeholder="123456"
-          style={{
-            marginTop: 8,
-            width: "100%",
-            padding: "14px 14px",
-            borderRadius: 14,
-            border: "1px solid rgba(0,0,0,0.15)",
-            background: "#fff",
-            fontWeight: 1100,
-            fontSize: 20,
-            letterSpacing: 6,
-            textAlign: "center"
-          }}
-        />
+        <input value={code} onChange={(e) => setCode(e.target.value)} inputMode="numeric" autoComplete="one-time-code" placeholder="123456" style={{ marginTop: 8, width: "100%", padding: "14px 14px", borderRadius: 14, border: "1px solid rgba(0,0,0,0.15)", background: "#fff", fontWeight: 1100, fontSize: 20, letterSpacing: 6, textAlign: "center" }} />
 
-        {ok ? (
-          <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(0,160,0,0.10)", border: "1px solid rgba(0,160,0,0.25)", fontWeight: 1000 }}>
-            {ok}
-          </div>
-        ) : null}
+        {ok ? <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(0,160,0,0.10)", border: "1px solid rgba(0,160,0,0.25)", fontWeight: 1000 }}>{ok}</div> : null}
+        {err ? <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(220,0,0,0.08)", border: "1px solid rgba(220,0,0,0.20)", fontWeight: 1000 }}>{err}</div> : null}
 
-        {err ? (
-          <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(220,0,0,0.08)", border: "1px solid rgba(220,0,0,0.20)", fontWeight: 1000 }}>
-            {err}
-          </div>
-        ) : null}
-
-        <button
-          type="button"
-          disabled={busy}
-          onClick={submit}
-          style={{
-            marginTop: 14,
-            width: "100%",
-            border: "0",
-            background: busy ? "rgba(75,68,59,0.45)" : "#4b443b",
-            color: "#fff",
-            padding: "14px 18px",
-            borderRadius: 999,
-            fontWeight: 1100,
-            cursor: busy ? "not-allowed" : "pointer"
-          }}
-        >
+        <button type="button" disabled={busy} onClick={submit} style={{ marginTop: 14, width: "100%", border: 0, background: busy ? "rgba(75,68,59,0.45)" : "#4b443b", color: "#fff", padding: "14px 18px", borderRadius: 999, fontWeight: 1100, cursor: busy ? "not-allowed" : "pointer" }}>
           {busy ? "Please wait..." : "Verify"}
         </button>
 
-        <button
-          type="button"
-          disabled={resendBusy}
-          onClick={resend}
-          style={{
-            marginTop: 10,
-            width: "100%",
-            border: "1px solid rgba(0,0,0,0.12)",
-            background: "#fff",
-            color: "#4b443b",
-            padding: "12px 14px",
-            borderRadius: 999,
-            fontWeight: 1100,
-            cursor: resendBusy ? "not-allowed" : "pointer"
-          }}
-        >
+        <button type="button" disabled={resendBusy} onClick={resend} style={{ marginTop: 10, width: "100%", border: "1px solid rgba(0,0,0,0.12)", background: "#fff", color: "#4b443b", padding: "12px 14px", borderRadius: 999, fontWeight: 1100, cursor: resendBusy ? "not-allowed" : "pointer" }}>
           {resendBusy ? "Sending..." : "Resend code"}
         </button>
       </div>

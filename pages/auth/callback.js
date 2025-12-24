@@ -11,15 +11,13 @@ export default function AuthCallback() {
         const { error } = await supabase.auth.exchangeCodeForSession(window.location.href);
         if (error) throw error;
         if (!alive) return;
-        window.location.href = "/auth/post";
+        window.location.href = "/dashboard";
       } catch (e) {
         if (!alive) return;
         setMsg(String(e?.message || e));
       }
     })();
-    return () => {
-      alive = false;
-    };
+    return () => { alive = false; };
   }, []);
 
   return (
