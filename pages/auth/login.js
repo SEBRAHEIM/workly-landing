@@ -1,293 +1,94 @@
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/router";
-import { useAuth } from "../../context/AuthContext";
+import { supabase } from "../../lib/supabaseClient";
 
-function validEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function cleanCode(v) {
-  return (v || "").replace(/\D/g, "").slice(0, 6);
-}
-
-export default function LoginPage() {
+export default function EmailLogin() {
   const router = useRouter();
-  const {
-    user,
-    profile,
-    loading,
-    apiCheckEmailExists,
-    signInWithPassword,
-    signInWithOtp,
-    verifyEmailOtp,
-    updateUserPassword
-  } = useAuth();
-
   const [email, setEmail] = useState("");
-  const [step, setStep] = useState("email");
-  const [password, setPassword] = useState("");
-  const [pendingPassword, setPendingPassword] = useState("");
-  const [showPass, setShowPass] = useState(false);
-  const [code, setCode] = useState("");
-
   const [busy, setBusy] = useState(false);
-  const [pill, setPill] = useState("");
   const [err, setErr] = useState("");
-  const [fieldErr, setFieldErr] = useState({ email: "", password: "", code: "" });
 
-  useEffect(() => {
-    if (loading) return;
-    if (!user) return;
-
-    if (!profile?.role || !profile?.username) {
-      router.replace("/onboarding");
-      return;
-    }
-
-    if (profile.role === "creator") {
-      router.replace("/creator");
-      return;
-    }
-
-    router.replace("/");
-  }, [loading, user, profile, router]);
-
-  const title = useMemo(() => {
-    if (step === "otp") return "Verify your email";
-    return "Sign in";
-  }, [step]);
-
-  const subtitle = useMemo(() => {
-    if (step === "otp") return "Enter the 6-digit code we sent to your email.";
-    return "Enter your email and password. First time? We’ll verify your email once.";
-  }, [step]);
-
-  const primaryLabel = useMemo(() => {
-    if (busy) return "Please wait…";
-    if (step === "otp") return "Verify code";
-    return "Continue";
-  }, [busy, step]);
-
-  const shouldDisablePrimary = useMemo(() => {
-    const e = email.trim().toLowerCase();
-    if (!e || !validEmail(e)) return true;
-    if (busy) return true;
-    if (step === "otp") return cleanCode(code).length !== 6;
-    return !password;
-  }, [email, password, busy, step, code]);
-
-  const resetMsgs = () => {
+  const submit = async () => {
     setErr("");
-    setPill("");
-    setFieldErr({ email: "", password: "", code: "" });
-  };
-
-  const validate = () => {
-    const e = email.trim().toLowerCase();
-    const next = { email: "", password: "", code: "" };
-    let ok = true;
-
-    if (!e) {
-      next.email = "Email is required.";
-      ok = false;
-    } else if (!validEmail(e)) {
-      next.email = "Enter a valid email.";
-      ok = false;
+    const e = String(email || "").trim().toLowerCase();
+    if (!e.includes("@")) {
+      setErr("Enter a valid email");
+      return;
     }
-
-    if (step !== "otp" && !password) {
-      next.password = "Password is required.";
-      ok = false;
-    }
-
-    if (step === "otp" && cleanCode(code).length !== 6) {
-      next.code = "Enter the 6-digit code.";
-      ok = false;
-    }
-
-    setFieldErr(next);
-    return ok;
-  };
-
-  const restart = () => {
-    resetMsgs();
-    setStep("email");
-    setCode("");
-    setPendingPassword("");
-  };
-
-  const onContinue = async () => {
-    resetMsgs();
-    if (!validate()) return;
-
-    const e = email.trim().toLowerCase();
-
+    setBusy(true);
     try {
-      setBusy(true);
-
-      if (step === "email") {
-        let exists = null;
-        try {
-          exists = await apiCheckEmailExists(e);
-        } catch (_x) {
-          exists = null;
-        }
-
-        if (exists === true) {
-          await signInWithPassword({ email: e, password });
-          router.replace("/onboarding");
-          return;
-        }
-
-        setPendingPassword(password);
-        await signInWithOtp({ email: e });
-        setStep("otp");
-        setCode("");
-        setPill("Code sent. Check your email.");
-        return;
-      }
-
-      await verifyEmailOtp({ email: e, token: cleanCode(code) });
-
-      const pw = pendingPassword || password;
-      if (pw) {
-        await updateUserPassword({ password: pw });
-      }
-
-      router.replace("/onboarding");
-    } catch (e2) {
-      const msg = e2 && e2.message ? String(e2.message) : "Could not continue. Try again.";
-      const low = msg.toLowerCase();
-
-      if (step === "email") {
-        if (low.includes("invalid login credentials")) {
-          setErr("Incorrect email or password.");
-          return;
-        }
-        setErr("Could not continue. Try again.");
-        return;
-      }
-
-      setErr("Invalid code. Try again.");
+      const { error } = await supabase.auth.signInWithOtp({
+        email: e,
+        options: { shouldCreateUser: true }
+      });
+      if (error) throw error;
+      router.push(`/auth/verify?email=${encodeURIComponent(e)}`);
+    } catch (x) {
+      setErr(String(x?.message || x));
     } finally {
       setBusy(false);
     }
   };
 
   return (
-    <div className="authPage">
-      <div className="authCard">
-        <div className="authTopRow">
-          <div className="authBrand">WORKLY</div>
-          <a className="authCloseLink" href="/auth">×</a>
+    <div style={{ minHeight: "100vh", background: "#ece9e2", padding: 24 }}>
+      <div style={{ maxWidth: 520, margin: "0 auto", background: "#fff", borderRadius: 18, padding: 18, border: "1px solid rgba(0,0,0,0.10)" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+          <div style={{ fontWeight: 1100, letterSpacing: 4, opacity: 0.75 }}>WORKLY</div>
+          <Link href="/auth" style={{ textDecoration: "none", fontWeight: 1000 }}>✕</Link>
         </div>
 
-        <h1 className="authTitle">{title}</h1>
-        <p className="authSubtitle">{subtitle}</p>
-
-        {pill ? <div className="authPill">{pill}</div> : null}
-
-        <div className="authField">
-          <label className="authLabel">Email</label>
-          <input
-            className="authInput"
-            type="email"
-            value={email}
-            onChange={(e3) => {
-              setEmail(e3.target.value);
-              restart();
-            }}
-            placeholder="you@example.com"
-            autoComplete="email"
-            required
-          />
-          {fieldErr.email ? <div className="authError">{fieldErr.email}</div> : null}
+        <div style={{ marginTop: 14, fontWeight: 1200, fontSize: 38, lineHeight: 1.05, color: "#3a332b" }}>
+          Continue with email
+        </div>
+        <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>
+          We’ll send you a 6-digit code.
         </div>
 
-        {step !== "otp" ? (
-          <div className="authField">
-            <label className="authLabel">Password</label>
-            <input
-              className="authInput"
-              type={showPass ? "text" : "password"}
-              value={password}
-              onChange={(e4) => setPassword(e4.target.value)}
-              placeholder="Your password"
-              autoComplete="current-password"
-            />
-            {fieldErr.password ? <div className="authError">{fieldErr.password}</div> : null}
+        <div style={{ marginTop: 14, fontWeight: 1000, opacity: 0.7 }}>Email</div>
+        <input
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          inputMode="email"
+          autoComplete="email"
+          placeholder="you@email.com"
+          style={{
+            marginTop: 8,
+            width: "100%",
+            padding: "14px 14px",
+            borderRadius: 14,
+            border: "1px solid rgba(0,0,0,0.15)",
+            background: "#fff",
+            fontWeight: 1100,
+            fontSize: 18
+          }}
+        />
 
-            <button
-              type="button"
-              className="authInlineToggle"
-              onClick={() => setShowPass((v) => !v)}
-            >
-              {showPass ? "Hide password" : "Show password"}
-            </button>
+        {err ? (
+          <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(220,0,0,0.08)", border: "1px solid rgba(220,0,0,0.20)", fontWeight: 1000 }}>
+            {err}
           </div>
         ) : null}
-
-        {step === "otp" ? (
-          <div className="authField">
-            <label className="authLabel">Verification code</label>
-            <input
-              className="authInput authCodeInput"
-              inputMode="numeric"
-              value={code}
-              onChange={(e5) => setCode(cleanCode(e5.target.value))}
-              placeholder="6-digit code"
-              autoComplete="one-time-code"
-            />
-            {fieldErr.code ? <div className="authError">{fieldErr.code}</div> : null}
-
-            <div className="authRow">
-              <button type="button" className="authLinkBtn" onClick={restart}>
-                Back
-              </button>
-              <button
-                type="button"
-                className="authLinkBtn"
-                onClick={async () => {
-                  resetMsgs();
-                  const em = email.trim().toLowerCase();
-                  if (!em || !validEmail(em)) return;
-                  try {
-                    setBusy(true);
-                    await signInWithOtp({ email: em });
-                    setPill("Code resent. Check your email.");
-                  } catch (_e) {
-                    setErr("Could not resend. Try again.");
-                  } finally {
-                    setBusy(false);
-                  }
-                }}
-              >
-                Resend code
-              </button>
-            </div>
-          </div>
-        ) : null}
-
-        {err ? <div className="authErrorBar">{err}</div> : null}
 
         <button
           type="button"
-          className="authPrimary"
-          onClick={onContinue}
-          disabled={shouldDisablePrimary}
+          disabled={busy}
+          onClick={submit}
+          style={{
+            marginTop: 14,
+            width: "100%",
+            border: 0,
+            background: busy ? "rgba(75,68,59,0.45)" : "#4b443b",
+            color: "#fff",
+            padding: "14px 18px",
+            borderRadius: 999,
+            fontWeight: 1100,
+            cursor: busy ? "not-allowed" : "pointer"
+          }}
         >
-          {primaryLabel}
+          {busy ? "Sending..." : "Send code"}
         </button>
-
-        <div className="authRow">
-          <a className="authLink" href="/auth/forgot-password">Forgot password?</a>
-          <a className="authLink" href="/auth">Back to options</a>
-        </div>
-
-        <div className="authFinePrint">
-          By continuing you agree to <a className="authLink" href="/terms">Terms</a> &{" "}
-          <a className="authLink" href="/privacy">Privacy</a>
-        </div>
       </div>
     </div>
   );

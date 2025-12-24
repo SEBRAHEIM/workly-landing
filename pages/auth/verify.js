@@ -16,8 +16,8 @@ export default function VerifyPage() {
   useEffect(() => {
     if (!loading && user) {
       const r = profile?.role || "";
-      if (r === "student") window.location.href = "/student";
-      else if (r === "creator") window.location.href = "/creator";
+      if (r === "student") window.location.href = "/student/dashboard";
+      else if (r === "creator") window.location.href = "/creator/dashboard";
       else window.location.href = "/auth/profile";
     }
   }, [loading, user, profile]);
@@ -99,23 +99,6 @@ export default function VerifyPage() {
             {err}
           </div>
         ) : null}
-
-        <div style={{ marginTop: 14, display: "flex", justifyContent: "space-between", gap: 12 }}>
-          <button
-            type="button"
-            onClick={() => router.back()}
-            style={{ border: "0", background: "transparent", fontWeight: 1100, color: "#2d5d3b", textDecoration: "underline", cursor: "pointer" }}
-          >
-            Back
-          </button>
-          <button
-            type="button"
-            onClick={() => window.location.href = "/auth"}
-            style={{ border: "0", background: "transparent", fontWeight: 1100, color: "#2d5d3b", textDecoration: "underline", cursor: "pointer" }}
-          >
-            Back to options
-          </button>
-        </div>
 
         <button
           type="button"
