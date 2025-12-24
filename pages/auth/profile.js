@@ -1,18 +1,37 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useAuth } from "../../context/AuthContext";
+import { supabase } from "../../lib/supabaseClient";
 
 export default function ProfileSetupPage() {
   const router = useRouter();
-  const { session, user, loading, profile } = useAuth();
+  const { user, loading, profile } = useAuth();
 
+  const [token, setToken] = useState("");
   const [role, setRole] = useState(profile?.role || "");
   const [username, setUsername] = useState(profile?.username || "");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
 
-  const token = session?.access_token || "";
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      const { data } = await supabase.auth.getSession();
+      const t = data?.session?.access_token || "";
+      if (alive) setToken(t);
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (loading) return;
+    if (!user) return;
+    if (profile?.role) setRole(profile.role);
+    if (profile?.username) setUsername(profile.username);
+  }, [loading, user, profile]);
 
   const cleaned = useMemo(() => {
     const s = String(username || "").trim().toLowerCase();
@@ -36,7 +55,7 @@ export default function ProfileSetupPage() {
   const submit = async () => {
     setErr("");
     if (!token) {
-      router.replace("/auth");
+      setErr("missing_access_token");
       return;
     }
     if (role !== "student" && role !== "creator") {
@@ -58,8 +77,12 @@ export default function ProfileSetupPage() {
         },
         body: JSON.stringify({ role, username: cleaned })
       });
-      const j = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(j.error || "could_not_save");
+
+      const text = await r.text();
+      let j = {};
+      try { j = JSON.parse(text); } catch {}
+
+      if (!r.ok) throw new Error(j.error || text || "could_not_save");
 
       window.location.href = role === "creator" ? "/creator" : "/student";
     } catch (e) {
