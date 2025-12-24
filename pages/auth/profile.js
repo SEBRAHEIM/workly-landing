@@ -10,59 +10,6 @@ export default function ProfileSetupPage() {
   const [username, setUsername] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
-  const [booting, setBooting] = useState(true);
-
-  useEffect(() => {
-    let alive = true;
-
-    const boot = async () => {
-      try {
-        const { data: u1 } = await supabase.auth.getUser();
-        if (!u1?.user) {
-          window.location.href = "/auth";
-          return;
-        }
-
-        for (let i = 0; i < 20; i++) {
-          const { data: s } = await supabase.auth.getSession();
-          if (s?.session?.access_token) break;
-          await new Promise((r) => setTimeout(r, 150));
-        }
-
-        const { data: s2 } = await supabase.auth.getSession();
-        const token = s2?.session?.access_token || "";
-        if (!token) {
-          setErr("Session missing. Refresh and try again.");
-          return;
-        }
-
-        const r = await fetch("/api/auth/profile-health", { headers: { authorization: `Bearer ${token}` } });
-        const j = await r.json().catch(() => ({}));
-        const pr = j?.profile || {};
-        const prRole = String(pr.role || "");
-        const prUsername = String(pr.username || "");
-
-        if (!alive) return;
-
-        if (prRole === "student" || prRole === "creator") setRole(prRole);
-        if (prUsername) setUsername(prUsername);
-
-        if ((prRole === "student" || prRole === "creator") && String(prUsername || "").trim().length >= 3) {
-          window.location.href = prRole === "creator" ? "/creator/dashboard" : "/student/dashboard";
-          return;
-        }
-      } catch (e) {
-        if (!alive) return;
-        setErr(String(e?.message || e));
-      } finally {
-        if (!alive) return;
-        setBooting(false);
-      }
-    };
-
-    boot();
-    return () => { alive = false; };
-  }, []);
 
   const cleaned = useMemo(() => {
     const s = String(username || "").trim().toLowerCase();
@@ -70,6 +17,50 @@ export default function ProfileSetupPage() {
   }, [username]);
 
   const canSubmit = (role === "student" || role === "creator") && cleaned.length >= 3 && !busy;
+
+  useEffect(() => {
+    let alive = true;
+
+    const warm = async () => {
+      try {
+        const { data: u1 } = await supabase.auth.getUser();
+        if (!u1?.user) {
+          window.location.href = "/auth";
+          return;
+        }
+
+        const ctrl = new AbortController();
+        const to = setTimeout(() => ctrl.abort(), 1500);
+
+        try {
+          const { data: s } = await supabase.auth.getSession();
+          const token = s?.session?.access_token || "";
+          if (!token) return;
+
+          const r = await fetch("/api/auth/profile-health", { headers: { authorization: `Bearer ${token}` }, signal: ctrl.signal });
+          const j = await r.json().catch(() => ({}));
+          const pr = j?.profile || {};
+          const prRole = String(pr.role || "");
+          const prUsername = String(pr.username || "");
+
+          if (!alive) return;
+
+          if (prRole === "student" || prRole === "creator") setRole(prRole);
+          if (prUsername) setUsername(prUsername);
+
+          if ((prRole === "student" || prRole === "creator") && String(prUsername || "").trim().length >= 3) {
+            window.location.replace(prRole === "creator" ? "/creator/dashboard" : "/student/dashboard");
+            return;
+          }
+        } finally {
+          clearTimeout(to);
+        }
+      } catch {}
+    };
+
+    warm();
+    return () => { alive = false; };
+  }, []);
 
   const chooseStyle = (active) => ({
     width: "100%",
@@ -104,11 +95,20 @@ export default function ProfileSetupPage() {
       const token = s2?.session?.access_token || "";
       if (!token) throw new Error("Session missing. Refresh and try again.");
 
-      const r = await fetch("/api/auth/set-profile", {
-        method: "POST",
-        headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
-        body: JSON.stringify({ role, username: cleaned })
-      });
+      const ctrl = new AbortController();
+      const to = setTimeout(() => ctrl.abort(), 4000);
+
+      let r;
+      try {
+        r = await fetch("/api/auth/set-profile", {
+          method: "POST",
+          headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+          body: JSON.stringify({ role, username: cleaned }),
+          signal: ctrl.signal
+        });
+      } finally {
+        clearTimeout(to);
+      }
 
       const text = await r.text();
       let j = {};
@@ -118,23 +118,13 @@ export default function ProfileSetupPage() {
         throw new Error(j?.error ? `${j.error}${j.detail ? " — " + j.detail : ""}` : (text || "could_not_save"));
       }
 
-      window.location.href = role === "creator" ? "/creator/dashboard" : "/student/dashboard";
+      window.location.replace(role === "creator" ? "/creator/dashboard" : "/student/dashboard");
     } catch (e) {
       setErr(String(e?.message || e));
     } finally {
       setBusy(false);
     }
   };
-
-  if (booting) {
-    return (
-      <div style={{ minHeight: "100vh", background: "#ece9e2", display: "grid", placeItems: "center", padding: 24 }}>
-        <div style={{ maxWidth: 520, width: "100%", background: "#fff", borderRadius: 18, padding: 18, border: "1px solid rgba(0,0,0,0.10)", fontWeight: 1100 }}>
-          Loading profile...
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div style={{ minHeight: "100vh", background: "#ece9e2", padding: 24 }}>
