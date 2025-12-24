@@ -13,13 +13,16 @@ export default function ProfileSetupPage() {
   const [username, setUsername] = useState(profile?.username || "");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
+  const [dbg, setDbg] = useState({ hasToken: false });
 
   useEffect(() => {
     let alive = true;
     (async () => {
       const { data } = await supabase.auth.getSession();
       const t = data?.session?.access_token || "";
-      if (alive) setToken(t);
+      if (!alive) return;
+      setToken(t);
+      setDbg({ hasToken: !!t });
     })();
     return () => {
       alive = false;
@@ -55,7 +58,7 @@ export default function ProfileSetupPage() {
   const submit = async () => {
     setErr("");
     if (!token) {
-      setErr("missing_access_token");
+      setErr("missing_access_token (refresh page once)");
       return;
     }
     if (role !== "student" && role !== "creator") {
@@ -82,7 +85,11 @@ export default function ProfileSetupPage() {
       let j = {};
       try { j = JSON.parse(text); } catch {}
 
-      if (!r.ok) throw new Error(j.error || text || "could_not_save");
+      if (!r.ok) {
+        if (j?.error === "username_taken") throw new Error("Username is taken. Try another one.");
+        if (j?.error === "invalid_token") throw new Error("Session token invalid. Refresh page and try again.");
+        throw new Error(j?.error ? `${j.error}${j.detail ? " — " + j.detail : ""}` : text || "could_not_save");
+      }
 
       window.location.href = role === "creator" ? "/creator" : "/student";
     } catch (e) {
@@ -131,6 +138,10 @@ export default function ProfileSetupPage() {
 
         <div style={{ marginTop: 14, fontWeight: 1200, fontSize: 38, lineHeight: 1.05, color: "#3a332b" }}>Tell us who you are</div>
         <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>Choose a role and a username to continue.</div>
+
+        <div style={{ marginTop: 10, opacity: 0.65, fontWeight: 900 }}>
+          Session token: <span style={{ fontWeight: 1200 }}>{dbg.hasToken ? "OK" : "Missing"}</span>
+        </div>
 
         <div style={{ marginTop: 16, display: "grid", gap: 10 }}>
           <button type="button" onClick={() => setRole("creator")} style={chooseStyle(role === "creator")}>
