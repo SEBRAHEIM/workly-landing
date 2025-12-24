@@ -1,17 +1,29 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
 
-export default function AuthCallback() {
-  const [msg, setMsg] = useState("Finishing sign-in...");
+export default function PostAuth() {
+  const [msg, setMsg] = useState("Preparing your account...");
 
   useEffect(() => {
     let alive = true;
     (async () => {
       try {
-        const { error } = await supabase.auth.exchangeCodeForSession(window.location.href);
-        if (error) throw error;
-        if (!alive) return;
-        window.location.href = "/auth/post";
+        const { data } = await supabase.auth.getUser();
+        const u = data?.user;
+        if (!u) {
+          window.location.href = "/auth";
+          return;
+        }
+
+        const confirmed = !!u.email_confirmed_at;
+
+        if (!confirmed && u.app_metadata?.provider === "email") {
+          await supabase.auth.signOut();
+          window.location.href = `/auth/check-email?email=${encodeURIComponent(u.email || "")}`;
+          return;
+        }
+
+        window.location.href = "/auth/profile";
       } catch (e) {
         if (!alive) return;
         setMsg(String(e?.message || e));
