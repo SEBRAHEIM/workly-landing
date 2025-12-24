@@ -13,6 +13,7 @@ export default function ProfileSetupPage() {
   const [username, setUsername] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
+  const [resetBusy, setResetBusy] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -123,6 +124,32 @@ export default function ProfileSetupPage() {
     }
   };
 
+  const resetChoice = async () => {
+    setErr("");
+    if (!token) {
+      setErr("Session missing. Refresh the page and try again.");
+      return;
+    }
+    setResetBusy(true);
+    try {
+      const r = await fetch("/api/auth/reset-profile", {
+        method: "POST",
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      });
+      const text = await r.text();
+      let j = {};
+      try { j = JSON.parse(text); } catch {}
+      if (!r.ok) throw new Error(j?.error ? `${j.error}${j.detail ? " — " + j.detail : ""}` : text || "reset_failed");
+      window.location.href = "/auth/profile";
+    } catch (e) {
+      setErr(String(e?.message || e));
+    } finally {
+      setResetBusy(false);
+    }
+  };
+
   if (loading) {
     return (
       <div style={{ minHeight: "100vh", background: "#ece9e2", display: "grid", placeItems: "center", padding: 24 }}>
@@ -141,11 +168,7 @@ export default function ProfileSetupPage() {
           <div style={{ marginTop: 14, fontWeight: 1200, fontSize: 34, lineHeight: 1.05, color: "#3a332b" }}>Tell us who you are</div>
           <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>Please sign in first.</div>
           <div style={{ marginTop: 14 }}>
-            <button
-              type="button"
-              onClick={() => router.replace("/auth")}
-              style={{ border: 0, background: "#4b443b", color: "#fff", padding: "14px 18px", borderRadius: 999, fontWeight: 1100, cursor: "pointer", width: "100%" }}
-            >
+            <button type="button" onClick={() => router.replace("/auth")} style={{ border: 0, background: "#4b443b", color: "#fff", padding: "14px 18px", borderRadius: 999, fontWeight: 1100, cursor: "pointer", width: "100%" }}>
               Go to Sign in
             </button>
           </div>
@@ -162,8 +185,8 @@ export default function ProfileSetupPage() {
           <Link href="/auth" style={{ textDecoration: "none", fontWeight: 1000 }}>✕</Link>
         </div>
 
-        <div style={{ marginTop: 14, fontWeight: 1200, fontSize: 38, lineHeight: 1.05, color: "#3a332b" }}>Tell us who you are</div>
-        <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>Choose account type and username.</div>
+        <div style={{ marginTop: 14, fontWeight: 1200, fontSize: 38, lineHeight: 1.05, color: "#3a332b" }}>Choose your account</div>
+        <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>Pick role + username, then continue.</div>
 
         <div style={{ marginTop: 16, display: "grid", gap: 10 }}>
           <button type="button" onClick={() => setRole("student")} style={chooseStyle(role === "student")}>
@@ -226,6 +249,25 @@ export default function ProfileSetupPage() {
           }}
         >
           {busy ? "Saving..." : "Continue"}
+        </button>
+
+        <button
+          type="button"
+          disabled={resetBusy || !token}
+          onClick={resetChoice}
+          style={{
+            marginTop: 10,
+            width: "100%",
+            border: "1px solid rgba(0,0,0,0.12)",
+            background: "#fff",
+            color: "#4b443b",
+            padding: "12px 14px",
+            borderRadius: 999,
+            fontWeight: 1100,
+            cursor: resetBusy ? "not-allowed" : "pointer"
+          }}
+        >
+          {resetBusy ? "Resetting..." : "Reset account choice"}
         </button>
       </div>
     </div>

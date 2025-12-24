@@ -1,26 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { supabase } from "../../lib/supabaseClient";
-import { useAuth } from "../../context/AuthContext";
 
 export default function VerifyPage() {
   const router = useRouter();
-  const { user, loading, profile } = useAuth();
-
   const email = useMemo(() => String(router.query.email || "").trim(), [router.query.email]);
+
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
-
-  useEffect(() => {
-    if (!loading && user) {
-      const r = profile?.role || "";
-      if (r === "student") window.location.href = "/student/dashboard";
-      else if (r === "creator") window.location.href = "/creator/dashboard";
-      else window.location.href = "/auth/profile";
-    }
-  }, [loading, user, profile]);
 
   const submit = async () => {
     setErr("");
@@ -120,7 +109,7 @@ export default function VerifyPage() {
         </button>
 
         <div style={{ marginTop: 14, opacity: 0.75, fontWeight: 900 }}>
-          By continuing you agree to Terms &amp; Privacy
+          After verification you will choose role + username.
         </div>
       </div>
     </div>
