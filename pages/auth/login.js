@@ -23,7 +23,7 @@ export default function EmailLogin() {
         options: { shouldCreateUser: true }
       });
       if (error) throw error;
-      router.push(`/auth/verify?email=${encodeURIComponent(e)}`);
+      router.push(`/auth/verify?email=${encodeURIComponent(e)}&sent=1`);
     } catch (x) {
       setErr(String(x?.message || x));
     } finally {

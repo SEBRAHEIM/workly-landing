@@ -54,8 +54,13 @@ export default function CreatorDashboard() {
           </button>
         </div>
 
-        <div style={{ marginTop: 16, padding: 14, borderRadius: 14, border: "1px solid rgba(0,0,0,0.10)", background: "rgba(0,0,0,0.03)", fontWeight: 900, opacity: 0.85 }}>
-          This is your creator home. Next: profile setup, offers, requests.
+        <div style={{ marginTop: 16, display: "grid", gap: 10 }}>
+          <div style={{ padding: 14, borderRadius: 14, border: "1px solid rgba(0,0,0,0.10)", background: "rgba(0,0,0,0.03)", fontWeight: 900, opacity: 0.9 }}>
+            Creator actions
+          </div>
+          <div style={{ padding: 14, borderRadius: 14, border: "1px solid rgba(0,0,0,0.10)", background: "rgba(0,0,0,0.03)", fontWeight: 900, opacity: 0.85 }}>
+            Create your profile, publish offers, manage requests.
+          </div>
         </div>
       </div>
     </div>

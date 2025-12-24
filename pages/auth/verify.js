@@ -9,34 +9,70 @@ export default function VerifyPage() {
 
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
+  const [resendBusy, setResendBusy] = useState(false);
   const [err, setErr] = useState("");
+  const [ok, setOk] = useState("");
+
+  const resend = async () => {
+    setErr("");
+    setOk("");
+    const e = String(email || "").trim().toLowerCase();
+    if (!e.includes("@")) {
+      setErr("missing_email");
+      return;
+    }
+    setResendBusy(true);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: e,
+        options: { shouldCreateUser: true }
+      });
+      if (error) throw error;
+      setOk("New code sent. Check your email.");
+    } catch (e2) {
+      setErr(String(e2?.message || e2));
+    } finally {
+      setResendBusy(false);
+    }
+  };
 
   const submit = async () => {
     setErr("");
+    setOk("");
     const token = String(code || "").replace(/\s+/g, "");
-    if (!email) {
+    const e = String(email || "").trim().toLowerCase();
+
+    if (!e.includes("@")) {
       setErr("missing_email");
       return;
     }
     if (token.length !== 6) {
-      setErr("code_must_be_6_digits");
+      setErr("Code must be 6 digits.");
       return;
     }
+
     setBusy(true);
     try {
       const { data, error } = await supabase.auth.verifyOtp({
-        email,
+        email: e,
         token,
         type: "email"
       });
       if (error) throw error;
+
       if (!data?.session) {
         const { data: s2 } = await supabase.auth.getSession();
         if (!s2?.session) throw new Error("no_session_after_verify");
       }
+
       window.location.href = "/auth/profile";
-    } catch (e) {
-      setErr(String(e?.message || e));
+    } catch (e3) {
+      const msg = String(e3?.message || e3);
+      if (msg.toLowerCase().includes("expired") || msg.toLowerCase().includes("invalid")) {
+        setErr("Code is invalid/expired. Tap Resend code and try again.");
+      } else {
+        setErr(msg);
+      }
     } finally {
       setBusy(false);
     }
@@ -83,8 +119,14 @@ export default function VerifyPage() {
           }}
         />
 
+        {ok ? (
+          <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(0,160,0,0.10)", border: "1px solid rgba(0,160,0,0.25)", fontWeight: 1000 }}>
+            {ok}
+          </div>
+        ) : null}
+
         {err ? (
-          <div style={{ marginTop: 14, padding: 12, borderRadius: 14, background: "rgba(220,0,0,0.08)", border: "1px solid rgba(220,0,0,0.20)", fontWeight: 1000 }}>
+          <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(220,0,0,0.08)", border: "1px solid rgba(220,0,0,0.20)", fontWeight: 1000 }}>
             {err}
           </div>
         ) : null}
@@ -108,9 +150,24 @@ export default function VerifyPage() {
           {busy ? "Please wait..." : "Verify"}
         </button>
 
-        <div style={{ marginTop: 14, opacity: 0.75, fontWeight: 900 }}>
-          After verification you will choose role + username.
-        </div>
+        <button
+          type="button"
+          disabled={resendBusy}
+          onClick={resend}
+          style={{
+            marginTop: 10,
+            width: "100%",
+            border: "1px solid rgba(0,0,0,0.12)",
+            background: "#fff",
+            color: "#4b443b",
+            padding: "12px 14px",
+            borderRadius: 999,
+            fontWeight: 1100,
+            cursor: resendBusy ? "not-allowed" : "pointer"
+          }}
+        >
+          {resendBusy ? "Sending..." : "Resend code"}
+        </button>
       </div>
     </div>
   );
