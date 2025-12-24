@@ -3,6 +3,16 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { supabase } from "../../lib/supabaseClient";
 
+const withTimeout = (p, ms) => {
+  let t;
+  return Promise.race([
+    p,
+    new Promise((_, rej) => {
+      t = setTimeout(() => rej(new Error("timeout")), ms);
+    })
+  ]).finally(() => clearTimeout(t));
+};
+
 export default function VerifyPage() {
   const router = useRouter();
   const email = useMemo(() => String(router.query.email || "").trim().toLowerCase(), [router.query.email]);
@@ -14,6 +24,7 @@ export default function VerifyPage() {
   const [ok, setOk] = useState("");
 
   const resend = async () => {
+    if (resendBusy) return;
     setErr("");
     setOk("");
     if (!email.includes("@")) {
@@ -22,26 +33,26 @@ export default function VerifyPage() {
     }
     setResendBusy(true);
     try {
-      const ctrl = new AbortController();
-      const to = setTimeout(() => ctrl.abort(), 8000);
-      try {
-        const { error } = await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
-        if (error) throw error;
-        setOk("New code sent. Check your email.");
-      } finally {
-        clearTimeout(to);
-      }
+      const r = await withTimeout(
+        supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: true } }),
+        8000
+      );
+      if (r?.error) throw r.error;
+      setOk("New code sent. Check your email.");
     } catch (e) {
-      setErr("Resend failed. Try again.");
+      const m = String(e?.message || e || "");
+      setErr(m.toLowerCase().includes("timeout") ? "Resend timed out. Try again." : "Resend failed. Try again.");
     } finally {
       setResendBusy(false);
     }
   };
 
   const submit = async () => {
+    if (busy) return;
     setErr("");
     setOk("");
-    const token = String(code || "").replace(/\s+/g, "");
+    const token = String(code || "").replace(/\D/g, "").slice(0, 6);
+
     if (!email.includes("@")) {
       setErr("Missing email");
       return;
@@ -53,41 +64,46 @@ export default function VerifyPage() {
 
     setBusy(true);
     try {
-      const ctrl = new AbortController();
-      const to = setTimeout(() => ctrl.abort(), 8000);
+      const tryVerify = async (type) => {
+        const r = await withTimeout(
+          supabase.auth.verifyOtp({ email, token, type }),
+          8000
+        );
+        if (r?.error) throw r.error;
+        return r?.data;
+      };
 
       let data;
       try {
-        const r = await supabase.auth.verifyOtp({ email, token, type: "email" });
-        if (r.error) throw r.error;
-        data = r.data;
-      } finally {
-        clearTimeout(to);
+        data = await tryVerify("email");
+      } catch (e1) {
+        const m1 = String(e1?.message || e1 || "").toLowerCase();
+        if (m1.includes("invalid") || m1.includes("expired") || m1.includes("token")) throw e1;
+        data = await tryVerify("signup");
       }
 
       const access_token = data?.session?.access_token || "";
       const refresh_token = data?.session?.refresh_token || "";
+
       if (access_token && refresh_token) {
-        const ctrl2 = new AbortController();
-        const to2 = setTimeout(() => ctrl2.abort(), 6000);
-        try {
-          const { error: setErr2 } = await supabase.auth.setSession({ access_token, refresh_token });
-          if (setErr2) throw setErr2;
-        } finally {
-          clearTimeout(to2);
-        }
+        const r2 = await withTimeout(
+          supabase.auth.setSession({ access_token, refresh_token }),
+          6000
+        );
+        if (r2?.error) throw r2.error;
       }
 
-      router.replace(`/auth/set-password?email=${encodeURIComponent(email)}`);
-    } catch (e3) {
-      const msg = String(e3?.message || e3 || "");
-      if (msg.toLowerCase().includes("expired") || msg.toLowerCase().includes("invalid")) {
-        setErr("Code is invalid/expired. Tap Resend code and try again.");
-      } else if (msg.toLowerCase().includes("abort") || msg.toLowerCase().includes("timeout")) {
-        setErr("Verification is taking too long. Refresh and try again.");
-      } else {
-        setErr("Verification failed. Refresh and try again.");
-      }
+      const s = await withTimeout(supabase.auth.getSession(), 4000);
+      if (!s?.data?.session?.access_token) throw new Error("no_session_after_verify");
+
+      window.location.replace(`/auth/set-password?email=${encodeURIComponent(email)}`);
+    } catch (e) {
+      const m = String(e?.message || e || "");
+      const ml = m.toLowerCase();
+      if (ml.includes("timeout")) setErr("Verification timed out. Refresh and try again.");
+      else if (ml.includes("expired") || ml.includes("invalid")) setErr("Code is invalid/expired. Tap Resend code and try again.");
+      else if (ml.includes("no_session_after_verify")) setErr("Verified but session did not persist. Refresh and try again.");
+      else setErr("Verification failed. Refresh and try again.");
     } finally {
       setBusy(false);
     }
@@ -96,7 +112,7 @@ export default function VerifyPage() {
   const onCode = (v) => {
     const digits = String(v || "").replace(/\D/g, "").slice(0, 6);
     setCode(digits);
-    if (digits.length === 6 && !busy) {
+    if (digits.length === 6) {
       setTimeout(() => submit(), 0);
     }
   };
