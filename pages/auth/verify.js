@@ -50,7 +50,7 @@ export default function VerifyPage() {
     }
     const pendingPass = getPendingPassword();
     if (!pendingPass || pendingPass.length < 8) {
-      setErr("Missing password from signup. Go back and sign up again.");
+      setErr("Missing password. Go back and try again.");
       return;
     }
     if (token.length !== 6) {
@@ -63,9 +63,15 @@ export default function VerifyPage() {
       const { data, error } = await supabase.auth.verifyOtp({ email, token, type: "email" });
       if (error) throw error;
 
+      const access_token = data?.session?.access_token || "";
+      const refresh_token = data?.session?.refresh_token || "";
+      if (access_token && refresh_token) {
+        const { error: setErr2 } = await supabase.auth.setSession({ access_token, refresh_token });
+        if (setErr2) throw setErr2;
+      }
+
       const { data: s2 } = await supabase.auth.getSession();
-      const session = data?.session || s2?.session;
-      if (!session) throw new Error("no_session_after_verify");
+      if (!s2?.session?.access_token) throw new Error("no_session_after_verify");
 
       const { error: upErr } = await supabase.auth.updateUser({ password: pendingPass });
       if (upErr) throw upErr;
@@ -101,16 +107,64 @@ export default function VerifyPage() {
         </div>
 
         <div style={{ marginTop: 16, fontWeight: 1000, opacity: 0.7 }}>Verification code</div>
-        <input value={code} onChange={(e) => setCode(e.target.value)} inputMode="numeric" autoComplete="one-time-code" placeholder="123456" style={{ marginTop: 8, width: "100%", padding: "14px 14px", borderRadius: 14, border: "1px solid rgba(0,0,0,0.15)", background: "#fff", fontWeight: 1100, fontSize: 20, letterSpacing: 6, textAlign: "center" }} />
+        <input
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+          inputMode="numeric"
+          autoComplete="one-time-code"
+          placeholder="123456"
+          style={{
+            marginTop: 8,
+            width: "100%",
+            padding: "14px 14px",
+            borderRadius: 14,
+            border: "1px solid rgba(0,0,0,0.15)",
+            background: "#fff",
+            fontWeight: 1100,
+            fontSize: 20,
+            letterSpacing: 6,
+            textAlign: "center"
+          }}
+        />
 
         {ok ? <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(0,160,0,0.10)", border: "1px solid rgba(0,160,0,0.25)", fontWeight: 1000 }}>{ok}</div> : null}
         {err ? <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(220,0,0,0.08)", border: "1px solid rgba(220,0,0,0.20)", fontWeight: 1000 }}>{err}</div> : null}
 
-        <button type="button" disabled={busy} onClick={submit} style={{ marginTop: 14, width: "100%", border: 0, background: busy ? "rgba(75,68,59,0.45)" : "#4b443b", color: "#fff", padding: "14px 18px", borderRadius: 999, fontWeight: 1100, cursor: busy ? "not-allowed" : "pointer" }}>
+        <button
+          type="button"
+          disabled={busy}
+          onClick={submit}
+          style={{
+            marginTop: 14,
+            width: "100%",
+            border: 0,
+            background: busy ? "rgba(75,68,59,0.45)" : "#4b443b",
+            color: "#fff",
+            padding: "14px 18px",
+            borderRadius: 999,
+            fontWeight: 1100,
+            cursor: busy ? "not-allowed" : "pointer"
+          }}
+        >
           {busy ? "Please wait..." : "Verify"}
         </button>
 
-        <button type="button" disabled={resendBusy} onClick={resend} style={{ marginTop: 10, width: "100%", border: "1px solid rgba(0,0,0,0.12)", background: "#fff", color: "#4b443b", padding: "12px 14px", borderRadius: 999, fontWeight: 1100, cursor: resendBusy ? "not-allowed" : "pointer" }}>
+        <button
+          type="button"
+          disabled={resendBusy}
+          onClick={resend}
+          style={{
+            marginTop: 10,
+            width: "100%",
+            border: "1px solid rgba(0,0,0,0.12)",
+            background: "#fff",
+            color: "#4b443b",
+            padding: "12px 14px",
+            borderRadius: 999,
+            fontWeight: 1100,
+            cursor: resendBusy ? "not-allowed" : "pointer"
+          }}
+        >
           {resendBusy ? "Sending..." : "Resend code"}
         </button>
       </div>

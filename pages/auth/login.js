@@ -3,9 +3,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { supabase } from "../../lib/supabaseClient";
 
-export default function EmailPasswordAuth() {
+export default function EmailPasswordOneFlow() {
   const router = useRouter();
-  const [mode, setMode] = useState("signin");
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [busy, setBusy] = useState(false);
@@ -13,15 +12,9 @@ export default function EmailPasswordAuth() {
 
   const cleanedEmail = useMemo(() => String(email || "").trim().toLowerCase(), [email]);
 
-  const tabStyle = (active) => ({
-    flex: 1,
-    padding: "12px 12px",
-    borderRadius: 999,
-    border: active ? "2px solid #4b443b" : "1px solid rgba(0,0,0,0.12)",
-    background: active ? "rgba(75,68,59,0.08)" : "#fff",
-    fontWeight: 1100,
-    cursor: "pointer"
-  });
+  const savePending = (e, p) => {
+    try { sessionStorage.setItem(`workly_pending_password:${e}`, p); } catch {}
+  };
 
   const submit = async () => {
     setErr("");
@@ -39,29 +32,40 @@ export default function EmailPasswordAuth() {
 
     setBusy(true);
     try {
-      if (mode === "signin") {
-        const { data, error } = await supabase.auth.signInWithPassword({ email: e, password: p });
-        if (error) throw error;
-        const u = data?.user;
-        if (!u) throw new Error("no_user");
-        if (!u.email_confirmed_at) {
+      const { data, error } = await supabase.auth.signInWithPassword({ email: e, password: p });
+
+      if (!error && data?.user) {
+        if (!data.user.email_confirmed_at) {
           await supabase.auth.signOut();
-          setErr("Please verify your email first. Use Sign up to receive a code.");
+          savePending(e, p);
+          const { error: otpErr } = await supabase.auth.signInWithOtp({ email: e, options: { shouldCreateUser: true } });
+          if (otpErr) throw otpErr;
+          router.push(`/auth/verify?email=${encodeURIComponent(e)}`);
           return;
         }
         window.location.href = "/dashboard";
         return;
       }
 
-      try { sessionStorage.setItem(`workly_pending_password:${e}`, p); } catch {}
+      const msg = String(error?.message || error || "");
 
-      const { error } = await supabase.auth.signInWithOtp({
-        email: e,
-        options: { shouldCreateUser: true }
-      });
-      if (error) throw error;
+      if (msg.toLowerCase().includes("invalid login credentials") || msg.toLowerCase().includes("invalid") || msg.toLowerCase().includes("credentials")) {
+        savePending(e, p);
+        const { error: otpErr } = await supabase.auth.signInWithOtp({ email: e, options: { shouldCreateUser: true } });
+        if (otpErr) throw otpErr;
+        router.push(`/auth/verify?email=${encodeURIComponent(e)}`);
+        return;
+      }
 
-      router.push(`/auth/verify?email=${encodeURIComponent(e)}`);
+      if (msg.toLowerCase().includes("email not confirmed") || msg.toLowerCase().includes("not confirmed") || msg.toLowerCase().includes("confirm")) {
+        savePending(e, p);
+        const { error: otpErr } = await supabase.auth.signInWithOtp({ email: e, options: { shouldCreateUser: true } });
+        if (otpErr) throw otpErr;
+        router.push(`/auth/verify?email=${encodeURIComponent(e)}`);
+        return;
+      }
+
+      throw new Error(msg || "Sign in failed");
     } catch (x) {
       setErr(String(x?.message || x));
     } finally {
@@ -77,28 +81,74 @@ export default function EmailPasswordAuth() {
           <Link href="/auth" style={{ textDecoration: "none", fontWeight: 1000 }}>✕</Link>
         </div>
 
-        <div style={{ marginTop: 14, display: "flex", gap: 10 }}>
-          <button type="button" onClick={() => setMode("signin")} style={tabStyle(mode === "signin")}>Sign in</button>
-          <button type="button" onClick={() => setMode("signup")} style={tabStyle(mode === "signup")}>Sign up</button>
-        </div>
-
-        <div style={{ marginTop: 14, fontWeight: 1200, fontSize: 34, lineHeight: 1.05, color: "#3a332b" }}>
-          {mode === "signup" ? "Create your account" : "Welcome back"}
+        <div style={{ marginTop: 14, fontWeight: 1200, fontSize: 38, lineHeight: 1.05, color: "#3a332b" }}>
+          Continue with email
         </div>
         <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>
-          {mode === "signup" ? "We’ll send a 6-digit verification code." : "Sign in to continue."}
+          If you’re new, we’ll send a 6-digit code to verify your email first.
         </div>
 
         <div style={{ marginTop: 14, fontWeight: 1000, opacity: 0.7 }}>Email</div>
-        <input value={email} onChange={(e) => setEmail(e.target.value)} inputMode="email" autoComplete="email" placeholder="you@email.com" style={{ marginTop: 8, width: "100%", padding: "14px 14px", borderRadius: 14, border: "1px solid rgba(0,0,0,0.15)", background: "#fff", fontWeight: 1100, fontSize: 18 }} />
+        <input
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          inputMode="email"
+          autoComplete="email"
+          placeholder="you@email.com"
+          style={{
+            marginTop: 8,
+            width: "100%",
+            padding: "14px 14px",
+            borderRadius: 14,
+            border: "1px solid rgba(0,0,0,0.15)",
+            background: "#fff",
+            fontWeight: 1100,
+            fontSize: 18
+          }}
+        />
 
         <div style={{ marginTop: 14, fontWeight: 1000, opacity: 0.7 }}>Password</div>
-        <input value={pass} onChange={(e) => setPass(e.target.value)} type="password" autoComplete={mode === "signup" ? "new-password" : "current-password"} placeholder="••••••••" style={{ marginTop: 8, width: "100%", padding: "14px 14px", borderRadius: 14, border: "1px solid rgba(0,0,0,0.15)", background: "#fff", fontWeight: 1100, fontSize: 18 }} />
+        <input
+          value={pass}
+          onChange={(e) => setPass(e.target.value)}
+          type="password"
+          autoComplete="current-password"
+          placeholder="••••••••"
+          style={{
+            marginTop: 8,
+            width: "100%",
+            padding: "14px 14px",
+            borderRadius: 14,
+            border: "1px solid rgba(0,0,0,0.15)",
+            background: "#fff",
+            fontWeight: 1100,
+            fontSize: 18
+          }}
+        />
 
-        {err ? <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(220,0,0,0.08)", border: "1px solid rgba(220,0,0,0.20)", fontWeight: 1000 }}>{err}</div> : null}
+        {err ? (
+          <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(220,0,0,0.08)", border: "1px solid rgba(220,0,0,0.20)", fontWeight: 1000 }}>
+            {err}
+          </div>
+        ) : null}
 
-        <button type="button" disabled={busy} onClick={submit} style={{ marginTop: 14, width: "100%", border: 0, background: busy ? "rgba(75,68,59,0.45)" : "#4b443b", color: "#fff", padding: "14px 18px", borderRadius: 999, fontWeight: 1100, cursor: busy ? "not-allowed" : "pointer" }}>
-          {busy ? "Please wait..." : (mode === "signup" ? "Send code" : "Sign in")}
+        <button
+          type="button"
+          disabled={busy}
+          onClick={submit}
+          style={{
+            marginTop: 14,
+            width: "100%",
+            border: 0,
+            background: busy ? "rgba(75,68,59,0.45)" : "#4b443b",
+            color: "#fff",
+            padding: "14px 18px",
+            borderRadius: 999,
+            fontWeight: 1100,
+            cursor: busy ? "not-allowed" : "pointer"
+          }}
+        >
+          {busy ? "Please wait..." : "Continue"}
         </button>
       </div>
     </div>

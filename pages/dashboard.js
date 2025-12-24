@@ -6,7 +6,8 @@ export default function DashboardRouter() {
 
   useEffect(() => {
     let alive = true;
-    (async () => {
+
+    const run = async () => {
       try {
         const { data: u1 } = await supabase.auth.getUser();
         const user = u1?.user;
@@ -22,8 +23,17 @@ export default function DashboardRouter() {
           return;
         }
 
-        const r = await fetch("/api/auth/profile-health", { headers: { authorization: `Bearer ${token}` } });
-        const j = await r.json().catch(() => ({}));
+        const ctrl = new AbortController();
+        const to = setTimeout(() => ctrl.abort(), 6000);
+
+        let j = {};
+        try {
+          const r = await fetch("/api/auth/profile-health", { headers: { authorization: `Bearer ${token}` }, signal: ctrl.signal });
+          j = await r.json().catch(() => ({}));
+        } finally {
+          clearTimeout(to);
+        }
+
         const role = String(j?.profile?.role || "");
         const username = String(j?.profile?.username || "");
 
@@ -35,9 +45,11 @@ export default function DashboardRouter() {
         window.location.href = role === "creator" ? "/creator/dashboard" : "/student/dashboard";
       } catch (e) {
         if (!alive) return;
-        setMsg(String(e?.message || e));
+        setMsg("Please refresh. If it repeats, sign out and sign in again.");
       }
-    })();
+    };
+
+    run();
     return () => { alive = false; };
   }, []);
 

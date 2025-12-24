@@ -6,36 +6,61 @@ import { supabase } from "../../lib/supabaseClient";
 export default function ProfileSetupPage() {
   const router = useRouter();
 
-  const [token, setToken] = useState("");
   const [role, setRole] = useState("");
   const [username, setUsername] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
+  const [booting, setBooting] = useState(true);
 
   useEffect(() => {
     let alive = true;
-    (async () => {
-      const { data } = await supabase.auth.getSession();
-      const t = data?.session?.access_token || "";
-      if (!alive) return;
-      setToken(t);
-      if (!t) {
-        window.location.href = "/auth";
-        return;
-      }
+
+    const boot = async () => {
       try {
-        const r = await fetch("/api/auth/profile-health", { headers: { authorization: `Bearer ${t}` } });
+        const { data: u1 } = await supabase.auth.getUser();
+        if (!u1?.user) {
+          window.location.href = "/auth";
+          return;
+        }
+
+        for (let i = 0; i < 20; i++) {
+          const { data: s } = await supabase.auth.getSession();
+          if (s?.session?.access_token) break;
+          await new Promise((r) => setTimeout(r, 150));
+        }
+
+        const { data: s2 } = await supabase.auth.getSession();
+        const token = s2?.session?.access_token || "";
+        if (!token) {
+          setErr("Session missing. Refresh and try again.");
+          return;
+        }
+
+        const r = await fetch("/api/auth/profile-health", { headers: { authorization: `Bearer ${token}` } });
         const j = await r.json().catch(() => ({}));
         const pr = j?.profile || {};
         const prRole = String(pr.role || "");
         const prUsername = String(pr.username || "");
+
+        if (!alive) return;
+
         if (prRole === "student" || prRole === "creator") setRole(prRole);
         if (prUsername) setUsername(prUsername);
+
         if ((prRole === "student" || prRole === "creator") && String(prUsername || "").trim().length >= 3) {
           window.location.href = prRole === "creator" ? "/creator/dashboard" : "/student/dashboard";
+          return;
         }
-      } catch {}
-    })();
+      } catch (e) {
+        if (!alive) return;
+        setErr(String(e?.message || e));
+      } finally {
+        if (!alive) return;
+        setBooting(false);
+      }
+    };
+
+    boot();
     return () => { alive = false; };
   }, []);
 
@@ -44,7 +69,7 @@ export default function ProfileSetupPage() {
     return s.replace(/[^a-z0-9_]/g, "").slice(0, 20);
   }, [username]);
 
-  const canSubmit = !!token && (role === "student" || role === "creator") && cleaned.length >= 3 && !busy;
+  const canSubmit = (role === "student" || role === "creator") && cleaned.length >= 3 && !busy;
 
   const chooseStyle = (active) => ({
     width: "100%",
@@ -64,10 +89,6 @@ export default function ProfileSetupPage() {
 
   const submit = async () => {
     setErr("");
-    if (!token) {
-      setErr("Session missing. Refresh and try again.");
-      return;
-    }
     if (role !== "student" && role !== "creator") {
       setErr("Choose Student or Creator");
       return;
@@ -79,6 +100,10 @@ export default function ProfileSetupPage() {
 
     setBusy(true);
     try {
+      const { data: s2 } = await supabase.auth.getSession();
+      const token = s2?.session?.access_token || "";
+      if (!token) throw new Error("Session missing. Refresh and try again.");
+
       const r = await fetch("/api/auth/set-profile", {
         method: "POST",
         headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
@@ -100,6 +125,16 @@ export default function ProfileSetupPage() {
       setBusy(false);
     }
   };
+
+  if (booting) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#ece9e2", display: "grid", placeItems: "center", padding: 24 }}>
+        <div style={{ maxWidth: 520, width: "100%", background: "#fff", borderRadius: 18, padding: 18, border: "1px solid rgba(0,0,0,0.10)", fontWeight: 1100 }}>
+          Loading profile...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight: "100vh", background: "#ece9e2", padding: 24 }}>
