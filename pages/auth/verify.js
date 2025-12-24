@@ -18,7 +18,7 @@ export default function VerifyPage() {
       const r = profile?.role || "";
       if (r === "student") window.location.href = "/student";
       else if (r === "creator") window.location.href = "/creator";
-      else window.location.href = "/auth/role";
+      else window.location.href = "/auth/profile";
     }
   }, [loading, user, profile]);
 
@@ -45,7 +45,7 @@ export default function VerifyPage() {
         const { data: s2 } = await supabase.auth.getSession();
         if (!s2?.session) throw new Error("no_session_after_verify");
       }
-      window.location.href = "/auth/role";
+      window.location.href = "/auth/profile";
     } catch (e) {
       setErr(String(e?.message || e));
     } finally {

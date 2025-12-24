@@ -1,162 +1,171 @@
-import Head from "next/head";
+import { useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import { supabase } from "../../lib/supabaseClient";
+import { useAuth } from "../../context/AuthContext";
 
-export default function CreatorProfileSetupPage() {
+export default function ProfileSetupPage() {
   const router = useRouter();
-  const [form, setForm] = useState({
-    displayName: "",
-    title: "",
-    country: "",
-    about: "",
-    skills: "",
-    experience: "",
+  const { session, user, loading, profile } = useAuth();
+
+  const [role, setRole] = useState(profile?.role || "");
+  const [username, setUsername] = useState(profile?.username || "");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+
+  const token = session?.access_token || "";
+
+  const cleaned = useMemo(() => {
+    const s = String(username || "").trim().toLowerCase();
+    return s.replace(/[^a-z0-9_]/g, "").slice(0, 20);
+  }, [username]);
+
+  const canSubmit = !!token && (role === "student" || role === "creator") && cleaned.length >= 3 && !busy;
+
+  const chooseStyle = (active) => ({
+    width: "100%",
+    border: active ? "2px solid #1f5a3a" : "1px solid rgba(0,0,0,0.12)",
+    background: active ? "rgba(31,90,58,0.12)" : "rgba(0,0,0,0.04)",
+    color: "#1f5a3a",
+    padding: "12px 14px",
+    borderRadius: 16,
+    fontWeight: 1200,
+    cursor: "pointer",
+    textAlign: "center"
   });
-  const [submitting, setSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleChange = (field) => (event) => {
-    setForm((prev) => ({ ...prev, [field]: event.target.value }));
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (!supabase) {
-      setErrorMessage("Supabase is not configured yet.");
+  const submit = async () => {
+    setErr("");
+    if (!token) {
+      router.replace("/auth");
+      return;
+    }
+    if (role !== "student" && role !== "creator") {
+      setErr("Choose Student or Creator");
+      return;
+    }
+    if (!cleaned || cleaned.length < 3) {
+      setErr("Username must be 3+ characters (letters/numbers/underscore).");
       return;
     }
 
-    setSubmitting(true);
-    setErrorMessage("");
-
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-
-    if (userError || !user) {
-      setErrorMessage("You need to be signed in first.");
-      setSubmitting(false);
-      return;
-    }
-
-    const { error } = await supabase
-      .from("profiles")
-      .upsert(
-        {
-          id: user.id,
-          display_name: form.displayName || null,
-          title: form.title || null,
-          country: form.country || null,
-          about: form.about || null,
-          skills: form.skills || null,
-          experience: form.experience || null,
+    setBusy(true);
+    try {
+      const r = await fetch("/api/auth/set-profile", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${token}`
         },
-        { onConflict: "id" },
-      );
+        body: JSON.stringify({ role, username: cleaned })
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.error || "could_not_save");
 
-    if (error) {
-      setErrorMessage(error.message || "Could not save your profile.");
-      setSubmitting(false);
-      return;
+      window.location.href = role === "creator" ? "/creator" : "/student";
+    } catch (e) {
+      setErr(String(e?.message || e));
+    } finally {
+      setBusy(false);
     }
-
-    router.push("/dashboard");
   };
+
+  if (loading) return null;
+
+  if (!user) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#ece9e2", padding: 24 }}>
+        <div style={{ maxWidth: 520, margin: "0 auto", background: "#fff", borderRadius: 18, padding: 18, border: "1px solid rgba(0,0,0,0.10)" }}>
+          <div style={{ fontWeight: 1100, letterSpacing: 4, opacity: 0.75 }}>WORKLY</div>
+          <div style={{ marginTop: 14, fontWeight: 1200, fontSize: 34, lineHeight: 1.05, color: "#3a332b" }}>Tell us who you are</div>
+          <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>Please sign in first.</div>
+          <div style={{ marginTop: 14 }}>
+            <button type="button" onClick={() => router.replace("/auth")} style={{ border: 0, background: "#4b443b", color: "#fff", padding: "14px 18px", borderRadius: 999, fontWeight: 1100, cursor: "pointer", width: "100%" }}>
+              Go to Auth
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (profile?.role === "student") {
+    if (typeof window !== "undefined") window.location.href = "/student";
+    return null;
+  }
+
+  if (profile?.role === "creator") {
+    if (typeof window !== "undefined") window.location.href = "/creator";
+    return null;
+  }
 
   return (
-    <>
-      <Head>
-        <title>Edit your new profile · Workly</title>
-      </Head>
-      <main className="auth-flow-page">
-        <div className="auth-flow-card auth-flow-card-scroll">
-          <h1 className="auth-flow-title">Edit your new profile</h1>
-          <p className="auth-flow-subtitle">
-            Tell students who you are and what you can help with.
-          </p>
-
-          <form onSubmit={handleSubmit} className="auth-flow-form">
-            <label className="auth-flow-label">
-              Display name
-              <input
-                type="text"
-                className="auth-flow-input"
-                value={form.displayName}
-                onChange={handleChange("displayName")}
-                placeholder="Your name"
-                required
-              />
-            </label>
-
-            <label className="auth-flow-label">
-              Title
-              <input
-                type="text"
-                className="auth-flow-input"
-                value={form.title}
-                onChange={handleChange("title")}
-                placeholder="Business student, CS graduate, etc."
-              />
-            </label>
-
-            <label className="auth-flow-label">
-              Country
-              <input
-                type="text"
-                className="auth-flow-input"
-                value={form.country}
-                onChange={handleChange("country")}
-                placeholder="United Arab Emirates"
-              />
-            </label>
-
-            <label className="auth-flow-label">
-              About
-              <textarea
-                className="auth-flow-textarea"
-                value={form.about}
-                onChange={handleChange("about")}
-                rows={4}
-                placeholder="Short bio about your academic background and strengths."
-              />
-            </label>
-
-            <label className="auth-flow-label">
-              Skills &amp; expertise
-              <textarea
-                className="auth-flow-textarea"
-                value={form.skills}
-                onChange={handleChange("skills")}
-                rows={3}
-                placeholder="Example: reports, PPT design, Excel dashboards, basic coding..."
-              />
-            </label>
-
-            <label className="auth-flow-label">
-              Work experience (optional)
-              <textarea
-                className="auth-flow-textarea"
-                value={form.experience}
-                onChange={handleChange("experience")}
-                rows={3}
-                placeholder="Any past tutoring, freelancing, or project work."
-              />
-            </label>
-
-            {errorMessage && <p className="auth-flow-error">{errorMessage}</p>}
-
-            <button
-              type="submit"
-              className="auth-flow-primary-btn"
-              disabled={submitting}
-            >
-              {submitting ? "Saving profile..." : "Continue"}
-            </button>
-          </form>
+    <div style={{ minHeight: "100vh", background: "#ece9e2", padding: 24 }}>
+      <div style={{ maxWidth: 520, margin: "0 auto", background: "#fff", borderRadius: 18, padding: 18, border: "1px solid rgba(0,0,0,0.10)" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+          <div style={{ fontWeight: 1100, letterSpacing: 4, opacity: 0.75 }}>WORKLY</div>
+          <Link href="/student" style={{ textDecoration: "none", fontWeight: 1000 }}>✕</Link>
         </div>
-      </main>
-    </>
+
+        <div style={{ marginTop: 14, fontWeight: 1200, fontSize: 38, lineHeight: 1.05, color: "#3a332b" }}>Tell us who you are</div>
+        <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>Choose a role and a username to continue.</div>
+
+        <div style={{ marginTop: 16, display: "grid", gap: 10 }}>
+          <button type="button" onClick={() => setRole("creator")} style={chooseStyle(role === "creator")}>
+            Creator
+            <div style={{ marginTop: 4, fontWeight: 950, opacity: 0.9 }}>Offer services to students</div>
+          </button>
+
+          <button type="button" onClick={() => setRole("student")} style={chooseStyle(role === "student")}>
+            Student
+            <div style={{ marginTop: 4, fontWeight: 950, opacity: 0.9 }}>Browse and request help</div>
+          </button>
+        </div>
+
+        <div style={{ marginTop: 14, fontWeight: 1000, opacity: 0.7 }}>Username</div>
+        <input
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="yourname"
+          style={{
+            marginTop: 8,
+            width: "100%",
+            padding: "14px 14px",
+            borderRadius: 14,
+            border: "1px solid rgba(0,0,0,0.15)",
+            background: "#fff",
+            fontWeight: 1100,
+            fontSize: 18
+          }}
+        />
+        <div style={{ marginTop: 8, opacity: 0.65, fontWeight: 900 }}>
+          Saved as: <span style={{ fontWeight: 1200 }}>{cleaned || "-"}</span>
+        </div>
+
+        {err ? (
+          <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(220,0,0,0.08)", border: "1px solid rgba(220,0,0,0.20)", fontWeight: 1000 }}>
+            {err}
+          </div>
+        ) : null}
+
+        <button
+          type="button"
+          disabled={!canSubmit}
+          onClick={submit}
+          style={{
+            marginTop: 14,
+            width: "100%",
+            border: 0,
+            background: canSubmit ? "#1f5a3a" : "rgba(31,90,58,0.35)",
+            color: "#fff",
+            padding: "14px 18px",
+            borderRadius: 999,
+            fontWeight: 1100,
+            cursor: canSubmit ? "pointer" : "not-allowed"
+          }}
+        >
+          {busy ? "Saving..." : "Continue"}
+        </button>
+      </div>
+    </div>
   );
 }
