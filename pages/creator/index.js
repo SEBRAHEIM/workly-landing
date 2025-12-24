@@ -1,4 +1,8 @@
-export default function CreatorHome() {
-  if (typeof window !== "undefined") window.location.href = "/creator/dashboard";
+import { useEffect } from "react";
+
+export default function CreatorIndex() {
+  useEffect(() => {
+    window.location.replace("/dashboard");
+  }, []);
   return null;
 }

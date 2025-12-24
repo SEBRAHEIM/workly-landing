@@ -1,4 +1,8 @@
-export default function StudentHome() {
-  if (typeof window !== "undefined") window.location.href = "/student/dashboard";
+import { useEffect } from "react";
+
+export default function StudentIndex() {
+  useEffect(() => {
+    window.location.replace("/dashboard");
+  }, []);
   return null;
 }
