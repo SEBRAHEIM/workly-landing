@@ -2,193 +2,143 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { supabase } from "../../lib/supabaseClient";
+import { useAuth } from "../../context/AuthContext";
 
 export default function VerifyPage() {
   const router = useRouter();
+  const { user, loading, profile } = useAuth();
 
-  const qEmail = useMemo(() => {
-    const v = router.query?.email;
-    return v ? String(v) : "";
-  }, [router.query]);
-
-  const [email, setEmail] = useState("");
+  const email = useMemo(() => String(router.query.email || "").trim(), [router.query.email]);
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const stored = window.sessionStorage.getItem("workly_email") || "";
-    const finalEmail = qEmail || stored;
-    if (finalEmail) {
-      setEmail(finalEmail);
-      window.sessionStorage.setItem("workly_email", finalEmail);
+    if (!loading && user) {
+      const r = profile?.role || "";
+      if (r === "student") window.location.href = "/student";
+      else if (r === "creator") window.location.href = "/creator";
+      else window.location.href = "/auth/role";
     }
-  }, [qEmail]);
+  }, [loading, user, profile]);
 
-  const canSubmit = email && code.replace(/\D/g, "").length === 6 && !busy;
-
-  const goNext = async () => {
-    const { data: sData } = await supabase.auth.getSession();
-    const token = sData?.session?.access_token || "";
-
-    if (!token) {
-      router.replace("/auth");
-      return;
-    }
-
-    const r = await fetch("/api/market/profile", {
-      headers: { authorization: `Bearer ${token}` }
-    });
-    const j = await r.json().catch(() => ({}));
-
-    const role = j?.profile?.role || "";
-    if (role === "student") {
-      window.location.href = "/student";
-      return;
-    }
-    if (role === "creator") {
-      window.location.href = "/creator";
-      return;
-    }
-    window.location.href = "/auth/role";
-  };
-
-  const verify = async () => {
+  const submit = async () => {
     setErr("");
-    const clean = code.replace(/\D/g, "");
+    const token = String(code || "").replace(/\s+/g, "");
     if (!email) {
-      setErr("Missing email.");
+      setErr("missing_email");
       return;
     }
-    if (clean.length !== 6) {
-      setErr("Enter the 6-digit code.");
+    if (token.length !== 6) {
+      setErr("code_must_be_6_digits");
       return;
     }
-
     setBusy(true);
     try {
-      const { error } = await supabase.auth.verifyOtp({
+      const { data, error } = await supabase.auth.verifyOtp({
         email,
-        token: clean,
+        token,
         type: "email"
       });
-
-      if (error) {
-        setErr(error.message || "Verification failed.");
-        return;
+      if (error) throw error;
+      if (!data?.session) {
+        const { data: s2 } = await supabase.auth.getSession();
+        if (!s2?.session) throw new Error("no_session_after_verify");
       }
-
-      await goNext();
+      window.location.href = "/auth/role";
     } catch (e) {
-      setErr(String(e?.message || e || "Verification failed."));
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const resend = async () => {
-    setErr("");
-    if (!email) {
-      setErr("Missing email.");
-      return;
-    }
-    setBusy(true);
-    try {
-      const { error } = await supabase.auth.signInWithOtp({ email });
-      if (error) {
-        setErr(error.message || "Could not resend code.");
-        return;
-      }
-    } catch (e) {
-      setErr(String(e?.message || e || "Could not resend code."));
+      setErr(String(e?.message || e));
     } finally {
       setBusy(false);
     }
   };
 
   return (
-    <div style={{ padding: 24, maxWidth: 720, margin: "0 auto" }}>
-      <div style={{ fontWeight: 1100, letterSpacing: 6, opacity: 0.7 }}>WORKLY</div>
-      <h1 style={{ marginTop: 14, marginBottom: 8, fontSize: 44, fontWeight: 1200 }}>Verify your email</h1>
-      <div style={{ opacity: 0.75, fontWeight: 900 }}>
-        Enter the 6-digit code we sent to your email.
-      </div>
-
-      {err ? (
-        <div style={{ marginTop: 14, padding: 12, borderRadius: 14, background: "rgba(220,0,0,0.08)", fontWeight: 900 }}>
-          {err}
+    <div style={{ minHeight: "100vh", background: "#ece9e2", padding: 24 }}>
+      <div style={{ maxWidth: 520, margin: "0 auto", background: "#fff", borderRadius: 18, padding: 18, border: "1px solid rgba(0,0,0,0.10)" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+          <div style={{ fontWeight: 1100, letterSpacing: 4, opacity: 0.75 }}>WORKLY</div>
+          <Link href="/auth" style={{ textDecoration: "none", fontWeight: 1000 }}>✕</Link>
         </div>
-      ) : null}
 
-      <div style={{ marginTop: 18 }}>
-        <div style={{ opacity: 0.7, fontWeight: 900, marginBottom: 8 }}>Email</div>
-        <input
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          inputMode="email"
-          placeholder="you@example.com"
-          style={{ width: "100%", padding: 14, borderRadius: 14, border: "1px solid rgba(0,0,0,0.14)", background: "rgba(255,240,120,0.35)", fontWeight: 950 }}
-        />
-      </div>
+        <div style={{ marginTop: 14, fontWeight: 1200, fontSize: 34, lineHeight: 1.05, color: "#3a332b" }}>
+          Verify your email
+        </div>
+        <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>
+          Enter the 6-digit code we sent to your email.
+        </div>
 
-      <div style={{ marginTop: 14 }}>
-        <div style={{ opacity: 0.7, fontWeight: 900, marginBottom: 8 }}>Verification code</div>
+        <div style={{ marginTop: 18, fontWeight: 1000, opacity: 0.7 }}>Email</div>
+        <div style={{ marginTop: 8, padding: 12, borderRadius: 14, background: "rgba(200,200,0,0.15)", border: "1px solid rgba(0,0,0,0.10)", fontWeight: 1000 }}>
+          {email || "missing email"}
+        </div>
+
+        <div style={{ marginTop: 16, fontWeight: 1000, opacity: 0.7 }}>Verification code</div>
         <input
           value={code}
           onChange={(e) => setCode(e.target.value)}
           inputMode="numeric"
+          autoComplete="one-time-code"
           placeholder="123456"
-          style={{ width: "100%", padding: 14, borderRadius: 14, border: "1px solid rgba(0,0,0,0.14)", background: "#fff", fontWeight: 1100, letterSpacing: 8, textAlign: "center" }}
+          style={{
+            marginTop: 8,
+            width: "100%",
+            padding: "14px 14px",
+            borderRadius: 14,
+            border: "1px solid rgba(0,0,0,0.15)",
+            background: "#fff",
+            fontWeight: 1100,
+            fontSize: 20,
+            letterSpacing: 6,
+            textAlign: "center"
+          }}
         />
-      </div>
 
-      <div style={{ marginTop: 12, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+        {err ? (
+          <div style={{ marginTop: 14, padding: 12, borderRadius: 14, background: "rgba(220,0,0,0.08)", border: "1px solid rgba(220,0,0,0.20)", fontWeight: 1000 }}>
+            {err}
+          </div>
+        ) : null}
+
+        <div style={{ marginTop: 14, display: "flex", justifyContent: "space-between", gap: 12 }}>
+          <button
+            type="button"
+            onClick={() => router.back()}
+            style={{ border: "0", background: "transparent", fontWeight: 1100, color: "#2d5d3b", textDecoration: "underline", cursor: "pointer" }}
+          >
+            Back
+          </button>
+          <button
+            type="button"
+            onClick={() => window.location.href = "/auth"}
+            style={{ border: "0", background: "transparent", fontWeight: 1100, color: "#2d5d3b", textDecoration: "underline", cursor: "pointer" }}
+          >
+            Back to options
+          </button>
+        </div>
+
         <button
           type="button"
-          onClick={() => router.back()}
-          style={{ border: "none", background: "transparent", fontWeight: 1100, cursor: "pointer", textDecoration: "underline" }}
+          disabled={busy}
+          onClick={submit}
+          style={{
+            marginTop: 14,
+            width: "100%",
+            border: "0",
+            background: busy ? "rgba(75,68,59,0.45)" : "#4b443b",
+            color: "#fff",
+            padding: "14px 18px",
+            borderRadius: 999,
+            fontWeight: 1100,
+            cursor: busy ? "not-allowed" : "pointer"
+          }}
         >
-          Back
+          {busy ? "Please wait..." : "Verify"}
         </button>
 
-        <button
-          type="button"
-          onClick={resend}
-          disabled={busy || !email}
-          style={{ border: "none", background: "transparent", fontWeight: 1100, cursor: "pointer", textDecoration: "underline", opacity: busy || !email ? 0.5 : 1 }}
-        >
-          Resend code
-        </button>
-      </div>
-
-      <button
-        type="button"
-        disabled={!canSubmit}
-        onClick={verify}
-        style={{
-          marginTop: 12,
-          width: "100%",
-          padding: "16px 18px",
-          borderRadius: 999,
-          border: "1px solid rgba(0,0,0,0.12)",
-          background: "#6f8f7d",
-          color: "#fff",
-          fontWeight: 1200,
-          cursor: canSubmit ? "pointer" : "not-allowed",
-          opacity: canSubmit ? 1 : 0.7
-        }}
-      >
-        {busy ? "Please wait..." : "Continue"}
-      </button>
-
-      <div style={{ marginTop: 14, display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-        <Link href="/auth/forgot-password" style={{ fontWeight: 1000, textDecoration: "none" }}>Forgot password?</Link>
-        <Link href="/auth" style={{ fontWeight: 1000, textDecoration: "none" }}>Back to options</Link>
-      </div>
-
-      <div style={{ marginTop: 10, opacity: 0.65, fontWeight: 900 }}>
-        By continuing you agree to Terms & Privacy
+        <div style={{ marginTop: 14, opacity: 0.75, fontWeight: 900 }}>
+          By continuing you agree to Terms &amp; Privacy
+        </div>
       </div>
     </div>
   );
