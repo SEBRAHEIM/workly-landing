@@ -9,11 +9,10 @@ export default function ProfileSetupPage() {
   const { user, loading, profile } = useAuth();
 
   const [token, setToken] = useState("");
-  const [role, setRole] = useState(profile?.role || "");
-  const [username, setUsername] = useState(profile?.username || "");
+  const [role, setRole] = useState("");
+  const [username, setUsername] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
-  const [dbg, setDbg] = useState({ hasToken: false });
 
   useEffect(() => {
     let alive = true;
@@ -22,7 +21,6 @@ export default function ProfileSetupPage() {
       const t = data?.session?.access_token || "";
       if (!alive) return;
       setToken(t);
-      setDbg({ hasToken: !!t });
     })();
     return () => {
       alive = false;
@@ -32,8 +30,11 @@ export default function ProfileSetupPage() {
   useEffect(() => {
     if (loading) return;
     if (!user) return;
-    if (profile?.role) setRole(profile.role);
-    if (profile?.username) setUsername(profile.username);
+    const pr = profile || {};
+    const prRole = String(pr.role || "");
+    const prUsername = String(pr.username || "");
+    if (prRole === "student" || prRole === "creator") setRole(prRole);
+    if (prUsername) setUsername(prUsername);
   }, [loading, user, profile]);
 
   const cleaned = useMemo(() => {
@@ -41,30 +42,53 @@ export default function ProfileSetupPage() {
     return s.replace(/[^a-z0-9_]/g, "").slice(0, 20);
   }, [username]);
 
-  const canSubmit = !!token && (role === "student" || role === "creator") && cleaned.length >= 3 && !busy;
+  const profileComplete =
+    (profile?.role === "student" || profile?.role === "creator") &&
+    String(profile?.username || "").trim().length >= 3;
+
+  useEffect(() => {
+    if (loading) return;
+    if (!user) return;
+    if (profileComplete) {
+      window.location.href = profile.role === "creator" ? "/creator/dashboard" : "/student/dashboard";
+    }
+  }, [loading, user, profileComplete, profile]);
+
+  const canSubmit =
+    !!token &&
+    (role === "student" || role === "creator") &&
+    cleaned.length >= 3 &&
+    !busy;
 
   const chooseStyle = (active) => ({
     width: "100%",
     border: active ? "2px solid #1f5a3a" : "1px solid rgba(0,0,0,0.12)",
     background: active ? "rgba(31,90,58,0.12)" : "rgba(0,0,0,0.04)",
     color: "#1f5a3a",
-    padding: "12px 14px",
+    padding: "14px 14px",
     borderRadius: 16,
     fontWeight: 1200,
     cursor: "pointer",
-    textAlign: "center"
+    textAlign: "left",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 12
   });
 
   const submit = async () => {
     setErr("");
+
     if (!token) {
-      setErr("missing_access_token (refresh page once)");
+      setErr("Session missing. Refresh the page and try again.");
       return;
     }
+
     if (role !== "student" && role !== "creator") {
       setErr("Choose Student or Creator");
       return;
     }
+
     if (!cleaned || cleaned.length < 3) {
       setErr("Username must be 3+ characters (letters/numbers/underscore).");
       return;
@@ -87,11 +111,11 @@ export default function ProfileSetupPage() {
 
       if (!r.ok) {
         if (j?.error === "username_taken") throw new Error("Username is taken. Try another one.");
-        if (j?.error === "invalid_token") throw new Error("Session token invalid. Refresh page and try again.");
-        throw new Error(j?.error ? `${j.error}${j.detail ? " — " + j.detail : ""}` : text || "could_not_save");
+        if (j?.error === "invalid_token") throw new Error("Session expired. Refresh and try again.");
+        throw new Error(j?.error ? `${j.error}${j.detail ? " — " + j.detail : ""}` : (text || "could_not_save"));
       }
 
-      window.location.href = role === "creator" ? "/creator" : "/student";
+      window.location.href = role === "creator" ? "/creator/dashboard" : "/student/dashboard";
     } catch (e) {
       setErr(String(e?.message || e));
     } finally {
@@ -99,7 +123,15 @@ export default function ProfileSetupPage() {
     }
   };
 
-  if (loading) return null;
+  if (loading) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#ece9e2", display: "grid", placeItems: "center", padding: 24 }}>
+        <div style={{ maxWidth: 520, width: "100%", background: "#fff", borderRadius: 18, padding: 18, border: "1px solid rgba(0,0,0,0.10)", fontWeight: 1100 }}>
+          Loading your session...
+        </div>
+      </div>
+    );
+  }
 
   if (!user) {
     return (
@@ -109,8 +141,12 @@ export default function ProfileSetupPage() {
           <div style={{ marginTop: 14, fontWeight: 1200, fontSize: 34, lineHeight: 1.05, color: "#3a332b" }}>Tell us who you are</div>
           <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>Please sign in first.</div>
           <div style={{ marginTop: 14 }}>
-            <button type="button" onClick={() => router.replace("/auth")} style={{ border: 0, background: "#4b443b", color: "#fff", padding: "14px 18px", borderRadius: 999, fontWeight: 1100, cursor: "pointer", width: "100%" }}>
-              Go to Auth
+            <button
+              type="button"
+              onClick={() => router.replace("/auth")}
+              style={{ border: 0, background: "#4b443b", color: "#fff", padding: "14px 18px", borderRadius: 999, fontWeight: 1100, cursor: "pointer", width: "100%" }}
+            >
+              Go to Sign in
             </button>
           </div>
         </div>
@@ -118,40 +154,32 @@ export default function ProfileSetupPage() {
     );
   }
 
-  if (profile?.role === "student") {
-    if (typeof window !== "undefined") window.location.href = "/student";
-    return null;
-  }
-
-  if (profile?.role === "creator") {
-    if (typeof window !== "undefined") window.location.href = "/creator";
-    return null;
-  }
-
   return (
     <div style={{ minHeight: "100vh", background: "#ece9e2", padding: 24 }}>
       <div style={{ maxWidth: 520, margin: "0 auto", background: "#fff", borderRadius: 18, padding: 18, border: "1px solid rgba(0,0,0,0.10)" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
           <div style={{ fontWeight: 1100, letterSpacing: 4, opacity: 0.75 }}>WORKLY</div>
-          <Link href="/student" style={{ textDecoration: "none", fontWeight: 1000 }}>✕</Link>
+          <Link href="/auth" style={{ textDecoration: "none", fontWeight: 1000 }}>✕</Link>
         </div>
 
         <div style={{ marginTop: 14, fontWeight: 1200, fontSize: 38, lineHeight: 1.05, color: "#3a332b" }}>Tell us who you are</div>
-        <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>Choose a role and a username to continue.</div>
-
-        <div style={{ marginTop: 10, opacity: 0.65, fontWeight: 900 }}>
-          Session token: <span style={{ fontWeight: 1200 }}>{dbg.hasToken ? "OK" : "Missing"}</span>
-        </div>
+        <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>Choose account type and username.</div>
 
         <div style={{ marginTop: 16, display: "grid", gap: 10 }}>
-          <button type="button" onClick={() => setRole("creator")} style={chooseStyle(role === "creator")}>
-            Creator
-            <div style={{ marginTop: 4, fontWeight: 950, opacity: 0.9 }}>Offer services to students</div>
+          <button type="button" onClick={() => setRole("student")} style={chooseStyle(role === "student")}>
+            <div>
+              <div style={{ fontWeight: 1200 }}>I’m a Student</div>
+              <div style={{ marginTop: 4, fontWeight: 900, opacity: 0.85 }}>Browse and request help</div>
+            </div>
+            <div style={{ fontWeight: 1200 }}>{role === "student" ? "✓" : ""}</div>
           </button>
 
-          <button type="button" onClick={() => setRole("student")} style={chooseStyle(role === "student")}>
-            Student
-            <div style={{ marginTop: 4, fontWeight: 950, opacity: 0.9 }}>Browse and request help</div>
+          <button type="button" onClick={() => setRole("creator")} style={chooseStyle(role === "creator")}>
+            <div>
+              <div style={{ fontWeight: 1200 }}>I’m a Creator</div>
+              <div style={{ marginTop: 4, fontWeight: 900, opacity: 0.85 }}>Offer services to students</div>
+            </div>
+            <div style={{ fontWeight: 1200 }}>{role === "creator" ? "✓" : ""}</div>
           </button>
         </div>
 
@@ -172,7 +200,7 @@ export default function ProfileSetupPage() {
           }}
         />
         <div style={{ marginTop: 8, opacity: 0.65, fontWeight: 900 }}>
-          Saved as: <span style={{ fontWeight: 1200 }}>{cleaned || "-"}</span>
+          Will save as: <span style={{ fontWeight: 1200 }}>{cleaned || "-"}</span>
         </div>
 
         {err ? (
