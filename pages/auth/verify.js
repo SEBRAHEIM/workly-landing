@@ -13,14 +13,6 @@ export default function VerifyPage() {
   const [err, setErr] = useState("");
   const [ok, setOk] = useState("");
 
-  const getPendingPassword = () => {
-    try { return sessionStorage.getItem(`workly_pending_password:${email}`) || ""; } catch { return ""; }
-  };
-
-  const clearPendingPassword = () => {
-    try { sessionStorage.removeItem(`workly_pending_password:${email}`); } catch {}
-  };
-
   const resend = async () => {
     setErr("");
     setOk("");
@@ -30,11 +22,17 @@ export default function VerifyPage() {
     }
     setResendBusy(true);
     try {
-      const { error } = await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
-      if (error) throw error;
-      setOk("New code sent. Check your email.");
+      const ctrl = new AbortController();
+      const to = setTimeout(() => ctrl.abort(), 8000);
+      try {
+        const { error } = await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
+        if (error) throw error;
+        setOk("New code sent. Check your email.");
+      } finally {
+        clearTimeout(to);
+      }
     } catch (e) {
-      setErr(String(e?.message || e));
+      setErr("Resend failed. Try again.");
     } finally {
       setResendBusy(false);
     }
@@ -48,11 +46,6 @@ export default function VerifyPage() {
       setErr("Missing email");
       return;
     }
-    const pendingPass = getPendingPassword();
-    if (!pendingPass || pendingPass.length < 8) {
-      setErr("Missing password. Go back and try again.");
-      return;
-    }
     if (token.length !== 6) {
       setErr("Code must be 6 digits.");
       return;
@@ -60,33 +53,51 @@ export default function VerifyPage() {
 
     setBusy(true);
     try {
-      const { data, error } = await supabase.auth.verifyOtp({ email, token, type: "email" });
-      if (error) throw error;
+      const ctrl = new AbortController();
+      const to = setTimeout(() => ctrl.abort(), 8000);
+
+      let data;
+      try {
+        const r = await supabase.auth.verifyOtp({ email, token, type: "email" });
+        if (r.error) throw r.error;
+        data = r.data;
+      } finally {
+        clearTimeout(to);
+      }
 
       const access_token = data?.session?.access_token || "";
       const refresh_token = data?.session?.refresh_token || "";
       if (access_token && refresh_token) {
-        const { error: setErr2 } = await supabase.auth.setSession({ access_token, refresh_token });
-        if (setErr2) throw setErr2;
+        const ctrl2 = new AbortController();
+        const to2 = setTimeout(() => ctrl2.abort(), 6000);
+        try {
+          const { error: setErr2 } = await supabase.auth.setSession({ access_token, refresh_token });
+          if (setErr2) throw setErr2;
+        } finally {
+          clearTimeout(to2);
+        }
       }
 
-      const { data: s2 } = await supabase.auth.getSession();
-      if (!s2?.session?.access_token) throw new Error("no_session_after_verify");
-
-      const { error: upErr } = await supabase.auth.updateUser({ password: pendingPass });
-      if (upErr) throw upErr;
-
-      clearPendingPassword();
-      window.location.href = "/auth/profile";
+      router.replace(`/auth/set-password?email=${encodeURIComponent(email)}`);
     } catch (e3) {
-      const msg = String(e3?.message || e3);
+      const msg = String(e3?.message || e3 || "");
       if (msg.toLowerCase().includes("expired") || msg.toLowerCase().includes("invalid")) {
         setErr("Code is invalid/expired. Tap Resend code and try again.");
+      } else if (msg.toLowerCase().includes("abort") || msg.toLowerCase().includes("timeout")) {
+        setErr("Verification is taking too long. Refresh and try again.");
       } else {
-        setErr(msg);
+        setErr("Verification failed. Refresh and try again.");
       }
     } finally {
       setBusy(false);
+    }
+  };
+
+  const onCode = (v) => {
+    const digits = String(v || "").replace(/\D/g, "").slice(0, 6);
+    setCode(digits);
+    if (digits.length === 6 && !busy) {
+      setTimeout(() => submit(), 0);
     }
   };
 
@@ -108,8 +119,8 @@ export default function VerifyPage() {
 
         <div style={{ marginTop: 16, fontWeight: 1000, opacity: 0.7 }}>Verification code</div>
         <input
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
+          value={code.split("").join(" ")}
+          onChange={(e) => onCode(e.target.value)}
           inputMode="numeric"
           autoComplete="one-time-code"
           placeholder="123456"
