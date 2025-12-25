@@ -2,21 +2,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../lib/supabaseClient";
 
-async function getProfile(token) {
-  const ctrl = new AbortController();
-  const to = setTimeout(() => ctrl.abort(), 6000);
-  try {
-    const r = await fetch("/api/auth/profile-health", {
-      headers: { authorization: `Bearer ${token}` },
-      signal: ctrl.signal
-    });
-    const j = await r.json().catch(() => ({}));
-    return j?.profile || null;
-  } finally {
-    clearTimeout(to);
-  }
-}
-
 function roleOk(role) {
   return role === "student" || role === "creator";
 }
@@ -33,45 +18,31 @@ export default function DashboardRouter() {
 
     (async () => {
       try {
+        for (let i = 0; i < 30; i++) {
+          const { data: s } = await supabase.auth.getSession();
+          if (s?.session?.access_token) break;
+          await new Promise((r) => setTimeout(r, 120));
+        }
+
         const { data: u1 } = await supabase.auth.getUser();
         if (!u1?.user) {
           window.location.replace("/auth");
           return;
         }
 
-        let token = "";
-        for (let i = 0; i < 20; i++) {
-          const { data: s1 } = await supabase.auth.getSession();
-          token = s1?.session?.access_token || "";
-          if (token) break;
-          await new Promise((r) => setTimeout(r, 150));
-        }
+        const meta = u1.user.user_metadata || {};
+        const role = String(meta.role || "");
+        const username = String(meta.username || "");
 
-        if (!token) {
-          if (!alive) return;
-          setStatus("Session not ready. Tap Refresh once.");
+        if (roleOk(role) && usernameOk(username)) {
+          window.location.replace(role === "creator" ? "/creator/dashboard" : "/student/dashboard");
           return;
         }
 
-        const p = await getProfile(token);
-        if (!p) {
-          if (!alive) return;
-          setStatus("Profile not reachable. Tap Refresh. If it repeats, sign out then sign in.");
-          return;
-        }
-
-        const role = String(p.role || "");
-        const username = String(p.username || "");
-
-        if (!roleOk(role) || !usernameOk(username)) {
-          window.location.replace("/auth/profile");
-          return;
-        }
-
-        window.location.replace(role === "creator" ? "/creator/dashboard" : "/student/dashboard");
+        window.location.replace("/auth/profile");
       } catch {
         if (!alive) return;
-        setStatus("Router blocked. Tap Refresh.");
+        setStatus("Router failed. Tap Auth and sign in again.");
       }
     })();
 

@@ -2,7 +2,6 @@ import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { supabase } from "../../lib/supabaseClient";
-import { getProfileOrNull, roleIsValid } from "../../lib/routeGuards";
 
 export default function ProfileSetupPage() {
   const router = useRouter();
@@ -11,7 +10,6 @@ export default function ProfileSetupPage() {
   const [username, setUsername] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
-  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -22,21 +20,19 @@ export default function ProfileSetupPage() {
           window.location.replace("/auth");
           return;
         }
-
-        const p = await getProfileOrNull();
-        if (p && alive) {
-          const prRole = String(p.role || "");
-          const prUsername = String(p.username || "");
-          if (roleIsValid(prRole)) setRole(prRole);
-          if (prUsername) setUsername(prUsername);
+        const meta = u1.user.user_metadata || {};
+        const r = String(meta.role || "");
+        const u = String(meta.username || "");
+        if (alive) {
+          if (r === "student" || r === "creator") setRole(r);
+          if (u) setUsername(u);
         }
       } catch {
-      } finally {
-        if (!alive) return;
-        setReady(true);
       }
     })();
-    return () => { alive = false; };
+    return () => {
+      alive = false;
+    };
   }, []);
 
   const cleaned = useMemo(() => {
@@ -93,6 +89,11 @@ export default function ProfileSetupPage() {
         throw new Error(j?.error ? `${j.error}${j.detail ? " — " + j.detail : ""}` : (text || "could_not_save"));
       }
 
+      const upd = await supabase.auth.updateUser({ data: { role, username: cleaned } });
+      if (upd?.error) {
+        throw new Error("Saved, but could not update session metadata. Refresh and try again.");
+      }
+
       window.location.replace("/dashboard");
     } catch (e) {
       setErr(String(e?.message || e));
@@ -110,9 +111,7 @@ export default function ProfileSetupPage() {
         </div>
 
         <div style={{ marginTop: 14, fontWeight: 1200, fontSize: 38, lineHeight: 1.05, color: "#3a332b" }}>Tell us who you are</div>
-        <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>
-          Choose account type and username.
-        </div>
+        <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>Choose account type and username.</div>
 
         <div style={{ marginTop: 16, display: "grid", gap: 10 }}>
           <button type="button" onClick={() => setRole("student")} style={chooseStyle(role === "student")}>
@@ -133,27 +132,13 @@ export default function ProfileSetupPage() {
         </div>
 
         <div style={{ marginTop: 14, fontWeight: 1000, opacity: 0.7 }}>Username</div>
-        <input
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="yourname"
-          style={{ marginTop: 8, width: "100%", padding: "14px 14px", borderRadius: 14, border: "1px solid rgba(0,0,0,0.15)", background: "#fff", fontWeight: 1100, fontSize: 18 }}
-        />
+        <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="yourname" style={{ marginTop: 8, width: "100%", padding: "14px 14px", borderRadius: 14, border: "1px solid rgba(0,0,0,0.15)", background: "#fff", fontWeight: 1100, fontSize: 18 }} />
         <div style={{ marginTop: 8, opacity: 0.65, fontWeight: 900 }}>Will save as: <span style={{ fontWeight: 1200 }}>{cleaned || "-"}</span></div>
 
-        {err ? (
-          <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(220,0,0,0.08)", border: "1px solid rgba(220,0,0,0.20)", fontWeight: 1000 }}>
-            {err}
-          </div>
-        ) : null}
+        {err ? <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(220,0,0,0.08)", border: "1px solid rgba(220,0,0,0.20)", fontWeight: 1000 }}>{err}</div> : null}
 
-        <button
-          type="button"
-          disabled={!canSubmit}
-          onClick={submit}
-          style={{ marginTop: 14, width: "100%", border: 0, background: canSubmit ? "#1f5a3a" : "rgba(31,90,58,0.35)", color: "#fff", padding: "14px 18px", borderRadius: 999, fontWeight: 1100, cursor: canSubmit ? "pointer" : "not-allowed" }}
-        >
-          {busy ? "Saving..." : (ready ? "Continue" : "Loading...")}
+        <button type="button" disabled={!canSubmit} onClick={submit} style={{ marginTop: 14, width: "100%", border: 0, background: canSubmit ? "#1f5a3a" : "rgba(31,90,58,0.35)", color: "#fff", padding: "14px 18px", borderRadius: 999, fontWeight: 1100, cursor: canSubmit ? "pointer" : "not-allowed" }}>
+          {busy ? "Saving..." : "Continue"}
         </button>
 
         <div style={{ marginTop: 10 }}>
