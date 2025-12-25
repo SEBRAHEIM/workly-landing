@@ -1,55 +1,32 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { supabase } from "../lib/supabaseClient";
-
-function roleOk(role) {
-  return role === "student" || role === "creator";
-}
-
-function usernameOk(username) {
-  return String(username || "").trim().length >= 3;
-}
+import { useAuth } from "../context/AuthContext";
 
 export default function DashboardRouter() {
+  const { user, profile, loading } = useAuth();
   const [status, setStatus] = useState("Loading...");
 
   useEffect(() => {
-    let alive = true;
+    if (loading) {
+      setStatus("Loading...");
+      return;
+    }
 
-    (async () => {
-      try {
-        for (let i = 0; i < 30; i++) {
-          const { data: s } = await supabase.auth.getSession();
-          if (s?.session?.access_token) break;
-          await new Promise((r) => setTimeout(r, 120));
-        }
+    if (!user) {
+      window.location.replace("/auth");
+      return;
+    }
 
-        const { data: u1 } = await supabase.auth.getUser();
-        if (!u1?.user) {
-          window.location.replace("/auth");
-          return;
-        }
+    const role = String(profile?.role || "");
+    const username = String(profile?.username || "").trim();
 
-        const meta = u1.user.user_metadata || {};
-        const role = String(meta.role || "");
-        const username = String(meta.username || "");
+    if (!(role === "student" || role === "creator") || username.length < 3) {
+      setStatus("Complete your profile to continue.");
+      return;
+    }
 
-        if (roleOk(role) && usernameOk(username)) {
-          window.location.replace(role === "creator" ? "/creator/dashboard" : "/student/dashboard");
-          return;
-        }
-
-        window.location.replace("/auth/profile");
-      } catch {
-        if (!alive) return;
-        setStatus("Router failed. Tap Auth and sign in again.");
-      }
-    })();
-
-    return () => {
-      alive = false;
-    };
-  }, []);
+    window.location.replace(role === "creator" ? "/creator/dashboard" : "/student/dashboard");
+  }, [loading, user, profile]);
 
   return (
     <div style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24, background: "#ece9e2" }}>
