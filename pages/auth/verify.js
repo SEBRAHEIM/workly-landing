@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { supabase } from "../../lib/supabaseClient";
@@ -15,7 +15,12 @@ const withTimeout = (p, ms) => {
 
 export default function VerifyPage() {
   const router = useRouter();
-  const email = useMemo(() => String(router.query.email || "").trim().toLowerCase(), [router.query.email]);
+  const ready = router.isReady;
+
+  const email = useMemo(() => {
+    if (!ready) return "";
+    return String(router.query.email || "").trim().toLowerCase();
+  }, [ready, router.query.email]);
 
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
@@ -23,22 +28,27 @@ export default function VerifyPage() {
   const [err, setErr] = useState("");
   const [ok, setOk] = useState("");
 
+  useEffect(() => {
+    setErr("");
+    setOk("");
+  }, [email]);
+
   const resend = async () => {
     if (resendBusy) return;
     setErr("");
     setOk("");
-    if (!email.includes("@")) {
-      setErr("Missing email");
+    if (!ready || !email.includes("@")) {
+      setErr("Email not ready. Go back and try again.");
       return;
     }
     setResendBusy(true);
     try {
       const r = await withTimeout(
         supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: true } }),
-        8000
+        10000
       );
       if (r?.error) throw r.error;
-      setOk("New code sent. Check your email.");
+      setOk("New code sent. Use the latest email.");
     } catch (e) {
       const m = String(e?.message || e || "");
       setErr(m.toLowerCase().includes("timeout") ? "Resend timed out. Try again." : "Resend failed. Try again.");
@@ -51,12 +61,13 @@ export default function VerifyPage() {
     if (busy) return;
     setErr("");
     setOk("");
-    const token = String(code || "").replace(/\D/g, "").slice(0, 6);
 
-    if (!email.includes("@")) {
-      setErr("Missing email");
+    if (!ready || !email.includes("@")) {
+      setErr("Email not ready. Go back and try again.");
       return;
     }
+
+    const token = String(code || "").replace(/\D/g, "").slice(0, 6);
     if (token.length !== 6) {
       setErr("Code must be 6 digits.");
       return;
@@ -67,7 +78,7 @@ export default function VerifyPage() {
       const tryVerify = async (type) => {
         const r = await withTimeout(
           supabase.auth.verifyOtp({ email, token, type }),
-          8000
+          10000
         );
         if (r?.error) throw r.error;
         return r?.data;
@@ -88,22 +99,24 @@ export default function VerifyPage() {
       if (access_token && refresh_token) {
         const r2 = await withTimeout(
           supabase.auth.setSession({ access_token, refresh_token }),
-          6000
+          8000
         );
         if (r2?.error) throw r2.error;
       }
 
-      const s = await withTimeout(supabase.auth.getSession(), 4000);
-      if (!s?.data?.session?.access_token) throw new Error("no_session_after_verify");
+      for (let i = 0; i < 20; i++) {
+        const { data: s } = await supabase.auth.getSession();
+        if (s?.session?.access_token) break;
+        await new Promise((r) => setTimeout(r, 150));
+      }
 
-      window.location.replace(`/auth/set-password?email=${encodeURIComponent(email)}`);
+      router.replace(`/auth/set-password?email=${encodeURIComponent(email)}`);
     } catch (e) {
       const m = String(e?.message || e || "");
       const ml = m.toLowerCase();
-      if (ml.includes("timeout")) setErr("Verification timed out. Refresh and try again.");
-      else if (ml.includes("expired") || ml.includes("invalid")) setErr("Code is invalid/expired. Tap Resend code and try again.");
-      else if (ml.includes("no_session_after_verify")) setErr("Verified but session did not persist. Refresh and try again.");
-      else setErr("Verification failed. Refresh and try again.");
+      if (ml.includes("timeout")) setErr("Verification timed out. Try again.");
+      else if (ml.includes("expired") || ml.includes("invalid")) setErr("Code is invalid/expired. Tap Resend code and use the latest email.");
+      else setErr("Verification failed. Try again.");
     } finally {
       setBusy(false);
     }
@@ -112,9 +125,6 @@ export default function VerifyPage() {
   const onCode = (v) => {
     const digits = String(v || "").replace(/\D/g, "").slice(0, 6);
     setCode(digits);
-    if (digits.length === 6) {
-      setTimeout(() => submit(), 0);
-    }
   };
 
   return (
@@ -130,7 +140,7 @@ export default function VerifyPage() {
 
         <div style={{ marginTop: 18, fontWeight: 1000, opacity: 0.7 }}>Email</div>
         <div style={{ marginTop: 8, padding: 12, borderRadius: 14, background: "rgba(200,200,0,0.15)", border: "1px solid rgba(0,0,0,0.10)", fontWeight: 1000 }}>
-          {email || "missing email"}
+          {ready ? (email || "missing email") : "loading..."}
         </div>
 
         <div style={{ marginTop: 16, fontWeight: 1000, opacity: 0.7 }}>Verification code</div>
@@ -140,6 +150,7 @@ export default function VerifyPage() {
           inputMode="numeric"
           autoComplete="one-time-code"
           placeholder="123456"
+          disabled={!ready || !email.includes("@")}
           style={{
             marginTop: 8,
             width: "100%",
@@ -150,7 +161,8 @@ export default function VerifyPage() {
             fontWeight: 1100,
             fontSize: 20,
             letterSpacing: 6,
-            textAlign: "center"
+            textAlign: "center",
+            opacity: (!ready || !email.includes("@")) ? 0.6 : 1
           }}
         />
 
@@ -159,18 +171,18 @@ export default function VerifyPage() {
 
         <button
           type="button"
-          disabled={busy}
+          disabled={busy || !ready || !email.includes("@")}
           onClick={submit}
           style={{
             marginTop: 14,
             width: "100%",
             border: 0,
-            background: busy ? "rgba(75,68,59,0.45)" : "#4b443b",
+            background: (busy || !ready || !email.includes("@")) ? "rgba(75,68,59,0.45)" : "#4b443b",
             color: "#fff",
             padding: "14px 18px",
             borderRadius: 999,
             fontWeight: 1100,
-            cursor: busy ? "not-allowed" : "pointer"
+            cursor: (busy || !ready || !email.includes("@")) ? "not-allowed" : "pointer"
           }}
         >
           {busy ? "Please wait..." : "Verify"}
@@ -178,7 +190,7 @@ export default function VerifyPage() {
 
         <button
           type="button"
-          disabled={resendBusy}
+          disabled={resendBusy || !ready || !email.includes("@")}
           onClick={resend}
           style={{
             marginTop: 10,
@@ -189,7 +201,8 @@ export default function VerifyPage() {
             padding: "12px 14px",
             borderRadius: 999,
             fontWeight: 1100,
-            cursor: resendBusy ? "not-allowed" : "pointer"
+            cursor: (resendBusy || !ready || !email.includes("@")) ? "not-allowed" : "pointer",
+            opacity: (resendBusy || !ready || !email.includes("@")) ? 0.7 : 1
           }}
         >
           {resendBusy ? "Sending..." : "Resend code"}

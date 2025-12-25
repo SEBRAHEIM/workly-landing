@@ -12,15 +12,14 @@ export default function SetPassword() {
   const [err, setErr] = useState("");
 
   useEffect(() => {
-    try {
-      const p = sessionStorage.getItem(`workly_pending_password:${email}`) || "";
-      if (p && p.length >= 8) setPass(p);
-    } catch {}
-  }, [email]);
-
-  const clearPending = () => {
-    try { sessionStorage.removeItem(`workly_pending_password:${email}`); } catch {}
-  };
+    (async () => {
+      for (let i = 0; i < 20; i++) {
+        const { data: s } = await supabase.auth.getSession();
+        if (s?.session?.access_token) return;
+        await new Promise((r) => setTimeout(r, 150));
+      }
+    })();
+  }, []);
 
   const submit = async () => {
     setErr("");
@@ -44,24 +43,12 @@ export default function SetPassword() {
         return;
       }
 
-      const ctrl = new AbortController();
-      const to = setTimeout(() => ctrl.abort(), 8000);
-      try {
-        const { error } = await supabase.auth.updateUser({ password: p });
-        if (error) throw error;
-      } finally {
-        clearTimeout(to);
-      }
+      const { error } = await supabase.auth.updateUser({ password: p });
+      if (error) throw error;
 
-      clearPending();
-      router.replace("/dashboard");
+      router.replace("/auth/profile");
     } catch (e) {
-      const msg = String(e?.message || e || "");
-      if (msg.toLowerCase().includes("abort") || msg.toLowerCase().includes("timeout")) {
-        setErr("Saving password is taking too long. Refresh and try again.");
-      } else {
-        setErr("Could not save password. Refresh and try again.");
-      }
+      setErr("Could not save password. Refresh and try again.");
     } finally {
       setBusy(false);
     }
@@ -78,7 +65,12 @@ export default function SetPassword() {
         <div style={{ marginTop: 14, fontWeight: 1200, fontSize: 34, lineHeight: 1.05, color: "#3a332b" }}>Set your password</div>
         <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>You’ll use this password to sign in next time.</div>
 
-        <div style={{ marginTop: 18, fontWeight: 1000, opacity: 0.7 }}>Password</div>
+        <div style={{ marginTop: 18, fontWeight: 1000, opacity: 0.7 }}>Email</div>
+        <div style={{ marginTop: 8, padding: 12, borderRadius: 14, background: "rgba(200,200,0,0.15)", border: "1px solid rgba(0,0,0,0.10)", fontWeight: 1000 }}>
+          {email || "email"}
+        </div>
+
+        <div style={{ marginTop: 16, fontWeight: 1000, opacity: 0.7 }}>Password</div>
         <input
           value={pass}
           onChange={(e) => setPass(e.target.value)}

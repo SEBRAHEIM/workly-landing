@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { supabase } from "../../lib/supabaseClient";
+import { getProfileOrNull, roleIsValid } from "../../lib/routeGuards";
 
 export default function ProfileSetupPage() {
   const router = useRouter();
@@ -10,6 +11,33 @@ export default function ProfileSetupPage() {
   const [username, setUsername] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const { data: u1 } = await supabase.auth.getUser();
+        if (!u1?.user) {
+          window.location.replace("/auth");
+          return;
+        }
+
+        const p = await getProfileOrNull();
+        if (p && alive) {
+          const prRole = String(p.role || "");
+          const prUsername = String(p.username || "");
+          if (roleIsValid(prRole)) setRole(prRole);
+          if (prUsername) setUsername(prUsername);
+        }
+      } catch {
+      } finally {
+        if (!alive) return;
+        setReady(true);
+      }
+    })();
+    return () => { alive = false; };
+  }, []);
 
   const cleaned = useMemo(() => {
     const s = String(username || "").trim().toLowerCase();
@@ -17,50 +45,6 @@ export default function ProfileSetupPage() {
   }, [username]);
 
   const canSubmit = (role === "student" || role === "creator") && cleaned.length >= 3 && !busy;
-
-  useEffect(() => {
-    let alive = true;
-
-    const warm = async () => {
-      try {
-        const { data: u1 } = await supabase.auth.getUser();
-        if (!u1?.user) {
-          window.location.href = "/auth";
-          return;
-        }
-
-        const ctrl = new AbortController();
-        const to = setTimeout(() => ctrl.abort(), 1500);
-
-        try {
-          const { data: s } = await supabase.auth.getSession();
-          const token = s?.session?.access_token || "";
-          if (!token) return;
-
-          const r = await fetch("/api/auth/profile-health", { headers: { authorization: `Bearer ${token}` }, signal: ctrl.signal });
-          const j = await r.json().catch(() => ({}));
-          const pr = j?.profile || {};
-          const prRole = String(pr.role || "");
-          const prUsername = String(pr.username || "");
-
-          if (!alive) return;
-
-          if (prRole === "student" || prRole === "creator") setRole(prRole);
-          if (prUsername) setUsername(prUsername);
-
-          if ((prRole === "student" || prRole === "creator") && String(prUsername || "").trim().length >= 3) {
-            window.location.replace(prRole === "creator" ? "/creator/dashboard" : "/student/dashboard");
-            return;
-          }
-        } finally {
-          clearTimeout(to);
-        }
-      } catch {}
-    };
-
-    warm();
-    return () => { alive = false; };
-  }, []);
 
   const chooseStyle = (active) => ({
     width: "100%",
@@ -95,20 +79,11 @@ export default function ProfileSetupPage() {
       const token = s2?.session?.access_token || "";
       if (!token) throw new Error("Session missing. Refresh and try again.");
 
-      const ctrl = new AbortController();
-      const to = setTimeout(() => ctrl.abort(), 4000);
-
-      let r;
-      try {
-        r = await fetch("/api/auth/set-profile", {
-          method: "POST",
-          headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
-          body: JSON.stringify({ role, username: cleaned }),
-          signal: ctrl.signal
-        });
-      } finally {
-        clearTimeout(to);
-      }
+      const r = await fetch("/api/auth/set-profile", {
+        method: "POST",
+        headers: { "content-type": "application/json", authorization: `Bearer ${token}` },
+        body: JSON.stringify({ role, username: cleaned })
+      });
 
       const text = await r.text();
       let j = {};
@@ -118,7 +93,7 @@ export default function ProfileSetupPage() {
         throw new Error(j?.error ? `${j.error}${j.detail ? " — " + j.detail : ""}` : (text || "could_not_save"));
       }
 
-      window.location.replace(role === "creator" ? "/creator/dashboard" : "/student/dashboard");
+      window.location.replace("/dashboard");
     } catch (e) {
       setErr(String(e?.message || e));
     } finally {
@@ -135,7 +110,9 @@ export default function ProfileSetupPage() {
         </div>
 
         <div style={{ marginTop: 14, fontWeight: 1200, fontSize: 38, lineHeight: 1.05, color: "#3a332b" }}>Tell us who you are</div>
-        <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>Choose account type and username.</div>
+        <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>
+          Choose account type and username.
+        </div>
 
         <div style={{ marginTop: 16, display: "grid", gap: 10 }}>
           <button type="button" onClick={() => setRole("student")} style={chooseStyle(role === "student")}>
@@ -156,18 +133,32 @@ export default function ProfileSetupPage() {
         </div>
 
         <div style={{ marginTop: 14, fontWeight: 1000, opacity: 0.7 }}>Username</div>
-        <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="yourname" style={{ marginTop: 8, width: "100%", padding: "14px 14px", borderRadius: 14, border: "1px solid rgba(0,0,0,0.15)", background: "#fff", fontWeight: 1100, fontSize: 18 }} />
+        <input
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="yourname"
+          style={{ marginTop: 8, width: "100%", padding: "14px 14px", borderRadius: 14, border: "1px solid rgba(0,0,0,0.15)", background: "#fff", fontWeight: 1100, fontSize: 18 }}
+        />
         <div style={{ marginTop: 8, opacity: 0.65, fontWeight: 900 }}>Will save as: <span style={{ fontWeight: 1200 }}>{cleaned || "-"}</span></div>
 
-        {err ? <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(220,0,0,0.08)", border: "1px solid rgba(220,0,0,0.20)", fontWeight: 1000 }}>{err}</div> : null}
+        {err ? (
+          <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(220,0,0,0.08)", border: "1px solid rgba(220,0,0,0.20)", fontWeight: 1000 }}>
+            {err}
+          </div>
+        ) : null}
 
-        <button type="button" disabled={!canSubmit} onClick={submit} style={{ marginTop: 14, width: "100%", border: 0, background: canSubmit ? "#1f5a3a" : "rgba(31,90,58,0.35)", color: "#fff", padding: "14px 18px", borderRadius: 999, fontWeight: 1100, cursor: canSubmit ? "pointer" : "not-allowed" }}>
-          {busy ? "Saving..." : "Continue"}
+        <button
+          type="button"
+          disabled={!canSubmit}
+          onClick={submit}
+          style={{ marginTop: 14, width: "100%", border: 0, background: canSubmit ? "#1f5a3a" : "rgba(31,90,58,0.35)", color: "#fff", padding: "14px 18px", borderRadius: 999, fontWeight: 1100, cursor: canSubmit ? "pointer" : "not-allowed" }}
+        >
+          {busy ? "Saving..." : (ready ? "Continue" : "Loading...")}
         </button>
 
         <div style={{ marginTop: 10 }}>
-          <button type="button" onClick={() => router.replace("/")} style={{ width: "100%", border: "1px solid rgba(0,0,0,0.12)", background: "#fff", color: "#4b443b", padding: "12px 14px", borderRadius: 999, fontWeight: 1100, cursor: "pointer" }}>
-            Back to home
+          <button type="button" onClick={() => router.replace("/dashboard")} style={{ width: "100%", border: "1px solid rgba(0,0,0,0.12)", background: "#fff", color: "#4b443b", padding: "12px 14px", borderRadius: 999, fontWeight: 1100, cursor: "pointer" }}>
+            Go to dashboard router
           </button>
         </div>
       </div>
