@@ -8,12 +8,6 @@ function bearer(req) {
 
 export default async function handler(req, res) {
   try {
-    if (req.method !== "POST") return res.status(405).json({ ok: false, error: "method_not_allowed" })
-
-    const secret = String(req.headers["x-admin-reset"] || "")
-    const expect = String(process.env.WORKLY_ADMIN_RESET_SECRET || "")
-    if (!expect || secret !== expect) return res.status(200).json({ ok: false, error: "forbidden" })
-
     const token = bearer(req)
     if (!token) return res.status(200).json({ ok: false, error: "missing_bearer" })
 
@@ -24,13 +18,20 @@ export default async function handler(req, res) {
     const userId = u.user.id
     const admin = supabaseAdminFromEnv()
 
-    const { error: werr } = await admin
+    const { data: prof, error: perr } = await admin
       .from("profiles")
-      .upsert({ id: userId, role: null, username: null }, { onConflict: "id" })
+      .select("id, role, username, created_at")
+      .eq("id", userId)
+      .maybeSingle()
 
-    if (werr) return res.status(200).json({ ok: false, error: "profiles_reset_error", detail: String(werr.message || werr) })
+    if (perr) return res.status(200).json({ ok: false, error: "profiles_read_error", detail: String(perr.message || perr) })
 
-    return res.status(200).json({ ok: true, userId, cleared: true })
+    return res.status(200).json({
+      ok: true,
+      userId,
+      email: u.user.email || null,
+      profile: prof || null
+    })
   } catch (e) {
     return res.status(200).json({ ok: false, error: "server_error", detail: String(e?.message || e) })
   }

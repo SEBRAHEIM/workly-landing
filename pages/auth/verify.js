@@ -1,213 +1,208 @@
-import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { supabase } from "../../lib/supabaseClient";
+import { useEffect, useMemo, useState } from "react"
+import Link from "next/link"
+import { useRouter } from "next/router"
+import { supabase } from "../../lib/supabaseBrowser"
+import AuthLayout from "../../components/auth/AuthLayout"
+import AuthCard from "../../components/auth/AuthCard"
+import { Field, Input, PrimaryButton, SecondaryButton, Message, Hint } from "../../components/auth/AuthUI"
 
-const withTimeout = (p, ms) => {
-  let t;
-  return Promise.race([
-    p,
-    new Promise((_, rej) => {
-      t = setTimeout(() => rej(new Error("timeout")), ms);
+function cleanCode(v) {
+  return String(v || "").replace(/[^0-9]/g, "").slice(0, 6)
+}
+
+async function postJsonWithTimeout(url, body, ms) {
+  const ctrl = new AbortController()
+  const t = setTimeout(() => ctrl.abort(), ms)
+  try {
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      signal: ctrl.signal
     })
-  ]).finally(() => clearTimeout(t));
-};
+    const text = await resp.text()
+    let j = null
+    try { j = JSON.parse(text) } catch { j = null }
+    return { ok: resp.ok, status: resp.status, json: j, raw: text }
+  } finally {
+    clearTimeout(t)
+  }
+}
 
-export default function VerifyPage() {
-  const router = useRouter();
-  const ready = router.isReady;
+export default function Verify() {
+  const r = useRouter()
+  const [email, setEmail] = useState("")
+  const [code, setCode] = useState("")
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState("")
+  const [ok, setOk] = useState(false)
 
-  const email = useMemo(() => {
-    if (!ready) return "";
-    return String(router.query.email || "").trim().toLowerCase();
-  }, [ready, router.query.email]);
-
-  const [code, setCode] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [resendBusy, setResendBusy] = useState(false);
-  const [err, setErr] = useState("");
-  const [ok, setOk] = useState("");
+  const emailFromQuery = useMemo(() => {
+    try {
+      if (typeof window === "undefined") return ""
+      return String(new URLSearchParams(window.location.search).get("email") || "")
+    } catch {
+      return ""
+    }
+  }, [])
 
   useEffect(() => {
-    setErr("");
-    setOk("");
-  }, [email]);
+    const saved = typeof window !== "undefined" ? localStorage.getItem("workly_email") : ""
+    const e = (emailFromQuery || saved || "").trim().toLowerCase()
+    if (e) setEmail(e)
+  }, [emailFromQuery])
 
-  const resend = async () => {
-    if (resendBusy) return;
-    setErr("");
-    setOk("");
-    if (!ready || !email.includes("@")) {
-      setErr("Email not ready. Go back and try again.");
-      return;
-    }
-    setResendBusy(true);
+  async function routeNext() {
     try {
-      const r = await withTimeout(
-        supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: true } }),
-        10000
-      );
-      if (r?.error) throw r.error;
-      setOk("New code sent. Use the latest email.");
-    } catch (e) {
-      const m = String(e?.message || e || "");
-      setErr(m.toLowerCase().includes("timeout") ? "Resend timed out. Try again." : "Resend failed. Try again.");
-    } finally {
-      setResendBusy(false);
+      const { data } = await supabase.auth.getSession()
+      const token = data?.session?.access_token || ""
+      if (!token) return r.replace("/dashboard")
+
+      const resp = await fetch("/api/profile/me", { headers: { Authorization: "Bearer " + token } })
+      const j = await resp.json()
+      const p = j?.profile || null
+
+      const role = String(p?.role || "")
+      const username = String(p?.username || "")
+
+      if (!role) return r.replace("/auth/role")
+      if (!username) return r.replace("/auth/username")
+      return r.replace("/dashboard")
+    } catch {
+      return r.replace("/dashboard")
     }
-  };
+  }
 
-  const submit = async () => {
-    if (busy) return;
-    setErr("");
-    setOk("");
+  async function onVerify() {
+    if (busy) return
+    setMsg("")
+    setOk(false)
 
-    if (!ready || !email.includes("@")) {
-      setErr("Email not ready. Go back and try again.");
-      return;
-    }
+    const e = String(email || "").trim().toLowerCase()
+    const c = cleanCode(code)
 
-    const token = String(code || "").replace(/\D/g, "").slice(0, 6);
-    if (token.length !== 6) {
-      setErr("Code must be 6 digits.");
-      return;
-    }
+    if (!e) return setMsg("Missing email.")
+    if (c.length !== 6) return setMsg("Enter the 6-digit code.")
 
-    setBusy(true);
+    setBusy(true)
+
     try {
-      const tryVerify = async (type) => {
-        const r = await withTimeout(
-          supabase.auth.verifyOtp({ email, token, type }),
-          10000
-        );
-        if (r?.error) throw r.error;
-        return r?.data;
-      };
+      const out = await postJsonWithTimeout("/api/auth/verify-otp", { email: e, code: c }, 15000)
+      const j = out.json
 
-      let data;
-      try {
-        data = await tryVerify("email");
-      } catch (e1) {
-        const m1 = String(e1?.message || e1 || "").toLowerCase();
-        if (m1.includes("invalid") || m1.includes("expired") || m1.includes("token")) throw e1;
-        data = await tryVerify("signup");
+      if (!j || !j.ok) {
+        const reason = String(j?.error || "verify_failed")
+        setBusy(false)
+        if (reason === "timeout") return setMsg("Server timeout. Tap Verify again.")
+        if (reason === "verify_failed") return setMsg(String(j?.detail || "Code is invalid/expired. Use the latest email."))
+        return setMsg("Verification failed: " + reason)
       }
 
-      const access_token = data?.session?.access_token || "";
-      const refresh_token = data?.session?.refresh_token || "";
+      const s = j?.session || null
+      const access_token = s?.access_token || ""
+      const refresh_token = s?.refresh_token || ""
 
       if (access_token && refresh_token) {
-        const r2 = await withTimeout(
-          supabase.auth.setSession({ access_token, refresh_token }),
-          8000
-        );
-        if (r2?.error) throw r2.error;
+        const { error } = await supabase.auth.setSession({ access_token, refresh_token })
+        if (error) {
+          setBusy(false)
+          return setMsg("Session error.")
+        }
+      } else {
+        setBusy(false)
+        return setMsg("No session returned.")
       }
 
-      for (let i = 0; i < 20; i++) {
-        const { data: s } = await supabase.auth.getSession();
-        if (s?.session?.access_token) break;
-        await new Promise((r) => setTimeout(r, 150));
+      const pending = typeof window !== "undefined" ? sessionStorage.getItem("workly_pending_pw") : ""
+      if (pending) {
+        const { error } = await supabase.auth.updateUser({ password: pending })
+        if (typeof window !== "undefined") sessionStorage.removeItem("workly_pending_pw")
+        if (error) {
+          setBusy(false)
+          return setMsg("Password save failed.")
+        }
       }
 
-      router.replace(`/auth/set-password?email=${encodeURIComponent(email)}`);
-    } catch (e) {
-      const m = String(e?.message || e || "");
-      const ml = m.toLowerCase();
-      if (ml.includes("timeout")) setErr("Verification timed out. Try again.");
-      else if (ml.includes("expired") || ml.includes("invalid")) setErr("Code is invalid/expired. Tap Resend code and use the latest email.");
-      else setErr("Verification failed. Try again.");
-    } finally {
-      setBusy(false);
+      setOk(true)
+      setBusy(false)
+      await routeNext()
+    } catch (e2) {
+      setBusy(false)
+      const m = String(e2?.message || e2)
+      if (m.toLowerCase().includes("aborted")) return setMsg("Network timeout. Tap Verify again.")
+      setMsg("Verification failed. Try again.")
     }
-  };
+  }
 
-  const onCode = (v) => {
-    const digits = String(v || "").replace(/\D/g, "").slice(0, 6);
-    setCode(digits);
-  };
+  async function onResend() {
+    if (busy) return
+    setMsg("")
+    setBusy(true)
+
+    try {
+      const e = String(email || "").trim().toLowerCase()
+      if (!e) {
+        setBusy(false)
+        return setMsg("Missing email.")
+      }
+
+      if (typeof window !== "undefined") localStorage.setItem("workly_email", e)
+
+      const { error } = await supabase.auth.signInWithOtp({
+        email: e,
+        options: { shouldCreateUser: true }
+      })
+
+      if (error) {
+        setBusy(false)
+        return setMsg(String(error.message || error))
+      }
+
+      setBusy(false)
+      setMsg("New code sent. Check your email.")
+    } catch {
+      setBusy(false)
+      setMsg("Failed to resend code.")
+    }
+  }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#ece9e2", padding: 24 }}>
-      <div style={{ maxWidth: 520, margin: "0 auto", background: "#fff", borderRadius: 18, padding: 18, border: "1px solid rgba(0,0,0,0.10)" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
-          <div style={{ fontWeight: 1100, letterSpacing: 4, opacity: 0.75 }}>WORKLY</div>
-          <Link href="/auth/login" style={{ textDecoration: "none", fontWeight: 1000 }}>✕</Link>
-        </div>
+    <AuthLayout>
+      <AuthCard
+        title="Verify your email"
+        subtitle="Paste the 6-digit code we sent to your email."
+        topRight={<Link href="/" style={{ fontSize: 18, textDecoration: "none", opacity: .7 }}>×</Link>}
+      >
+        <Field label="Email">
+          <Input value={email} readOnly />
+        </Field>
 
-        <div style={{ marginTop: 14, fontWeight: 1200, fontSize: 34, lineHeight: 1.05, color: "#3a332b" }}>Verify your email</div>
-        <div style={{ marginTop: 10, opacity: 0.7, fontWeight: 900 }}>Paste the 6-digit code we sent to your email.</div>
+        <Field label="Verification code">
+          <Input
+            value={code}
+            onChange={e => setCode(e.target.value)}
+            placeholder="123456"
+            inputMode="numeric"
+            style={{ height: 56, fontSize: 22, textAlign: "center", letterSpacing: ".35em", background: "rgba(255,255,255,.65)" }}
+          />
+        </Field>
 
-        <div style={{ marginTop: 18, fontWeight: 1000, opacity: 0.7 }}>Email</div>
-        <div style={{ marginTop: 8, padding: 12, borderRadius: 14, background: "rgba(200,200,0,0.15)", border: "1px solid rgba(0,0,0,0.10)", fontWeight: 1000 }}>
-          {ready ? (email || "missing email") : "loading..."}
-        </div>
+        <Message text={msg} />
 
-        <div style={{ marginTop: 16, fontWeight: 1000, opacity: 0.7 }}>Verification code</div>
-        <input
-          value={code.split("").join(" ")}
-          onChange={(e) => onCode(e.target.value)}
-          inputMode="numeric"
-          autoComplete="one-time-code"
-          placeholder="123456"
-          disabled={!ready || !email.includes("@")}
-          style={{
-            marginTop: 8,
-            width: "100%",
-            padding: "14px 14px",
-            borderRadius: 14,
-            border: "1px solid rgba(0,0,0,0.15)",
-            background: "#fff",
-            fontWeight: 1100,
-            fontSize: 20,
-            letterSpacing: 6,
-            textAlign: "center",
-            opacity: (!ready || !email.includes("@")) ? 0.6 : 1
-          }}
-        />
+        <div style={{ height: 16 }} />
 
-        {ok ? <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(0,160,0,0.10)", border: "1px solid rgba(0,160,0,0.25)", fontWeight: 1000 }}>{ok}</div> : null}
-        {err ? <div style={{ marginTop: 12, padding: 12, borderRadius: 14, background: "rgba(220,0,0,0.08)", border: "1px solid rgba(220,0,0,0.20)", fontWeight: 1000 }}>{err}</div> : null}
+        <PrimaryButton onClick={onVerify} disabled={busy}>
+          {busy ? "Verifying..." : ok ? "Verified" : "Verify"}
+        </PrimaryButton>
 
-        <button
-          type="button"
-          disabled={busy || !ready || !email.includes("@")}
-          onClick={submit}
-          style={{
-            marginTop: 14,
-            width: "100%",
-            border: 0,
-            background: (busy || !ready || !email.includes("@")) ? "rgba(75,68,59,0.45)" : "#4b443b",
-            color: "#fff",
-            padding: "14px 18px",
-            borderRadius: 999,
-            fontWeight: 1100,
-            cursor: (busy || !ready || !email.includes("@")) ? "not-allowed" : "pointer"
-          }}
-        >
-          {busy ? "Please wait..." : "Verify"}
-        </button>
+        <Hint text={busy ? "Checking code..." : ""} />
 
-        <button
-          type="button"
-          disabled={resendBusy || !ready || !email.includes("@")}
-          onClick={resend}
-          style={{
-            marginTop: 10,
-            width: "100%",
-            border: "1px solid rgba(0,0,0,0.12)",
-            background: "#fff",
-            color: "#4b443b",
-            padding: "12px 14px",
-            borderRadius: 999,
-            fontWeight: 1100,
-            cursor: (resendBusy || !ready || !email.includes("@")) ? "not-allowed" : "pointer",
-            opacity: (resendBusy || !ready || !email.includes("@")) ? 0.7 : 1
-          }}
-        >
-          {resendBusy ? "Sending..." : "Resend code"}
-        </button>
-      </div>
-    </div>
-  );
+        <div style={{ height: 12 }} />
+
+        <SecondaryButton onClick={onResend} disabled={busy}>
+          {busy ? "Please wait..." : "Resend code"}
+        </SecondaryButton>
+      </AuthCard>
+    </AuthLayout>
+  )
 }

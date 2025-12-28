@@ -1,26 +1,31 @@
-import { createClient } from "@supabase/supabase-js";
-
-function isValidEmail(email) {
-  return typeof email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
+import { supabaseAdminFromEnv } from "./_sb"
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") return res.status(405).json({ error: "method" });
-
-  const { email } = req.body || {};
-  if (!isValidEmail(email)) return res.status(400).json({ error: "email" });
-
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const service = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!url || !service) return res.status(200).json({ exists: null, error: "server_missing_keys" });
-
   try {
-    const supabaseAdmin = createClient(url, service, { auth: { persistSession: false } });
-    const { data, error } = await supabaseAdmin.auth.admin.getUserByEmail(email.toLowerCase());
-    if (error) return res.status(200).json({ exists: false });
-    return res.status(200).json({ exists: !!data?.user });
-  } catch (_e) {
-    return res.status(200).json({ exists: null, error: "server_error" });
+    const email = String((req.query?.email || req.body?.email || "")).trim().toLowerCase()
+    if (!email) return res.status(200).json({ ok: false, error: "missing_email" })
+
+    const serviceKey = String(process.env.SUPABASE_SERVICE_ROLE_KEY || "")
+    if (!serviceKey) return res.status(200).json({ ok: false, error: "missing_service_role_key" })
+
+    const admin = supabaseAdminFromEnv()
+
+    let page = 1
+    const perPage = 200
+    let found = false
+
+    for (let i = 0; i < 20; i++) {
+      const { data, error } = await admin.auth.admin.listUsers({ page, perPage })
+      if (error) return res.status(200).json({ ok: false, error: "list_users_error", detail: String(error.message || error) })
+      const users = data?.users || []
+      found = users.some(u => String(u.email || "").toLowerCase() === email)
+      if (found) break
+      if (users.length < perPage) break
+      page += 1
+    }
+
+    return res.status(200).json({ ok: true, exists: found })
+  } catch (e) {
+    return res.status(200).json({ ok: false, error: "server_error", detail: String(e?.message || e) })
   }
 }

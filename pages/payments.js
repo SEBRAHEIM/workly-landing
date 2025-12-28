@@ -1,10 +1,6 @@
 import Link from "next/link"
-import { useRouter } from "next/router"
 
-export default function Category() {
-  const r = useRouter()
-  const slug = String(r.query.slug || "")
-
+export default function Payments() {
   return (
     <div style={{ minHeight: "100vh", background: "#f3efe7", padding: 16, boxSizing: "border-box" }}>
       <div style={{ maxWidth: 760, margin: "0 auto" }}>
@@ -20,11 +16,9 @@ export default function Category() {
           borderRadius: 24,
           padding: 18
         }}>
-          <div style={{ fontWeight: 950, fontSize: 34, lineHeight: 1.06, color: "#2d2a24" }}>
-            {slug.replace(/-/g, " ")}
-          </div>
+          <div style={{ fontWeight: 950, fontSize: 34, lineHeight: 1.06, color: "#2d2a24" }}>Payments</div>
           <div style={{ marginTop: 10, fontWeight: 900, opacity: 0.72 }}>
-            This page is a placeholder. Next step: show creators and filters for this category.
+            Placeholder page. Next: escrow, releases, history, and invoices.
           </div>
         </div>
       </div>

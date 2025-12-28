@@ -1,26 +1,21 @@
-import "../styles/globals.css";
-import RoleAuthGate from "../components/RoleAuthGate";
-import { AuthProvider, useAuth } from "../context/AuthContext";
-import { useEffect } from "react";
-
-function RoleBinder() {
-  const { profile, loading } = useAuth();
-
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-    const role = !loading && profile?.role ? profile.role : "guest";
-    document.documentElement.setAttribute("data-role", role);
-  }, [profile, loading]);
-
-  return null;
-}
-
+import "../styles/workly.css"
 export default function App({ Component, pageProps }) {
   return (
-    <AuthProvider>
-      <RoleBinder />
-      <RoleAuthGate />
+    <>
+      <style jsx global>{`
+        html, body {
+          padding: 0;
+          margin: 0;
+          background: #efe9df;
+          color: #2f2c27;
+          font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+          overscroll-behavior: none;
+        }
+        * { box-sizing: border-box; }
+        a { color: inherit; text-decoration: none; }
+        button { font-family: inherit; }
+      `}</style>
       <Component {...pageProps} />
-    </AuthProvider>
-  );
+    </>
+  )
 }

@@ -1,137 +1,95 @@
-import Head from "next/head";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { supabase } from "../../lib/supabaseClient";
+import Link from "next/link"
+import { useRouter } from "next/router"
+import { useState } from "react"
+import { supabase } from "../../lib/supabaseBrowser"
+import AuthLayout from "../../components/auth/AuthLayout"
+import AuthCard from "../../components/auth/AuthCard"
 
-export default function UsernameStepPage() {
-  const router = useRouter();
-  const [username, setUsername] = useState("");
-  const [loadingUser, setLoadingUser] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const email = typeof router.query.email === "string" ? router.query.email : "";
+function cleanUsername(v) {
+  return String(v || "").toLowerCase().replace(/[^a-z0-9_]/g, "").slice(0, 24)
+}
 
-  useEffect(() => {
-    let mounted = true;
+export default function Username() {
+  const r = useRouter()
+  const [u, setU] = useState("")
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState("")
 
-    const fetchUser = async () => {
-      if (!supabase) {
-        setLoadingUser(false);
-        return;
-      }
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!mounted) return;
+  async function onContinue() {
+    if (busy) return
+    setMsg("")
+    const username = cleanUsername(u)
 
-      if (!user) {
-        router.replace("/auth/login");
-        return;
-      }
-      setLoadingUser(false);
-    };
-
-    fetchUser();
-
-    return () => {
-      mounted = false;
-    };
-  }, [router]);
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (!supabase) {
-      setErrorMessage("Supabase is not configured yet.");
-      return;
-    }
-    if (!username.trim()) return;
-
-    setSubmitting(true);
-    setErrorMessage("");
-
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-
-    if (userError || !user) {
-      setErrorMessage("You need to be signed up first.");
-      setSubmitting(false);
-      return;
+    if (username.length < 3) {
+      setMsg("Username must be 3-24 characters.")
+      return
     }
 
-    const { error } = await supabase
-      .from("profiles")
-      .upsert(
-        {
-          id: user.id,
-          email: user.email,
-          username: username.trim(),
-        },
-        { onConflict: "id" },
-      );
+    setBusy(true)
+
+    const { data } = await supabase.auth.getSession()
+    const sess = data?.session || null
+    const user = sess?.user || null
+
+    if (!user) {
+      setBusy(false)
+      setMsg("Please sign in again.")
+      return
+    }
+
+    const { error } = await supabase.from("profiles").upsert({ id: user.id, username }, { onConflict: "id" })
 
     if (error) {
-      setErrorMessage(error.message || "Could not save your username.");
-      setSubmitting(false);
-      return;
+      const m = String(error.message || "")
+      setBusy(false)
+      if (m.toLowerCase().includes("unique") || m.toLowerCase().includes("duplicate")) {
+        setMsg("Username is taken. Try another one.")
+        return
+      }
+      setMsg("Could not save username.")
+      return
     }
 
-    router.push(
-      `/auth/verify${email ? `?email=${encodeURIComponent(email)}` : ""}`,
-    );
-  };
+    const { data: row } = await supabase.from("profiles").select("role").eq("id", user.id).maybeSingle()
+    const role = String(row?.role || "")
 
-  if (loadingUser) {
-    return (
-      <main className="auth-flow-page">
-        <div className="auth-flow-card">
-          <p>Loading...</p>
-        </div>
-      </main>
-    );
+    setBusy(false)
+
+    if (role === "student") return r.replace("/")
+    return r.replace("/dashboard")
   }
 
   return (
-    <>
-      <Head>
-        <title>Get your profile started · Workly</title>
-      </Head>
-      <main className="auth-flow-page">
-        <div className="auth-flow-card">
-          <h1 className="auth-flow-title">Get your profile started</h1>
-          <p className="auth-flow-subtitle">
-            Choose a username for your Workly account.
-          </p>
+    <AuthLayout>
+      <AuthCard
+        title="Pick a username"
+        subtitle="3-24 characters. a-z, 0-9, underscore."
+        topRight={<Link href="/" style={{ fontSize: 18, opacity: .7 }}>×</Link>}
+      >
+        <div style={{ fontWeight: 950, marginBottom: 8 }}>Username</div>
+        <input
+          value={u}
+          onChange={(e) => setU(cleanUsername(e.target.value))}
+          placeholder="e.g. salem_eb"
+          style={{ width: "100%", height: 52, borderRadius: 14, border: "1px solid rgba(0,0,0,.15)", padding: "0 14px", fontSize: 16, background: "rgba(255,255,255,.65)", outline: "none" }}
+        />
 
-          <form onSubmit={handleSubmit} className="auth-flow-form">
-            <label className="auth-flow-label">
-              Username
-              <input
-                type="text"
-                className="auth-flow-input"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="your-username"
-                required
-              />
-            </label>
-            <p className="auth-flow-hint">
-              You can&apos;t change your username later, so choose wisely.
-            </p>
+        {msg ? (
+          <div style={{ marginTop: 14, padding: 12, borderRadius: 14, border: "1px solid rgba(180,0,0,.20)", background: "rgba(255, 170, 170, .22)", fontWeight: 950 }}>
+            {msg}
+          </div>
+        ) : null}
 
-            {errorMessage && <p className="auth-flow-error">{errorMessage}</p>}
+        <div style={{ height: 16 }} />
 
-            <button
-              type="submit"
-              className="auth-flow-primary-btn"
-              disabled={!username.trim() || submitting}
-            >
-              {submitting ? "Saving..." : "Create my account"}
-            </button>
-          </form>
-        </div>
-      </main>
-    </>
-  );
+        <button
+          onClick={onContinue}
+          disabled={busy}
+          style={{ width: "100%", height: 54, borderRadius: 999, border: "1px solid rgba(0,0,0,.12)", background: "#3b3a35", color: "#f4f0ea", fontWeight: 980, fontSize: 16, opacity: busy ? .6 : 1, cursor: busy ? "default" : "pointer" }}
+        >
+          {busy ? "Please wait..." : "Continue"}
+        </button>
+      </AuthCard>
+    </AuthLayout>
+  )
 }
